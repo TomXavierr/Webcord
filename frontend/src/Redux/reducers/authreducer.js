@@ -55,7 +55,6 @@ const authReducer = (state = initialState, action) => {
             return {
                 ...state,
                 user: payload,
-                isAdmin: payload.is_admin,
             };
 
         case AUTHENTICATED_FAIL:

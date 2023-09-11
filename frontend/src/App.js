@@ -11,16 +11,19 @@ import Activate from "./Components/User/Login & SignUp/Activate";
 import { Provider } from "react-redux";
 import store from "./Redux/store";
 import ProtectedRoute from "./ProtectecRoutes/ProtectedRoute";
+
 import { useEffect, useState } from "react";
 import { checkAuthenticated } from "./Redux/actions/userauthaction";
 
 import AuthLoading from "./Components/Loadings/AuthLoading";
+import AdminProtectedRoute from "./ProtectecRoutes/AdminProtectedRoute";
 
 function App() {
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        store.dispatch(checkAuthenticated())
+        store
+            .dispatch(checkAuthenticated())
             .then(() => setLoading(false)) // Set loading to false on success
             .catch(() => setLoading(false)); // Set loading to false on error
     }, []);
@@ -41,15 +44,19 @@ function App() {
                             path="/activate/:uid/:token"
                             element={<Activate />}
                         />
-                        <Route path="/admin" element={<AdminLogin />} />
-
                         <Route element={<ProtectedRoute />}>
                             <Route path="/home" element={<Home />} exact />
+                        </Route>
+
+
+                        <Route path="/admin" element={<AdminLogin />} />
+                        <Route element={<AdminProtectedRoute />}>
                             <Route
                                 path="/dashboard"
                                 element={<AdminDashboard />}
                             />
                         </Route>
+
                     </Routes>
                 </Router>
             </Provider>

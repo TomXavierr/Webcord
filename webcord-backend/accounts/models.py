@@ -67,10 +67,6 @@ class UserAccount(AbstractBaseUser, PermissionsMixin):
     def __str__(self):
         return self.email
     
-    def activate(self):
-        if not self.is_verified:
-            self.is_verified = True
-            self.save(update_fields=['is_verified'])
     
     def send_friend_request(self, receiver):
         if not Friendship.objects.filter(sender=self, receiver=receiver).exists():

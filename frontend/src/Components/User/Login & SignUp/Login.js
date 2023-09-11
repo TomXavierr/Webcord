@@ -7,7 +7,7 @@ import {
     Link,
     Typography,
 } from "@mui/material";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { connect } from "react-redux";
 
 import { Await, Navigate, useNavigate } from "react-router-dom";
@@ -36,6 +36,12 @@ const Login = ({ login: loginUser, error, isAuthenticated }) => {
     };
 
     const navigate = useNavigate();
+    
+    useEffect(() => {
+        if (isAuthenticated) {
+            navigate("/home");
+        }
+    }, [isAuthenticated, navigate]);
 
     const [formData, setFormData] = useState({
         email: "",
@@ -95,7 +101,6 @@ const Login = ({ login: loginUser, error, isAuthenticated }) => {
                             name="email"
                             value={email}
                             onChange={(e) => onChange(e)}
-                            required
                             sx={inputPropsStyle}
                         />
                         {/* {emailError && <FormHelperText>This field is required</FormHelperText>} */}
@@ -109,7 +114,6 @@ const Login = ({ login: loginUser, error, isAuthenticated }) => {
                             type="password"
                             value={password}
                             onChange={(e) => onChange(e)}
-                            required
                             sx={inputPropsStyle}
                         />
                         {/* {passwordError && <FormHelperText>This field is required</FormHelperText>} */}
@@ -174,6 +178,7 @@ const Login = ({ login: loginUser, error, isAuthenticated }) => {
 
 const mapStateToProps = (state) => ({
     error: state.auth.error,
+    isAuthenticated: state.auth.isAuthenticated,
 });
 
 export default connect(mapStateToProps, { login })(Login);

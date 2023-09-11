@@ -9,7 +9,7 @@ import {
     Typography,
 } from "@mui/material";
 import React, { useState } from "react";
-import { connect, useDispatch } from "react-redux";
+import { connect } from "react-redux";
 import { signup } from "../../../Redux/actions/userauthaction";
 
 const Signup = ({ signup: createUser, signupError, isAccountCreated }) => {
@@ -113,7 +113,7 @@ const Signup = ({ signup: createUser, signupError, isAccountCreated }) => {
                             name="display_name"
                             value={display_name}
                             onChange={(e) => onChange(e)}
-                            required
+                        required
                             sx={inputPropsStyle}
                         />
                         {/* {emailError && <FormHelperText>This field is required</FormHelperText>} */}
