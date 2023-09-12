@@ -52,6 +52,7 @@ const adminAuthReducer = (state = initialState, action) => {
                 isAuthenticated: false,
                 isAdmin: false,
                 user: null,
+                admin_login_error: null,
             };
 
         default:

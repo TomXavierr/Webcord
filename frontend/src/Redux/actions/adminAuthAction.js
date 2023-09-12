@@ -59,7 +59,6 @@ export const adminLogin = (email, password) => async (dispatch) => {
 };
 
 export const adminLogout = () => (dispatch) => {
-   
     localStorage.removeItem('admin_token');
     dispatch({
         type: ADMIN_LOGOUT,

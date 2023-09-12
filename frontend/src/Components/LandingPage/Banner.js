@@ -1,7 +1,7 @@
 import { Box, Button, Container, Typography } from "@mui/material";
 import React from "react";
-import Banner1 from "../../../src/assets/Banner1.svg";
-import Banner2 from "../../../src/assets/Banner2.svg";
+import Banner1 from "../../../src/assets/ImageSvgs/Banner1.svg";
+import Banner2 from "../../../src/assets/ImageSvgs/Banner2.svg";
 import { Link } from "react-router-dom";
 
 const Banner = () => {
@@ -11,10 +11,10 @@ const Banner = () => {
                 sx={{
                     backgroundImage: `url(${Banner1}), url(${Banner2})`,
                     backgroundRepeat: "no-repeat",
-                    backgroundPosition: "left bottom, right bottom", // Position images on opposite sides
-                    backgroundSize: "50% 60%, 50% 60%", // Size images to cover half of the box each
-                    minHeight: "200px", // Set a minimum height for the container
-                    position: "relative", // Required for positioning content on top
+                    backgroundPosition: "left bottom, right bottom", 
+                    backgroundSize: "50% 60%, 50% 60%", 
+                    minHeight: "200px", 
+                    position: "relative",
                     padding: "32px",
                     minHeight: "700px"
                 }}

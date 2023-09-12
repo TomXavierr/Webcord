@@ -17,19 +17,32 @@ import { checkAuthenticated } from "./Redux/actions/userauthaction";
 
 import AuthLoading from "./Components/Loadings/AuthLoading";
 import AdminProtectedRoute from "./ProtectecRoutes/AdminProtectedRoute";
+import { checkAdminAuthentication } from "./Redux/actions/adminAuthAction";
 
 function App() {
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        store
-            .dispatch(checkAuthenticated())
-            .then(() => setLoading(false)) // Set loading to false on success
-            .catch(() => setLoading(false)); // Set loading to false on error
+        const adminToken = localStorage.getItem("admin_token");
+        const userToken = localStorage.getItem("access");
+       
+        if (adminToken) {
+            store
+                .dispatch(checkAdminAuthentication())
+                .then(() => setLoading(false))
+                .catch(() => setLoading(false));
+        } else if (userToken) {
+            store
+                .dispatch(checkAuthenticated())
+                .then(() => setLoading(false))
+                .catch(() => setLoading(false));
+        } else {
+            setLoading(false);
+        }
     }, []);
 
     if (loading) {
-        return <AuthLoading />; // Show loading indicator
+        return <AuthLoading />; 
     }
 
     return (

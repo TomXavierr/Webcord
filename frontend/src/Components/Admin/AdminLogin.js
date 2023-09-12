@@ -32,6 +32,7 @@ const AdminLogin = ({ adminLogin, adminLoginError, isAuthenticated, isAdmin }) =
     };
 
     const navigate = useNavigate();
+    
 
     useEffect(() => {
         if (isAuthenticated && isAdmin) {
@@ -123,7 +124,7 @@ const AdminLogin = ({ adminLogin, adminLoginError, isAuthenticated, isAdmin }) =
                     </Button>
                     {adminLoginError  && (
                         <Typography color="error" style={{ fontSize: "12px" }}>
-                            {adminLoginError .detail}
+                            {adminLoginError.detail}
                         </Typography>
                     )}    
                     <Typography
