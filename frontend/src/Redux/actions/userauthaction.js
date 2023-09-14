@@ -17,37 +17,57 @@ import {
 } from "./types";
 
 
-
 export const load_user = () => async (dispatch) => {
-    if (localStorage.getItem("access")) {
-        const config = {
-            headers: {
-                "Content-Type": "application/json",
-                Authorization: `JWT ${localStorage.getItem("access")}`,
-                Accept: "application/json",
-            },
-        };
-        try {
-            const res = await axios.get(
-                `${process.env.REACT_APP_API_URL}/auth/users/me/`,
-                config
-            );
+    const token = localStorage.getItem("access");
+    const config = {
+        headers: {
+            Authorization: `Bearer ${token}`,
+        },
+    };
+    try {
+        const res = await axios.get(`${process.env.REACT_APP_API_URL}/account/user-details/`, config);
 
-            dispatch({
-                type: USER_LOADED_SUCCESS,
-                payload: res.data,
-            });
-        } catch (err) {
-            dispatch({
-                type: USER_LOADED_FAIL,
-            });
-        }
-    } else {
+        dispatch({
+            type: USER_LOADED_SUCCESS,
+            payload: res.data,
+        });
+    } catch (err) {
         dispatch({
             type: USER_LOADED_FAIL,
         });
     }
 };
+
+// export const load_user = () => async (dispatch) => {
+//     if (localStorage.getItem("access")) {
+//         const config = {
+//             headers: {
+//                 "Content-Type": "application/json",
+//                 Authorization: `JWT ${localStorage.getItem("access")}`,
+//                 Accept: "application/json",
+//             },
+//         };
+//         try {
+//             const res = await axios.get(
+//                 `${process.env.REACT_APP_API_URL}/auth/users/me/`,
+//                 config
+//             );
+
+//             dispatch({
+//                 type: USER_LOADED_SUCCESS,
+//                 payload: res.data,
+//             });
+//         } catch (err) {
+//             dispatch({
+//                 type: USER_LOADED_FAIL,
+//             });
+//         }
+//     } else {
+//         dispatch({
+//             type: USER_LOADED_FAIL,
+//         });
+//     }
+// };
 
 export const googleAuthenticate = (state,code) => async dispatch => {
     if (state && code && !localStorage.getItem('access')) {
@@ -104,6 +124,7 @@ export const checkAuthenticated = () => async (dispatch) => {
                 dispatch({
                     type: AUTHENTICATED_SUCCESS,
                 });
+                await dispatch(load_user());
             } else {
                 dispatch({
                     type: AUTHENTICATED_FAIL,
@@ -133,7 +154,7 @@ export const login = (email, password) => async (dispatch) => {
 
     try {
         const res = await axios.post(
-            `${process.env.REACT_APP_API_URL}/auth/jwt/create/`,
+            `${process.env.REACT_APP_API_URL}/auth/token/create/`,
             body,
             config
         );

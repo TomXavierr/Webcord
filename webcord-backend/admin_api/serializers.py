@@ -13,4 +13,4 @@ class AdminLoginSerializer(serializers.ModelSerializer):
 class UserListSerializer(serializers.ModelSerializer):
     class Meta:
         model = UserAccount
-        fields = ("id","email", "display_name","username","is_banned")
+        fields = "__all__"

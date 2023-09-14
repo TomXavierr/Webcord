@@ -56,7 +56,7 @@ const Login = ({ login: loginUser, error, isAuthenticated }) => {
     const onSubmit = async (e) => {
         e.preventDefault();
         await loginUser(email, password);
-        navigate("/home");
+        navigate("/channels");
     };
 
     const ContinueWithGoogle = async () => {

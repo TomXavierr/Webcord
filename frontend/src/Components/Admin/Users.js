@@ -8,18 +8,24 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
-// import { fetchAdminUserList } from "../../Redux/actions/adminUserListActions";
+import UserBlockButton from "./Buttons/UserBlockButton";
 
 const UsersTable = () => {
-    const adminUserList = useSelector((state) => state.adminUserList.adminUserList);
-    // console.log(adminUserList.adminUserList);
+    const adminUserList = useSelector(
+        (state) => state.adminUserList.adminUserList
+    );
+
+    const handleUpdateUserBlockStatus = (userId, isBlocked) => {
+        
+      };
+    
     if (!Array.isArray(adminUserList)) {
-      return (
-          <Box>
-              <Typography>No user data available.</Typography>
-          </Box>
-      );
-  }
+        return (
+            <Box>
+                <Typography>No user data available.</Typography>
+            </Box>
+        );
+    }
 
     return (
         <Box>
@@ -29,10 +35,9 @@ const UsersTable = () => {
                     <TableHead>
                         <TableRow>
                             <TableCell>Username</TableCell>
-                            <TableCell align="right">Email</TableCell>
-                            <TableCell align="right">Display Name</TableCell>
-                            <TableCell align="right">Action</TableCell>
-                            {/* <TableCell align="right">Protein&nbsp;(g)</TableCell> */}
+                            <TableCell >Display Name</TableCell>
+                            <TableCell >Email</TableCell>
+                            <TableCell align="right">Block User</TableCell>
                         </TableRow>
                     </TableHead>
                     <TableBody>
@@ -48,10 +53,20 @@ const UsersTable = () => {
                                 <TableCell component="th" scope="row">
                                     {user.username}
                                 </TableCell>
-                                <TableCell align="right">{user.email}</TableCell>
-                                <TableCell align="right">{user.display_name}</TableCell>
-                                <TableCell align="right"></TableCell>
-                                {/* <TableCell align="right">{row.protein}</TableCell> */}
+                                <TableCell align="left">
+                                    {user.display_name}
+                                </TableCell>
+                                <TableCell >
+                                    {user.email}
+                                </TableCell>
+                                <TableCell align="right">
+                                    <UserBlockButton 
+                                    userId={user.id}
+                                    isBlocked={user.is_banned} // Pass the initial state based on is_banned
+                                    onUpdate={handleUpdateUserBlockStatus}
+                                    />
+                                   
+                                </TableCell>
                             </TableRow>
                         ))}
                     </TableBody>

@@ -17,7 +17,7 @@ const Signup = ({ signup: createUser, signupError, isAccountCreated }) => {
         color: "white",
         backgroundColor: "#000000",
         fontSize: "12px",
-        paddingLeft : "12px"
+        paddingLeft: "12px",
     };
     const LabelStyle = {
         fontFamily: "Sofia Sans, sans-serif",
@@ -41,20 +41,77 @@ const Signup = ({ signup: createUser, signupError, isAccountCreated }) => {
         password: "",
     });
 
-  
-    // if (signupError) {
-    //     console.log(signupError);
-    // }
+    const [errors, setErrors] = useState({});
+
+    const ErrorMessages = ({ errors }) => {
+        return (
+            <div>
+                {Object.keys(errors).map((fieldName, index) => (
+                    <p key={index} style={{ color: "red" }}>
+                        {errors[fieldName]}
+                    </p>
+                ))}
+            </div>
+        );
+    };
 
     const { email, username, display_name, password } = formData;
 
-    const onChange = (e) => {
-        setFormData({ ...formData, [e.target.name]: e.target.value });
+    const validateEmail = (email) => {
+        const emailRegex = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i;
+        return emailRegex.test(email);
+    };
+
+    const validateUsername = (username) => {
+        const usernameRegex = /^[a-zA-Z0-9]+$/;
+        return usernameRegex.test(username);
+    };
+
+    const validatePassword = (password) => {
+        return password.length >= 8;
+    };
+
+    const handleInputChange = (e) => {
+        const { name, value } = e.target;
+        setFormData({ ...formData, [name]: value });
+
+        // Real-time validation
+        const newErrors = { ...errors };
+
+        switch (name) {
+            case "email":
+                newErrors.email = validateEmail(value)
+                    ? ""
+                    : "Invalid email address";
+                break;
+            case "username":
+                newErrors.username = validateUsername(value)
+                    ? ""
+                    : "Username must contain only letters and numbers";
+                break;
+            case "password":
+                newErrors.password = validatePassword(value)
+                    ? ""
+                    : "Password must be at least 8 characters long";
+                break;
+            default:
+                break;
+        }
+
+        setErrors(newErrors);
     };
 
     const onSubmit = async (e) => {
         e.preventDefault();
-        await createUser(email, username, display_name, password);
+        console.log(formData.display_name);
+        if (Object.keys(errors).every((key) => errors[key] === "")) {
+            await createUser(
+                formData.email,
+                formData.username,
+                formData.display_name,
+                formData.password
+            );
+        }
     };
 
     return (
@@ -87,10 +144,16 @@ const Signup = ({ signup: createUser, signupError, isAccountCreated }) => {
                             type="email"
                             name="email"
                             value={email}
-                            onChange={(e) => onChange(e)}
-                            required
+                            onChange={handleInputChange}
                             sx={inputPropsStyle}
                         />
+                        {errors.email && (
+                            <FormHelperText
+                                style={{ fontSize: "12px", color: "#FF160c" }}
+                            >
+                                {errors.email}
+                            </FormHelperText>
+                        )}
                         {signupError &&
                             signupError.email &&
                             signupError.email.length > 0 && (
@@ -103,8 +166,6 @@ const Signup = ({ signup: createUser, signupError, isAccountCreated }) => {
                                     {signupError.email[0]}
                                 </FormHelperText>
                             )}
-
-                        {/* {emailError && <FormHelperText>This field is required</FormHelperText>} */}
                     </FormControl>
                     <FormControl fullWidth margin="normal">
                         <FormLabel sx={LabelStyle}>Display Name</FormLabel>
@@ -112,11 +173,9 @@ const Signup = ({ signup: createUser, signupError, isAccountCreated }) => {
                             type="text"
                             name="display_name"
                             value={display_name}
-                            onChange={(e) => onChange(e)}
-                        required
+                            onChange={handleInputChange}
                             sx={inputPropsStyle}
                         />
-                        {/* {emailError && <FormHelperText>This field is required</FormHelperText>} */}
                     </FormControl>
                     <FormControl fullWidth margin="normal">
                         <FormLabel sx={LabelStyle}>Username</FormLabel>
@@ -124,11 +183,17 @@ const Signup = ({ signup: createUser, signupError, isAccountCreated }) => {
                             type="text"
                             name="username"
                             value={username}
-                            onChange={(e) => onChange(e)}
-                            required
+                            onChange={handleInputChange}
                             sx={inputPropsStyle}
                         />
-                       {signupError &&
+                        {errors.username && (
+                            <FormHelperText
+                                style={{ fontSize: "12px", color: "#FF160c" }}
+                            >
+                                {errors.username}
+                            </FormHelperText>
+                        )}
+                        {signupError &&
                             signupError.username &&
                             signupError.username.length > 0 && (
                                 <FormHelperText
@@ -147,10 +212,16 @@ const Signup = ({ signup: createUser, signupError, isAccountCreated }) => {
                             name="password"
                             type="password"
                             value={password}
-                            onChange={(e) => onChange(e)}
-                            required
+                            onChange={handleInputChange}
                             sx={inputPropsStyle}
                         />
+                        {errors.password && (
+                            <FormHelperText
+                                style={{ fontSize: "12px", color: "#FF160c" }}
+                            >
+                                {errors.password}
+                            </FormHelperText>
+                        )}
                         {signupError &&
                             signupError.password &&
                             signupError.password.length > 0 && (

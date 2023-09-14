@@ -4,7 +4,6 @@ import LandingPage from "./Components/LandingPage/LandingPage";
 import Login from "./Components/User/Login & SignUp/Login";
 import Signup from "./Components/User/Login & SignUp/Signup";
 import AdminLogin from "./Components/Admin/AdminLogin";
-import Home from "./Components/User/Home/Home";
 import AdminDashboard from "./Components/Admin/AdminDashboard";
 import Activate from "./Components/User/Login & SignUp/Activate";
 
@@ -18,6 +17,7 @@ import { checkAuthenticated } from "./Redux/actions/userauthaction";
 import AuthLoading from "./Components/Loadings/AuthLoading";
 import AdminProtectedRoute from "./ProtectecRoutes/AdminProtectedRoute";
 import { checkAdminAuthentication } from "./Redux/actions/adminAuthAction";
+import Channels from "./Components/User/Home/Channels";
 
 function App() {
     const [loading, setLoading] = useState(true);
@@ -58,7 +58,7 @@ function App() {
                             element={<Activate />}
                         />
                         <Route element={<ProtectedRoute />}>
-                            <Route path="/home" element={<Home />} exact />
+                            <Route path="/channels" element={<Channels />} exact />
                         </Route>
 
 
@@ -69,7 +69,7 @@ function App() {
                                 element={<AdminDashboard />}
                             />
                         </Route>
-
+        
                     </Routes>
                 </Router>
             </Provider>

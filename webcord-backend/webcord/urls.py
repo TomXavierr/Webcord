@@ -10,14 +10,19 @@ from rest_framework_simplejwt.views import (
     TokenRefreshView,
     TokenVerifyView
 )
+from accounts.views import CustomTokenObtainPairView
 
 urlpatterns = [
    
     path('dj-admin/', admin.site.urls),
     path('admin/', include('admin_api.urls')),
+    path('account/', include('accounts.urls')),
 
      
     path('api-auth/', include('rest_framework.urls')),
+
+    path('auth/token/create/', CustomTokenObtainPairView.as_view(), name='custom-token-create'),
+
     path('auth/', include('djoser.urls')),
     path('auth/', include('djoser.urls.jwt')),
     # path('auth/', include('djoser.social.urls')),

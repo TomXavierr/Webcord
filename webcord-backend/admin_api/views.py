@@ -11,24 +11,7 @@ from accounts.permissions import IsSuperuser
 from rest_framework.permissions import IsAuthenticated
 
 class AdminLoginView(TokenObtainPairView):
-    permission_classes = [AllowAny]
-
-    # def post(self, request, *args, **kwargs):
-    #     response = super().post(request, *args, **kwargs)
-    #     token = response.data.get("access")
-
-    #     email = request.data.get('email')
-    #     password = request.data.get('password')
-
-    #     if email and password:
-    #         user = authenticate(request, email=email, password=password)
-    #         if user is not None and user.is_superuser:
-    #             login(request, user)
-    #             return Response({'token': token, 'id': user.pk}, status=status.HTTP_200_OK)
-        
-    #     return Response({'error': 'Invalid email or password'}, status=status.HTTP_401_UNAUTHORIZED)
-
-        
+    permission_classes = [AllowAny]  
 
     def post(self, request, *args, **kwargs):
         response = super(AdminLoginView, self).post(
@@ -62,3 +45,24 @@ class AdminUsersListView(APIView):
         except UserAccount.DoesNotExist:
             return Response(status=status.HTTP_404_NOT_FOUND)
         return Response(serializer.data, status=status.HTTP_200_OK)
+
+
+    def patch(self, request, user_id):
+        try:
+            User = UserAccount.objects.get(id=user_id)
+            print(request.data['is_banned'])
+
+        except user.DoesNotExist:
+            return Response({"error": "user does not exist"}, status=status.HTTP_404_NOT_FOUND)
+
+        if User:
+            serializer = UserListSerializer(
+                instance=User, data=request.data, partial=True)
+            if serializer.is_valid():
+                serializer.save()
+                if User.is_banned == True:
+                    return Response({'message': "user banned successfully"})
+                elif User.is_banned == False:
+                    return Response({'message': "user unbanned successfully"})
+            else:
+                return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
