@@ -18,6 +18,7 @@ import AuthLoading from "./Components/Loadings/AuthLoading";
 import AdminProtectedRoute from "./ProtectecRoutes/AdminProtectedRoute";
 import { checkAdminAuthentication } from "./Redux/actions/adminAuthAction";
 import Channels from "./Components/User/Home/Channels";
+import UserSettings from "./Components/User/Home/UserSettings";
 
 function App() {
     const [loading, setLoading] = useState(true);
@@ -59,6 +60,7 @@ function App() {
                         />
                         <Route element={<ProtectedRoute />}>
                             <Route path="/channels" element={<Channels />} exact />
+                            {/* <Route path="/settings" element={<UserSettings/>} exact /> */}
                         </Route>
 
 

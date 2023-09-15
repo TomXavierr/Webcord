@@ -21,12 +21,13 @@ const Login = ({ login: loginUser, error, isAuthenticated }) => {
         fontSize: "12px",
     };
     const LabelStyle = {
-        fontFamily: "Sofia Sans, sans-serif", // Replace with your font family
-        fontWeight: "bold",
+        fontFamily: "Sofia Sans, sans-serif ", 
+        fontWeight: 600,
+        letterSpacing: "1.5px",
         fontSize: "12px",
         color: "#EBF2FA",
         "&.Mui-focused": {
-            color: "#EBF2FA", // Set the same color for focused label
+            color: "#EBF2FA", 
         },
     };
     const buttonStyle = {
@@ -39,7 +40,7 @@ const Login = ({ login: loginUser, error, isAuthenticated }) => {
     
     useEffect(() => {
         if (isAuthenticated) {
-            navigate("/home");
+            navigate("/channels");
         }
     }, [isAuthenticated, navigate]);
 
@@ -93,7 +94,7 @@ const Login = ({ login: loginUser, error, isAuthenticated }) => {
                 </Typography>
                 <form onSubmit={(e) => onSubmit(e)}>
                     <FormControl fullWidth margin="normal">
-                        <FormLabel sx={LabelStyle} required>
+                        <FormLabel sx={LabelStyle} >
                             Email
                         </FormLabel>
                         <Input
@@ -103,10 +104,9 @@ const Login = ({ login: loginUser, error, isAuthenticated }) => {
                             onChange={(e) => onChange(e)}
                             sx={inputPropsStyle}
                         />
-                        {/* {emailError && <FormHelperText>This field is required</FormHelperText>} */}
                     </FormControl>
                     <FormControl fullWidth margin="normal">
-                        <FormLabel sx={LabelStyle} required>
+                        <FormLabel sx={LabelStyle} >
                             Password
                         </FormLabel>
                         <Input
@@ -116,7 +116,6 @@ const Login = ({ login: loginUser, error, isAuthenticated }) => {
                             onChange={(e) => onChange(e)}
                             sx={inputPropsStyle}
                         />
-                        {/* {passwordError && <FormHelperText>This field is required</FormHelperText>} */}
                         <Typography
                             style={{ fontSize: "12px", color: "#3685B5" }}
                             mt={1}

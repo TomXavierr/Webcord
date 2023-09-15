@@ -259,7 +259,7 @@ const AdminDashboard = () => {
                     <ListItem>
                         <IconButton
                             onClick={handleLogout}
-                            sx={{ padding: "0" }}
+                            sx={{ padding: "0",display:"flex" , justifyContent:"space-between"}}
                         >
                             <ListItemIcon>
                                 <LogoutIcon sx={{ color: "white" }} />

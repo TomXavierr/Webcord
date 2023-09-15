@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import Box from "@mui/material/Box";
 import Toolbar from "@mui/material/Toolbar";
 import List from "@mui/material/List";
@@ -15,30 +15,32 @@ import ListItem from "@mui/material/ListItem";
 import ChatIcon from "@mui/icons-material/Chat";
 import Drawer from "@mui/material/Drawer";
 import SettingsIcon from "@mui/icons-material/Settings";
-import { AppBar, Button } from "@mui/material";
+import { AppBar, Avatar, Button, IconButton, Stack } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { logout } from "../../../Redux/actions/userauthaction";
+import UserSettings from "./UserSettings";
 
 const drawerWidth = 60;
 
 const toolbarStyle = {
-    minHeight: "42px",
+    minHeight: "36px",
     display: "flex",
     justifyContent: "space-between",
 };
 
 const Layout = () => {
-    const dispatch = useDispatch();
-    const navigate = useNavigate();
+    const [isUserSettingsOpen, setUserSettingsOpen] = useState(false);
+
+    const handleSettingsIconClick = () => {
+        setUserSettingsOpen(true);
+    };
+
+    const handleCloseUserSettings = () => {
+        setUserSettingsOpen(false);
+    };
 
     const username = useSelector((state) => state.auth.user?.username);
-    // const username = user ? user.username : 'Loading...';
-
-    const handleLogout = () => {
-        dispatch(logout());
-        navigate("/");
-    };
 
     return (
         <div>
@@ -95,26 +97,12 @@ const Layout = () => {
                             <Typography variant="h6" noWrap component="div">
                                 Home
                             </Typography>
-                            <Button
-                                type="submit"
-                                variant="contained"
-                                onClick={handleLogout}
-                                style={{
-                                    backgroundColor: "#44CFCB",
-                                    borderRadius: "12px",
-                                }}
-                                sx={{
-                                    "&:hover": { backgroundColor: "#a0e3de" },
-                                }}
-                            >
-                                Logout
-                            </Button>
                         </Toolbar>
                     </AppBar>
 
                     <Box
                         sx={{
-                            marginTop: "48px",
+                            marginTop: "36px",
                             width: `calc(100% - ${drawerWidth}px)`,
                             display: "flex",
                             flexDirection: "row",
@@ -137,32 +125,57 @@ const Layout = () => {
                             <Box
                                 sx={{
                                     width: "200px",
-                                    height: "48px",
+                                    height: "40px",
                                     backgroundColor: "#031D25",
                                     color: "#EBF2FA",
                                     position: "absolute",
                                     bottom: 0,
                                     left: 0,
-                                    
-
-                                    
                                 }}
                             >
-                                <Box sx={{
-                                   display:"flex",
-                                   justifyContent:"space-between",
-                                   padding:"12px",
-                                   
-                                }}>
-                                    <Typography>{username}</Typography>
-                                    <SettingsIcon />
+                                <Box
+                                    sx={{
+                                        display: "flex",
+                                        justifyContent: "space-between",
+                                        padding: "8px",
+                                    }}
+                                >
+                                    <Stack direction="row" spacing={1}>
+                                        <Avatar
+                                            style={{
+                                                width: "24px",
+                                                height: "24px",
+                                            }}
+                                        ></Avatar>
+                                        <Typography
+                                            style={{
+                                                fontFamily:
+                                                    "Noto Sans, sans-serif",
+                                                fontSize: "14px",
+                                                fontWeight: "bold",
+                                            }}
+                                        >
+                                            {username}
+                                        </Typography>
+                                    </Stack>
+                                    <IconButton
+                                        onClick={handleSettingsIconClick}
+                                        style={{
+                                            width: "24px",
+                                            height: "24px",
+                                            color: "white",
+                                        }}
+                                    >
+                                        <SettingsIcon />
+                                    </IconButton>
+                                    <UserSettings isOpen={isUserSettingsOpen} onClose={handleCloseUserSettings} />
                                 </Box>
                             </Box>
                         </Drawer>
                         <Box
                             sx={{
                                 marginLeft: "200px",
-                                height: `calc(100vh - ${48}px)`,
+                                height: `calc(100vh - ${36}px)`,
                             }}
                         >
                             <Typography paragraph sx={{ padding: "12px" }}>
