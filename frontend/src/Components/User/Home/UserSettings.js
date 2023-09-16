@@ -94,7 +94,7 @@ const UserSettings = ({ isOpen, onClose }) => {
                     sx={{
                         display: "flex",
                         justifyContent: "right",
-                        width: "40vw",
+                        width: "25vw",
                         minWidth: "180px",
                         flex: "2",
                         backgroundColor: "#122C34",
@@ -105,7 +105,6 @@ const UserSettings = ({ isOpen, onClose }) => {
                         sx={{
                             justifyContent: "left",
                             flexDirection: "coloumn",
-                            width: "150px",
                             paddingRight: "12px",
                             backgroundColor: "#122C34",
                         }}
@@ -206,7 +205,7 @@ const UserSettings = ({ isOpen, onClose }) => {
                     sx={{
                         display: "flex",
                         justifyContent: "left",
-                        flex: "3",
+                        flex: "5",
                         backgroundColor: "transparent",
                         paddingTop: "36px",
                     }}
@@ -217,9 +216,10 @@ const UserSettings = ({ isOpen, onClose }) => {
                 </Box>
                 <Box
                     sx={{
+                        alignItems:"center",
                         position: "absolute",
                         top: 36,
-                        right: 100,
+                        right: 50,
                         color: "rgba(255, 255, 255, 0.3)",
                             "&:hover": {
                                 color: "rgba(255, 255, 255, 0.8)",

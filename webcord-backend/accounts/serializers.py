@@ -20,4 +20,11 @@ class UserLoginSerializer(serializers.ModelSerializer):
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields =  ('id', 'email', 'display_name', 'username', 'password')
+        fields =  ('id', 'email', 'display_name', 'username',  'status', 'about', 'phone', 'avatar')
+
+class UserUpdateSerializer(serializers.ModelSerializer):
+    username = serializers.CharField(required=False)
+    display_name = serializers.CharField(required=False)
+    class Meta:
+        model = User
+        fields = ['username', 'display_name', 'status', 'about', 'phone', 'avatar']

@@ -38,6 +38,7 @@ export const load_user = () => async (dispatch) => {
     }
 };
 
+// =========================Djoser Loaduser=============================
 // export const load_user = () => async (dispatch) => {
 //     if (localStorage.getItem("access")) {
 //         const config = {
