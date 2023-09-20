@@ -352,7 +352,7 @@ const MyProfile = () => {
                     </Typography>
                     <ChangePasswordModal
                         isOpen={isPasswordModalOpen}
-                        onClose={() => setIsPasswordModalOpen(false)}
+                        onCancel={() => setIsPasswordModalOpen(false)}
                         onPasswordChange={handlePasswordChange}
                     />
                 </Button>

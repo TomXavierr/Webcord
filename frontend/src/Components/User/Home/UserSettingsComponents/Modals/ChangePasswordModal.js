@@ -6,9 +6,8 @@ import {
   DialogActions,
   Button,
   TextField,
-  Typography,
 } from "@mui/material";
-const ChangePasswordModal = ({ isOpen, onClose, onPasswordChange }) => {
+const ChangePasswordModal = ({ isOpen, onCancel, onPasswordChange }) => {
     const [passwordData, setPasswordData] = useState({
       currentPassword: "",
       newPassword: "",
@@ -60,16 +59,16 @@ const ChangePasswordModal = ({ isOpen, onClose, onPasswordChange }) => {
    
       onPasswordChange(passwordData.currentPassword, passwordData.newPassword,passwordData.confirmPassword);
 
-      onClose();
+      onCancel();
     };
   
     const handleClose = () => {
-      onClose();
+      onCancel();
     };
   
     return (
         
-      <Dialog open={isOpen} onClose={handleClose} maxWidth="xs" fullWidth>
+      <Dialog open={isOpen} onClose={onCancel} maxWidth="xs" fullWidth>
         <DialogTitle>Change Password</DialogTitle>
         <DialogContent>
           <TextField

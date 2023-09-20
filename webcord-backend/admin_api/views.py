@@ -39,7 +39,7 @@ class AdminUsersListView(APIView):
 
     def get(self, request):
         try:
-            User = UserAccount.objects.all()
+            User = UserAccount.objects.all().filter(is_superuser=False)
             serializer = UserListSerializer(User, many=True)
 
         except UserAccount.DoesNotExist:

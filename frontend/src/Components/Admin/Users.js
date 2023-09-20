@@ -29,7 +29,7 @@ const UsersTable = () => {
 
     return (
         <Box>
-            <Typography>UsersTable</Typography>
+            <Typography color={"white"}>UsersTable</Typography>
             <TableContainer component={Paper}>
                 <Table sx={{ minWidth: 650 }} aria-label="simple table">
                     <TableHead>
