@@ -1,0 +1,27 @@
+# Global .gitignore
+
+# Backend-specific ignores
+/webcord-backend/.env
+/webcord-backend/venv/
+
+# Frontend-specific ignores
+/frontend/node_modules/
+/frontend/.env
+/frontend/build/
+
+# Common ignores for both frontend and backend
+.DS_Store
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Frontend specific ignores from .gitignore
+/node_modules
+/.pnp
+.pnp.js
+/coverage
+/build
