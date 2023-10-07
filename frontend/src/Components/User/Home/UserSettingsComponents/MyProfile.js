@@ -1,17 +1,9 @@
-import {
-    Avatar,
-    Box,
-    Button,
-    Divider,
-    ListItem,
-    ListItemButton,
-    Stack,
-    Typography,
-} from "@mui/material";
+import { Avatar, Box, Button, Divider, Stack, Typography } from "@mui/material";
 import React, { useState } from "react";
 import { useSelector } from "react-redux";
 import ChangePasswordModal from "./Modals/ChangePasswordModal";
 import axios from "axios";
+import EditPhoneModal from "./Modals/EditPhoneModal";
 
 const headingStyles = {
     fontSize: "10px",
@@ -24,13 +16,31 @@ const textStyles = {
     fontFamily: "Noto Sans, sans-serif",
     color: "#EBF2FA",
     letterSpacing: "1px",
-    color: "#EBF2FA",
+};
+
+const boxStyles = {
+    backgroundColor: "fffff",
+    alignItems: "center",
+    height: "40px",
+    display: "flex",
+    paddingBlock: "6px",
+    paddingInline: "12px",
+    justifyContent: "space-between",
+};
+
+const editButtonStyle = {
+    color: "#FFFFFF",
+    borderRadius: "4px",
+    height: "24px",
+    backgroundColor: "rgba(235,242,250,.3)",
+    fontSize: "14px",
+    textTransform: "none",
 };
 
 const MyProfile = () => {
     const user = useSelector((state) => state.auth.user);
     const [isPasswordModalOpen, setIsPasswordModalOpen] = useState(false);
- 
+    const [isPhoneModalOpen, setIsPhoneModalOpen] = useState(false);
 
     const handlePasswordChange = async (
         currentPassword,
@@ -46,19 +56,22 @@ const MyProfile = () => {
 
         try {
             const response = await axios.post(
-              "http://127.0.0.1:8000/auth/users/set_password/",
-              {
-                current_password: currentPassword,
-                new_password: newPassword,
-                re_new_password: confirmPassword,
-              },
-              config
+                `${process.env.REACT_APP_API_URL}/auth/users/set_password/`,
+                {
+                    current_password: currentPassword,
+                    new_password: newPassword,
+                    re_new_password: confirmPassword,
+                },
+                config
             );
             setIsPasswordModalOpen(false);
         } catch (error) {
-          console.error("Password change failed:", error);
-    
+            console.error("Password change failed:", error);
         }
+    };
+
+    const handleEditPhoneClick = () => {
+        setIsPhoneModalOpen(true);
     };
 
     return (
@@ -159,17 +172,7 @@ const MyProfile = () => {
                         borderRadius: "10px",
                     }}
                 >
-                    <Box
-                        sx={{
-                            backgroundColor: "fffff",
-                            alignItems: "center",
-                            height: "40px",
-                            display: "flex",
-                            paddingBlock: "6px",
-                            paddingInline: "12px",
-                            justifyContent: "space-between",
-                        }}
-                    >
+                    <Box sx={boxStyles}>
                         <Box>
                             <Typography style={headingStyles}>
                                 USERNAME
@@ -178,16 +181,7 @@ const MyProfile = () => {
                                 {user.username}
                             </Typography>
                         </Box>
-                        <Button
-                            sx={{
-                                color: "#FFFFFF",
-                                borderRadius: "4px",
-                                height: "24px",
-                                backgroundColor: "rgba(235,242,250,.3)",
-                                fontSize: "14px",
-                                textTransform: "none",
-                            }}
-                        >
+                        <Button sx={editButtonStyle}>
                             <Typography
                                 style={{
                                     fontSize: "12px",
@@ -197,17 +191,7 @@ const MyProfile = () => {
                             </Typography>
                         </Button>
                     </Box>
-                    <Box
-                        sx={{
-                            backgroundColor: "fffff",
-                            alignItems: "center",
-                            height: "40px",
-                            display: "flex",
-                            paddingBlock: "6px",
-                            paddingInline: "12px",
-                            justifyContent: "space-between",
-                        }}
-                    >
+                    <Box sx={boxStyles}>
                         <Box>
                             <Typography style={headingStyles}>
                                 DISPLAY NAME
@@ -216,16 +200,7 @@ const MyProfile = () => {
                                 {user.display_name}
                             </Typography>
                         </Box>
-                        <Button
-                            sx={{
-                                color: "#FFFFFF",
-                                borderRadius: "4px",
-                                height: "24px",
-                                backgroundColor: "rgba(235,242,250,.3)",
-                                fontSize: "14px",
-                                textTransform: "none",
-                            }}
-                        >
+                        <Button sx={editButtonStyle}>
                             <Typography
                                 style={{
                                     fontSize: "12px",
@@ -235,33 +210,14 @@ const MyProfile = () => {
                             </Typography>
                         </Button>
                     </Box>
-                    <Box
-                        sx={{
-                            backgroundColor: "fffff",
-                            alignItems: "center",
-                            height: "40px",
-                            display: "flex",
-                            paddingBlock: "6px",
-                            paddingInline: "12px",
-                            justifyContent: "space-between",
-                        }}
-                    >
+                    <Box sx={boxStyles}>
                         <Box>
                             <Typography style={headingStyles}>EMAIL</Typography>
                             <Typography style={textStyles}>
                                 {user.email}
                             </Typography>
                         </Box>
-                        <Button
-                            sx={{
-                                color: "#FFFFFF",
-                                borderRadius: "4px",
-                                height: "24px",
-                                backgroundColor: "rgba(235,242,250,.3)",
-                                fontSize: "14px",
-                                textTransform: "none",
-                            }}
-                        >
+                        <Button sx={editButtonStyle}>
                             <Typography
                                 style={{
                                     fontSize: "12px",
@@ -271,17 +227,7 @@ const MyProfile = () => {
                             </Typography>
                         </Button>
                     </Box>
-                    <Box
-                        sx={{
-                            backgroundColor: "fffff",
-                            alignItems: "center",
-                            height: "40px",
-                            display: "flex",
-                            paddingBlock: "6px",
-                            paddingInline: "12px",
-                            justifyContent: "space-between",
-                        }}
-                    >
+                    <Box sx={boxStyles}>
                         <Box>
                             <Typography style={headingStyles}>PHONE</Typography>
                             <Typography style={textStyles}>
@@ -289,14 +235,8 @@ const MyProfile = () => {
                             </Typography>
                         </Box>
                         <Button
-                            sx={{
-                                color: "#FFFFFF",
-                                borderRadius: "4px",
-                                height: "24px",
-                                backgroundColor: "rgba(235,242,250,.3)",
-                                fontSize: "14px",
-                                textTransform: "none",
-                            }}
+                            sx={editButtonStyle}
+                            onClick={handleEditPhoneClick}
                         >
                             <Typography
                                 style={{
@@ -305,6 +245,15 @@ const MyProfile = () => {
                             >
                                 Edit
                             </Typography>
+                            <EditPhoneModal
+                                isOpen={isPhoneModalOpen}
+                                onCancel={() => setIsPhoneModalOpen(false)}
+                                value={user.phone}
+                                onChange={(newPhone) => {
+                                    console.log("New phone number:", newPhone);
+                                    setIsPhoneModalOpen(false);
+                                }}
+                            />
                         </Button>
                     </Box>
                 </Box>
@@ -332,7 +281,10 @@ const MyProfile = () => {
                 </Typography>
 
                 <Button
-                    onClick={() => setIsPasswordModalOpen(true)}
+                    onClick={(event) => {
+                        event.stopPropagation();
+                        setIsPasswordModalOpen(true);
+                    }}
                     style={{
                         backgroundColor: "#44CFCB",
                         borderRadius: "4px",

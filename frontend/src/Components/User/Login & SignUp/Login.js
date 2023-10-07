@@ -10,7 +10,7 @@ import {
 import React, { useEffect, useState } from "react";
 import { connect } from "react-redux";
 
-import { Await, Navigate, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { login } from "../../../Redux/actions/userauthaction";
 import axios from "axios";
 
@@ -21,13 +21,13 @@ const Login = ({ login: loginUser, error, isAuthenticated }) => {
         fontSize: "12px",
     };
     const LabelStyle = {
-        fontFamily: "Sofia Sans, sans-serif ", 
+        fontFamily: "Sofia Sans, sans-serif ",
         fontWeight: 600,
         letterSpacing: "1.5px",
         fontSize: "12px",
         color: "#EBF2FA",
         "&.Mui-focused": {
-            color: "#EBF2FA", 
+            color: "#EBF2FA",
         },
     };
     const buttonStyle = {
@@ -37,7 +37,7 @@ const Login = ({ login: loginUser, error, isAuthenticated }) => {
     };
 
     const navigate = useNavigate();
-    
+
     useEffect(() => {
         if (isAuthenticated) {
             navigate("/channels");
@@ -50,24 +50,57 @@ const Login = ({ login: loginUser, error, isAuthenticated }) => {
     });
 
     const { email, password } = formData;
+    const [localError, setLocalError] = useState(null);
 
     const onChange = (e) =>
         setFormData({ ...formData, [e.target.name]: e.target.value });
 
     const onSubmit = async (e) => {
         e.preventDefault();
-        await loginUser(email, password);
-        navigate("/channels");
+
+        if (!email || !password) {
+            setLocalError({
+                detail: "Please enter both email and password.",
+            });
+            return;
+        }
+
+        try {
+            const response = await loginUser(email, password);
+
+            if (response && response.data) {
+                console.log(response.data);
+                navigate("/channels");
+            } 
+        } catch (error) {
+            console.error("API call failed:", error);
+
+        if (error.response && error.response.data) {
+            setLocalError({
+                detail: error.response.data.detail || "An error occurred.",
+            });
+        } else if (error.message === "Network Error") {
+            setLocalError({
+                detail: "Unable to connect to the server. Please try again later.",
+            });
+        } else {
+            setLocalError({
+                detail: "An error occurred.",
+            });
+        }
+        }
     };
 
     const ContinueWithGoogle = async () => {
         try {
-            const res = await axios.get(`${process.env.REACT_APP_API_URL}/auth/o/google-oauth2/?redirect_uri=http://localhost:3000`);
+            const res = await axios.get(
+                `${process.env.REACT_APP_API_URL}/auth/o/google-oauth2/?redirect_uri=http://localhost:3000`
+            );
             window.location.replace(res.data.authorization_url);
-        } catch(err) {
-            console.log(err)
+        } catch (err) {
+            console.log(err);
         }
-    }
+    };
 
     return (
         <div
@@ -94,9 +127,7 @@ const Login = ({ login: loginUser, error, isAuthenticated }) => {
                 </Typography>
                 <form onSubmit={(e) => onSubmit(e)}>
                     <FormControl fullWidth margin="normal">
-                        <FormLabel sx={LabelStyle} >
-                            Email
-                        </FormLabel>
+                        <FormLabel sx={LabelStyle}>Email</FormLabel>
                         <Input
                             type="email"
                             name="email"
@@ -106,9 +137,7 @@ const Login = ({ login: loginUser, error, isAuthenticated }) => {
                         />
                     </FormControl>
                     <FormControl fullWidth margin="normal">
-                        <FormLabel sx={LabelStyle} >
-                            Password
-                        </FormLabel>
+                        <FormLabel sx={LabelStyle}>Password</FormLabel>
                         <Input
                             name="password"
                             type="password"
@@ -134,42 +163,41 @@ const Login = ({ login: loginUser, error, isAuthenticated }) => {
                     >
                         Login
                     </Button>
-                      
                 </form>
                 <Button
-                        type="submit"
-                        variant="contained"
-                        onClick={ContinueWithGoogle}
-                        style={{
-                            backgroundColor: "#ffffff",
-                            color: "#000000",
-                            display: "flex",
-                            alignItems: "center",
-                        }}
-                        fullWidth
-                    >
-                        <img
-                            src="/GoogleIcon.svg" // Make sure to provide the correct path
-                            alt="Google Icon"
-                            width= '24px'
-                            style={{ marginRight: "8px" }}
-                        />
-                        Continue with Google
-                    </Button>
-                    {error && (
-                        <Typography color="error" style={{ fontSize: "12px" }}>
-                            {error.detail}
-                        </Typography>
-                    )}    
-                    <Typography
-                        style={{ fontSize: "12px", color: "#EBF2FA" }}
-                        mt={1}
-                    >
-                        Need an Account?
-                        <Link href="/signup" underline="hover">
-                            Register
-                        </Link>
+                    type="submit"
+                    variant="contained"
+                    onClick={ContinueWithGoogle}
+                    style={{
+                        backgroundColor: "#ffffff",
+                        color: "#000000",
+                        display: "flex",
+                        alignItems: "center",
+                    }}
+                    fullWidth
+                >
+                    <img
+                        src="/GoogleIcon.svg" // Make sure to provide the correct path
+                        alt="Google Icon"
+                        width="24px"
+                        style={{ marginRight: "8px" }}
+                    />
+                    Continue with Google
+                </Button>
+                {(error || localError) && (
+                    <Typography color="error" style={{ fontSize: "12px" }}>
+                        {error ? error.detail : localError.detail}
                     </Typography>
+                )}
+                <Typography
+                    style={{ fontSize: "12px", color: "#EBF2FA" }}
+                    mt={1}
+                >
+                    Need an Account?
+                    <Link href="/signup" underline="hover">
+                        Register
+                    </Link>
+                </Typography>
             </Box>
         </div>
     );

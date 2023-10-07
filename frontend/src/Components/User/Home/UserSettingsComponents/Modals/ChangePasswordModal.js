@@ -1,11 +1,7 @@
 import React, { useState } from "react";
 import {
-    Dialog,
-    DialogTitle,
-    DialogContent,
     DialogActions,
     Button,
-    TextField,
     FormControl,
     FormLabel,
     Input,
@@ -92,6 +88,8 @@ const ChangePasswordModal = ({ isOpen, onCancel, onPasswordChange }) => {
 
     const handleClose = (event) => {
         event.stopPropagation();
+
+        
         onCancel();
     };
 
@@ -106,6 +104,15 @@ const ChangePasswordModal = ({ isOpen, onCancel, onPasswordChange }) => {
                 }}
             >
                 <Box width="400px" height="auto" p={4} bgcolor="#122C34">
+                <Typography
+                    variant="h4"
+                    color="#EBF2FA"
+                    style={{
+                        fontSize: "24px",
+                    }}
+                >
+                    Change Password
+                </Typography>
                     <form onSubmit={handleSave}>
                         <FormControl fullWidth margin="normal">
                             <FormLabel sx={LabelStyle}>
