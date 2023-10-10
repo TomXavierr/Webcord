@@ -38,7 +38,7 @@ const editButtonStyle = {
 };
 
 const MyProfile = () => {
-    const user = useSelector((state) => state.auth.user);
+    const [user, setUser] = useState(useSelector((state) => state.auth.user));
     const [isPasswordModalOpen, setIsPasswordModalOpen] = useState(false);
     const [isPhoneModalOpen, setIsPhoneModalOpen] = useState(false);
 
@@ -72,6 +72,12 @@ const MyProfile = () => {
 
     const handleEditPhoneClick = () => {
         setIsPhoneModalOpen(true);
+    };
+
+    const handlePhoneChange = (newPhone) => {
+        const updatedUser = { ...user, phone: newPhone };
+        setUser(updatedUser);
+        setIsPhoneModalOpen(false);
     };
 
     return (
@@ -253,6 +259,7 @@ const MyProfile = () => {
                                     console.log("New phone number:", newPhone);
                                     setIsPhoneModalOpen(false);
                                 }}
+                                onSave={handlePhoneChange}
                             />
                         </Button>
                     </Box>

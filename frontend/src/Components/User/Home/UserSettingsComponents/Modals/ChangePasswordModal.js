@@ -82,14 +82,12 @@ const ChangePasswordModal = ({ isOpen, onCancel, onPasswordChange }) => {
             passwordData.newPassword,
             passwordData.confirmPassword
         );
-
+            
         onCancel();
     };
 
     const handleClose = (event) => {
         event.stopPropagation();
-
-        
         onCancel();
     };
 

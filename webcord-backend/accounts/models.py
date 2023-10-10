@@ -3,6 +3,7 @@ from django.conf import settings
 from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin, BaseUserManager
 from django.db.models import Q
 
+
 # Create your models here.
 
 class UserAccountManager(BaseUserManager):
@@ -67,3 +68,11 @@ class UserAccount(AbstractBaseUser, PermissionsMixin):
     def __str__(self):
         return self.email
     
+    def get_friends(self):
+        
+        friends = UserAccount.objects.filter(
+            Q(sender__receiver=self, sender__is_accepted=True) |
+            Q(receiver__sender=self, receiver__is_accepted=True)
+        ).distinct()
+
+        return friends

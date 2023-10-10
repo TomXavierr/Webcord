@@ -17,10 +17,10 @@ urlpatterns = [
     path('dj-admin/', admin.site.urls),
     path('admin/', include('admin_api.urls')),
     path('account/', include('accounts.urls')),
+    path('friends/', include('friend_system.urls')),
 
      
     path('api-auth/', include('rest_framework.urls')),
-
     path('auth/token/create/', CustomTokenObtainPairView.as_view(), name='custom-token-create'),
 
     path('auth/', include('djoser.urls')),
