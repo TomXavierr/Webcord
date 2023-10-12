@@ -1,5 +1,6 @@
+# pylint: disable=missing-docstring disable=trailing-whitespace
+
 from django.db import models
-from django.conf import settings 
 from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin, BaseUserManager
 from django.db.models import Q
 
@@ -12,7 +13,6 @@ class UserAccountManager(BaseUserManager):
             raise ValueError('Users must have an email address')
         if not username:
             raise ValueError('Users must have a username')
-        
         if not display_name:
             raise ValueError('Users must have a Display Name')
         
@@ -67,6 +67,7 @@ class UserAccount(AbstractBaseUser, PermissionsMixin):
     
     def __str__(self):
         return self.email
+
     
     def get_friends(self):
         

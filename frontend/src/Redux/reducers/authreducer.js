@@ -13,6 +13,8 @@ import {
     ACTIVATION_FAIL,
     GOOGLE_AUTH_SUCCESS,
     GOOGLE_AUTH_FAIL,
+    FRIENDS_LIST_SUCCESS, 
+    FRIENDS_LIST_FAIL
 } from "../actions/types";
 
 const initialState = {
@@ -20,6 +22,7 @@ const initialState = {
     refresh: localStorage.getItem("refresh"),
     isAuthenticated: null,
     user: null,
+    friendsList: [],
     error: null,
     signupError: null,
     isAccountCreated: false,
@@ -55,6 +58,18 @@ const authReducer = (state = initialState, action) => {
             return {
                 ...state,
                 user: payload,
+            };
+
+        case FRIENDS_LIST_SUCCESS:
+            return {
+                ...state,
+                friendsList: action.payload,
+            };
+            
+        case FRIENDS_LIST_FAIL:
+            return {
+                ...state,
+                friendsList: [],
             };
 
         case AUTHENTICATED_FAIL:
