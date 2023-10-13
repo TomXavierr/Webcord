@@ -8,7 +8,17 @@ import ListItem from "@mui/material/ListItem";
 import ChatIcon from "@mui/icons-material/Chat";
 import Drawer from "@mui/material/Drawer";
 import SettingsIcon from "@mui/icons-material/Settings";
-import { AppBar, Avatar, Button, IconButton, Stack } from "@mui/material";
+import DeleteIcon from '@mui/icons-material/Delete';
+import {
+    AppBar,
+    Avatar,
+    Button,
+    IconButton,
+    ListItemAvatar,
+    ListItemText,
+    Stack,
+    TextField,
+} from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { logout } from "../../../../Redux/actions/userauthaction";
@@ -21,6 +31,7 @@ const toolbarStyle = {
     minHeight: "36px",
     display: "flex",
     justifyContent: "space-between",
+    padding: "0",
 };
 
 const UserLayout = () => {
@@ -35,6 +46,7 @@ const UserLayout = () => {
     };
 
     const username = useSelector((state) => state.auth.user?.username);
+    const friendsList  = useSelector((state) => state.auth.friendsList);
 
     return (
         <Box
@@ -54,9 +66,35 @@ const UserLayout = () => {
                 }}
             >
                 <Toolbar variant="dense" style={toolbarStyle}>
-                    <Typography variant="h6" noWrap component="div">
-                        Home
-                    </Typography>
+                    <Box
+                        sx={{
+                            width: "200px",
+                            height: "36px",
+                            display: "flex",
+                            alignItems: "center",
+                            justifyContent: "center",
+                        }}
+                    >
+                        <Box
+                            sx={{
+                                width: "170px",
+                                height: "24px",
+                                backgroundColor: "#020F12",
+                                borderRadius: "4px",
+                                display: "flex",
+                                alignItems: "center",
+                            }}
+                        >
+                            <Typography
+                                style={{
+                                    fontSize: "12px",
+                                }}
+                                pl={2}
+                            >
+                                Start a conversation
+                            </Typography>
+                        </Box>
+                    </Box>
                 </Toolbar>
             </AppBar>
 
@@ -65,7 +103,7 @@ const UserLayout = () => {
                     marginTop: "36px",
                     width: `calc(100% - ${drawerWidth}px)`,
                     display: "flex",
-                    flexDirection: "row",
+                    // flexDirection: "row",
                 }}
             >
                 <Drawer
@@ -79,7 +117,7 @@ const UserLayout = () => {
                             backgroundColor: "#122C34",
                             zIndex: 1,
                             position: "absolute",
-                            
+                            alignItems: "center",
                         },
                     }}
                 >
@@ -139,27 +177,28 @@ const UserLayout = () => {
                 <Box
                     sx={{
                         marginLeft: "200px",
+                        flex: 1,
+                        // width: `calc(100% - 200px)`,
                         height: `calc(100vh - ${36}px)`,
+                        
                     }}
                 >
-                    <Typography paragraph sx={{ padding: "12px" }}>
-                        Lorem ipsum dolor sit amet, consectetur adipiscing elit,
-                        sed do eiusmod tempor incididunt ut labore et dolore
-                        magna aliqua. Rhoncus dolor purus non enim praesent
-                        elementum facilisis leo vel. Risus at ultrices mi tempus
-                        imperdiet. Semper risus in hendrerit gravida rutrum
-                        quisque non tellus. Convallis convallis tellus id
-                        interdum velit laoreet id donec ultrices. Odio morbi
-                        quis commodo odio aenean sed adipiscing. Amet nisl
-                        suscipit adipiscing bibendum est ultricies integer quis.
-                        Cursus euismod quis viverra nibh cras. Metus vulputate
-                        eu scelerisque felis imperdiet proin fermentum leo.
-                        Mauris commodo quis imperdiet massa tincidunt. Cras
-                        tincidunt lobortis feugiat vivamus at augue. At augue
-                        eget arcu dictum varius duis at consectetur lorem. Velit
-                        sed ullamcorper morbi tincidunt. Lorem donec massa
-                        sapien faucibus et molestie ac.
-                    </Typography>
+                    <List sx={{}}>
+                        {friendsList.map((friend) => ( 
+                        <ListItem>
+                            <ListItemAvatar>
+                                <Avatar></Avatar>
+                            </ListItemAvatar>
+                            <ListItemText
+                                    primary={friend.display_name}
+                                    secondary={friend.username}
+                                />
+                                <IconButton edge="end" aria-label="delete">
+                      <DeleteIcon />
+                    </IconButton>
+                        </ListItem>
+                        ))}
+                    </List>
                 </Box>
             </Box>
         </Box>

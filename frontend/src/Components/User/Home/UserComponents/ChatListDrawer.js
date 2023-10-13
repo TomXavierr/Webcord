@@ -1,6 +1,7 @@
 import React from "react";
 import {
     Box,
+    Button,
     CssBaseline,
     Drawer,
     IconButton,
@@ -8,15 +9,24 @@ import {
     Toolbar,
     Typography,
 } from "@mui/material";
+import PeopleAltIcon from '@mui/icons-material/PeopleAlt';
 
 const ChatListDrawer = () => {
     return (
-        <div style={{
-            paddingTop: "36px",
-        }}>
-            <Typography component="div" marginLeft={4}>
-                Friends
-            </Typography>
+        <div
+            style={{
+                paddingTop: "36px",
+            }}
+        >
+            <Box sx={{height:"36px", width:"180px", padding:"10px" }}>
+                <Button sx={{height:"36px", width:"180px",  color: "white", textTransform: "none", justifyContent: "left"  }} >
+
+                <PeopleAltIcon/>
+                <Typography component="div" pl={2}>
+                    Friends
+                </Typography>
+                </Button>
+            </Box>
         </div>
     );
 };

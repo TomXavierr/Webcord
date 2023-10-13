@@ -19,6 +19,8 @@ import AdminProtectedRoute from "./ProtectecRoutes/AdminProtectedRoute";
 import { checkAdminAuthentication } from "./Redux/actions/adminAuthAction";
 import Channels from "./Components/User/Home/Channels";
 import UserSettings from "./Components/User/Home/UserSettings";
+import UserLayout from "./Components/User/Home/UserComponents/UserLayout";
+import ServerLayout from "./Components/User/Home/ServerComponents/ServerLayout";
 
 function App() {
     const [loading, setLoading] = useState(true);
@@ -26,7 +28,7 @@ function App() {
     useEffect(() => {
         const adminToken = localStorage.getItem("admin_token");
         const userToken = localStorage.getItem("access");
-       
+
         if (adminToken) {
             store
                 .dispatch(checkAdminAuthentication())
@@ -43,7 +45,7 @@ function App() {
     }, []);
 
     if (loading) {
-        return <AuthLoading />; 
+        return <AuthLoading />;
     }
 
     return (
@@ -59,10 +61,16 @@ function App() {
                             element={<Activate />}
                         />
                         <Route element={<ProtectedRoute />}>
-                            <Route path="/channels" element={<Channels />} exact />
+                            <Route
+                                path="/channels"
+                                element={<Channels />}
+                                exact
+                            >
+                                <Route path="@me" element={<UserLayout />} />
+                                <Route path="server" element={<ServerLayout />} />
+                            </Route>
                             {/* <Route path="/settings" element={<UserSettings/>} exact /> */}
                         </Route>
-
 
                         <Route path="/admin" element={<AdminLogin />} />
                         <Route element={<AdminProtectedRoute />}>
@@ -71,7 +79,6 @@ function App() {
                                 element={<AdminDashboard />}
                             />
                         </Route>
-        
                     </Routes>
                 </Router>
             </Provider>
