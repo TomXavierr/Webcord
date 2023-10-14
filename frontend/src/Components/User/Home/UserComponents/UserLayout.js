@@ -101,9 +101,9 @@ const UserLayout = () => {
             <Box
                 sx={{
                     marginTop: "36px",
-                    width: `calc(100% - ${drawerWidth}px)`,
+                    width: `calc(100% - ${60}px)`,
                     display: "flex",
-                    // flexDirection: "row",
+                    flexDirection: "row",
                 }}
             >
                 <Drawer
@@ -177,10 +177,8 @@ const UserLayout = () => {
                 <Box
                     sx={{
                         marginLeft: "200px",
-                        flex: 1,
-                        // width: `calc(100% - 200px)`,
                         height: `calc(100vh - ${36}px)`,
-                        
+                        width:`calc(100vw - ${260}px)`
                     }}
                 >
                     <List sx={{}}>
