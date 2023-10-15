@@ -1,41 +1,28 @@
 import React, { useState } from "react";
 import Box from "@mui/material/Box";
 import Toolbar from "@mui/material/Toolbar";
-import List from "@mui/material/List";
 import Typography from "@mui/material/Typography";
-import Divider from "@mui/material/Divider";
-import ListItem from "@mui/material/ListItem";
-import ChatIcon from "@mui/icons-material/Chat";
 import Drawer from "@mui/material/Drawer";
 import SettingsIcon from "@mui/icons-material/Settings";
-import DeleteIcon from '@mui/icons-material/Delete';
-import {
-    AppBar,
-    Avatar,
-    Button,
-    IconButton,
-    ListItemAvatar,
-    ListItemText,
-    Stack,
-    TextField,
-} from "@mui/material";
-import { useDispatch, useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
-import { logout } from "../../../../Redux/actions/userauthaction";
+
+import { AppBar, Avatar, Button, IconButton, Stack } from "@mui/material";
+import { useSelector } from "react-redux";
 import UserSettings from "../UserSettings";
 import ChatListDrawer from "./ChatListDrawer";
+import FriendsList from "./UserLayoutComponents/FriendsList";
+import AddFriend from "./UserLayoutComponents/AddFriend";
 
 const drawerWidth = 60;
 
 const toolbarStyle = {
     minHeight: "36px",
     display: "flex",
-    justifyContent: "space-between",
     padding: "0",
 };
 
 const UserLayout = () => {
     const [isUserSettingsOpen, setUserSettingsOpen] = useState(false);
+    const [activeTab, setActiveTab] = useState("all");
 
     const handleSettingsIconClick = () => {
         setUserSettingsOpen(true);
@@ -45,8 +32,11 @@ const UserLayout = () => {
         setUserSettingsOpen(false);
     };
 
+    const handleTabChange = (tab) => {
+        setActiveTab(tab);
+    };
+
     const username = useSelector((state) => state.auth.user?.username);
-    const friendsList  = useSelector((state) => state.auth.friendsList);
 
     return (
         <Box
@@ -78,7 +68,7 @@ const UserLayout = () => {
                         <Box
                             sx={{
                                 width: "170px",
-                                height: "24px",
+                                height: "20px",
                                 backgroundColor: "#020F12",
                                 borderRadius: "4px",
                                 display: "flex",
@@ -95,6 +85,34 @@ const UserLayout = () => {
                             </Typography>
                         </Box>
                     </Box>
+                    <Typography
+                        sx={{ px: "10px", fontSize: "14px" }}
+                        onClick={() => handleTabChange("all")}
+                    >
+                        All
+                    </Typography>
+                    <Button
+                        onClick={() => handleTabChange("addFriend")}
+                        sx={{
+                            backgroundColor: "#32965d",
+                            borderRadius: "4px",
+                            height: "20px",
+                            color: "white",
+                            fontSize: "14px",
+                            textTransform: "none",
+                            "&:hover": {
+                                backgroundColor: "#1e604e", // Adjust the hover background color
+                              },
+                        }}
+                    >
+                        <Typography
+                            style={{
+                                fontSize: "12px",
+                            }}
+                        >
+                            Add Friend
+                        </Typography>
+                    </Button>
                 </Toolbar>
             </AppBar>
 
@@ -178,25 +196,11 @@ const UserLayout = () => {
                     sx={{
                         marginLeft: "200px",
                         height: `calc(100vh - ${36}px)`,
-                        width:`calc(100vw - ${260}px)`
+                        width: `calc(100vw - ${260}px)`,
                     }}
                 >
-                    <List sx={{}}>
-                        {friendsList.map((friend) => ( 
-                        <ListItem>
-                            <ListItemAvatar>
-                                <Avatar></Avatar>
-                            </ListItemAvatar>
-                            <ListItemText
-                                    primary={friend.display_name}
-                                    secondary={friend.username}
-                                />
-                                <IconButton edge="end" aria-label="delete">
-                      <DeleteIcon />
-                    </IconButton>
-                        </ListItem>
-                        ))}
-                    </List>
+                    {activeTab === "all" && <FriendsList />}
+                    {activeTab === "addFriend" && <AddFriend />}
                 </Box>
             </Box>
         </Box>

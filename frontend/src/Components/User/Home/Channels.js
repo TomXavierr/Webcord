@@ -1,16 +1,13 @@
 import React, { useEffect, useState } from "react";
-import { Link, Outlet, useLocation, useParams } from "react-router-dom";
+import { Link, Outlet } from "react-router-dom";
 
 import { Box, Button } from "@mui/material";
 import List from "@mui/material/List";
-import Typography from "@mui/material/Typography";
 import Divider from "@mui/material/Divider";
 import ListItem from "@mui/material/ListItem";
 import ChatIcon from "@mui/icons-material/Chat";
 import Drawer from "@mui/material/Drawer";
 
-import UserLayout from "./UserComponents/UserLayout";
-import ServerLayout from "./ServerComponents/ServerLayout";
 
 const drawerWidth = 60;
 
@@ -70,6 +67,7 @@ const Channels = () => {
                                     display: "flex",
                                     justifyContent: "center",
                                     padding: 0,
+                                    
                                 }}
                             >
                                 <ChatIcon />

@@ -40,7 +40,7 @@ const Login = ({ login: loginUser, error, isAuthenticated }) => {
 
     useEffect(() => {
         if (isAuthenticated) {
-            navigate("/channels");
+            navigate("/channels/@me");
         }
     }, [isAuthenticated, navigate]);
 
@@ -70,7 +70,7 @@ const Login = ({ login: loginUser, error, isAuthenticated }) => {
 
             if (response && response.data) {
                 console.log(response.data);
-                navigate("/channels");
+                navigate("/channels/@me");
             } 
         } catch (error) {
             console.error("API call failed:", error);

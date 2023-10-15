@@ -2,6 +2,9 @@ from rest_framework import viewsets, status
 from rest_framework.decorators import action
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
+from django.contrib.auth import get_user_model
+from django.db.models import Q
+
 
 from .models import Friendship,FriendRequest
 from .serializers import FriendRequestSerializer, FriendshipSerializer
@@ -73,4 +76,23 @@ class FriendRequestViewSet(viewsets.ModelViewSet):
         user = request.user
         friends = user.get_friends()
         serializer = UserSerializer(friends, many=True)  # Replace YourUserAccountSerializer with your actual serializer
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+    @action(detail=False, methods=['GET'])
+    def user_search(self, request):
+        user = request.user
+        query = request.GET.get('query','')
+
+        users = get_user_model().objects.filter(
+            ~Q(is_staff=True) & ~Q(is_banned=True)
+        ).exclude(id=user.id)
+
+        if query:
+            users = users.filter(
+                Q(username__icontains=query) | 
+                Q(display_name__icontains=query)
+            
+            )
+
+        serializer = UserSerializer(users, many=True)  
         return Response(serializer.data, status=status.HTTP_200_OK)
