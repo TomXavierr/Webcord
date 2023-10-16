@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Box from "@mui/material/Box";
 import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
@@ -11,6 +11,9 @@ import UserSettings from "../UserSettings";
 import ChatListDrawer from "./ChatListDrawer";
 import FriendsList from "./UserLayoutComponents/FriendsList";
 import AddFriend from "./UserLayoutComponents/AddFriend";
+import FriendRequests from "./UserLayoutComponents/FriendRequests";
+
+import { useToasts } from "react-toast-notifications";
 
 const drawerWidth = 60;
 
@@ -20,9 +23,23 @@ const toolbarStyle = {
     padding: "0",
 };
 
+const tabstyle = {
+    borderRadius: "4px",
+    color: "white",
+    fontSize: "14px",
+    marginInline: "10px",
+    paddingInline: "10px",
+    height: "20px",
+    transition: "background-color 0.2s ease-in-out",
+    "&:hover": {
+        backgroundColor: "#0a424f",
+    },
+};
+
 const UserLayout = () => {
     const [isUserSettingsOpen, setUserSettingsOpen] = useState(false);
     const [activeTab, setActiveTab] = useState("all");
+    const { addToast } = useToasts();
 
     const handleSettingsIconClick = () => {
         setUserSettingsOpen(true);
@@ -36,7 +53,7 @@ const UserLayout = () => {
         setActiveTab(tab);
     };
 
-    const username = useSelector((state) => state.auth.user?.username);
+    const user = useSelector((state) => state.auth.user);
 
     return (
         <Box
@@ -85,24 +102,44 @@ const UserLayout = () => {
                             </Typography>
                         </Box>
                     </Box>
-                    <Typography
-                        sx={{ px: "10px", fontSize: "14px" }}
+                    <Box
                         onClick={() => handleTabChange("all")}
+                        sx={{
+                            ...tabstyle,
+                            backgroundColor:
+                                activeTab === "all" ? "#0A4C5C" : "transparent",
+                        }}
                     >
-                        All
-                    </Typography>
+                        <Typography sx={{ fontSize: "14px" }}>All</Typography>
+                    </Box>
+                    <Box
+                        onClick={() => handleTabChange("requests")}
+                        sx={{
+                            ...tabstyle,
+                            backgroundColor:
+                                activeTab === "requests"
+                                    ? "#0A4C5C"
+                                    : "transparent",
+                        }}
+                    >
+                        <Typography sx={{ fontSize: "14px" }}>
+                            Requests
+                        </Typography>
+                    </Box>
                     <Button
                         onClick={() => handleTabChange("addFriend")}
                         sx={{
+                            ...tabstyle,
                             backgroundColor: "#32965d",
-                            borderRadius: "4px",
+
                             height: "20px",
+                            borderRadius: "4px",
                             color: "white",
                             fontSize: "14px",
                             textTransform: "none",
                             "&:hover": {
-                                backgroundColor: "#1e604e", // Adjust the hover background color
-                              },
+                                backgroundColor: "#1e604e",
+                            },
                         }}
                     >
                         <Typography
@@ -164,7 +201,17 @@ const UserLayout = () => {
                                         width: "24px",
                                         height: "24px",
                                     }}
-                                ></Avatar>
+                                >
+                                    <img
+                                        src={`${process.env.REACT_APP_API_URL}/${user.avatar}`}
+                                        alt="User Avatar"
+                                        style={{
+                                            width: "100%",
+                                            height: "100%",
+                                            borderRadius: "50%",
+                                        }}
+                                    />
+                                </Avatar>
                                 <Typography
                                     style={{
                                         fontFamily: "Noto Sans, sans-serif",
@@ -172,7 +219,7 @@ const UserLayout = () => {
                                         fontWeight: "bold",
                                     }}
                                 >
-                                    {username}
+                                    {user.username}
                                 </Typography>
                             </Stack>
                             <IconButton
@@ -201,6 +248,7 @@ const UserLayout = () => {
                 >
                     {activeTab === "all" && <FriendsList />}
                     {activeTab === "addFriend" && <AddFriend />}
+                    {activeTab === "requests" && <FriendRequests />}
                 </Box>
             </Box>
         </Box>

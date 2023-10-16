@@ -13,9 +13,12 @@ import {
     Typography,
 } from "@mui/material";
 import PersonAddIcon from "@mui/icons-material/PersonAdd";
+import HowToRegIcon from "@mui/icons-material/HowToReg";
+import PersonRemoveIcon from "@mui/icons-material/PersonRemove";
 
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
+import { useToasts } from "react-toast-notifications";
 
 const inputPropsStyle = {
     color: "white", // Set the text color to white
@@ -32,6 +35,7 @@ const AddFriend = () => {
     const [searchResults, setSearchResults] = useState([]);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
+    const { addToast } = useToasts();
 
     const userId = useSelector((state) => state.auth.user?.id);
 
@@ -105,11 +109,46 @@ const AddFriend = () => {
                 throw new Error(`HTTP error! Status: ${response.status}`);
             }
 
-            // Handle success, maybe update UI or show a message
+            addToast("Friend request sent successfully", {
+                appearance: "success",
+                autoDismiss: true,
+            });
+            handleSearch(searchQuery);
             console.log("Friend request sent successfully");
         } catch (error) {
-            // Handle error, maybe show an error message
             console.error("Error sending friend request:", error.message);
+        }
+    };
+
+    const handleCancelFriendRequest = async (friendRequestId, user) => {
+        try {
+            const token = localStorage.getItem("access");
+            const url = `${process.env.REACT_APP_API_URL}/friends/friend-requests/${friendRequestId}/cancel_request/`;
+    
+            const config = {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    Authorization: `Bearer ${token}`,
+                },
+            };
+    
+            const response = await fetch(url, config);
+    
+            if (!response.ok) {
+                throw new Error(`HTTP error! Status: ${response.status}`);
+            }
+    
+            addToast("Friend request cancelled successfully", {
+                appearance: "warning",
+                autoDismiss: true,
+            });
+    
+            handleSearch(searchQuery);
+    
+            console.log("Friend request canceled successfully");
+        } catch (error) {
+            console.error("Error canceling friend request:", error.message);
         }
     };
 
@@ -179,10 +218,18 @@ const AddFriend = () => {
                             >
                                 <Box sx={{ display: "flex" }}>
                                     <ListItemAvatar>
-                                        <Avatar>{user.id}</Avatar>
+                                        <Avatar> <img
+                                        src={`${process.env.REACT_APP_API_URL}/${user.avatar}`} 
+                                        alt="User Avatar"
+                                        style={{
+                                            width: "100%",
+                                            height: "100%",
+                                            borderRadius: "50%", 
+                                        }}
+                                    /></Avatar>
                                     </ListItemAvatar>
                                     <Box>
-                                    <Typography
+                                        <Typography
                                             style={{
                                                 color: "white",
                                                 width: "inherit",
@@ -202,17 +249,65 @@ const AddFriend = () => {
                                         </Typography>
                                     </Box>
                                 </Box>
-                                {/* Add Friend Button */}
-                                <Tooltip title="Add friend"
-                                    onClick={() => handleAddFriend(user)}
-                                   
-                                >
-                                    <IconButton edge="end" aria-label="delete">
 
-                                    <PersonAddIcon sx={{color:"white"}}/>
-                                    </IconButton>
-                                </Tooltip>
-                               
+                                {user.is_friend ? (
+                                    <Tooltip title="Already friends">
+                                        <IconButton
+                                            edge="end"
+                                            aria-label="Already friends"
+                                        >
+                                            <HowToRegIcon
+                                                sx={{ color: "white" }}
+                                            />
+                                        </IconButton>
+                                    </Tooltip>
+                                ) : user.is_friend_request_sent && user.friend_request_status == "pending" ? (
+                                    <Tooltip
+                                        title="Cancel request"
+                                        onClick={() =>
+                                            handleCancelFriendRequest(
+                                                user.friend_request_id
+                                            )
+                                        }
+                                    >
+                                        <IconButton
+                                            edge="end"
+                                            aria-label="Cancel request"
+                                        >
+                                            <PersonRemoveIcon
+                                                sx={{ color: "white" }}
+                                            />
+                                        </IconButton>
+                                    </Tooltip>
+                                ) : user.is_friend_request_sent && user.friend_request_status == "declined" ?(
+                                    <Tooltip
+                                        title="Add friend"
+                                        onClick={() => handleAddFriend(user)}
+                                    >
+                                        <IconButton
+                                            edge="end"
+                                            aria-label="delete"
+                                        >
+                                            <PersonAddIcon
+                                                sx={{ color: "white" }}
+                                            />
+                                        </IconButton>
+                                    </Tooltip>
+                                ) : (
+                                    <Tooltip
+                                        title="Add friend"
+                                        onClick={() => handleAddFriend(user)}
+                                    >
+                                        <IconButton
+                                            edge="end"
+                                            aria-label="delete"
+                                        >
+                                            <PersonAddIcon
+                                                sx={{ color: "white" }}
+                                            />
+                                        </IconButton>
+                                    </Tooltip>
+                                )}
                             </ListItem>
                         </Box>
                     </Box>

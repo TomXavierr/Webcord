@@ -77,3 +77,17 @@ class UserAccount(AbstractBaseUser, PermissionsMixin):
         ).distinct()
 
         return friends
+
+    def update_avatar(self, new_avatar):
+        """
+        Update the user's avatar.
+        """
+        self.avatar = new_avatar
+        self.save()
+
+    def update_banner(self, new_banner):
+        """
+        Update the user's banner.
+        """
+        self.banner = new_banner
+        self.save()

@@ -4,6 +4,7 @@ from rest_framework import generics
 from rest_framework import status
 from rest_framework.response import Response
 from django.contrib.auth.models import AnonymousUser
+from rest_framework.parsers import MultiPartParser, FormParser
 from .serializers import UserSerializer,UserUpdateSerializer
 from rest_framework.permissions import IsAuthenticated
 from .models import UserAccount
@@ -37,6 +38,23 @@ class UserDetailView(APIView):
 class UserUpdateView(generics.RetrieveUpdateAPIView):
     serializer_class = UserUpdateSerializer
     permission_classes = [IsAuthenticated]
+    parser_classes = [MultiPartParser, FormParser]
 
     def get_object(self):
         return self.request.user
+
+    def update(self, request, *args, **kwargs):
+        partial = kwargs.pop('partial', False)
+        instance = self.get_object()
+        serializer = self.get_serializer(instance, data=request.data, partial=partial)
+        serializer.is_valid(raise_exception=True)
+        self.perform_update(serializer)
+
+        # Check if 'avatar' and 'banner' are present in the request data
+        if 'avatar' in request.data:
+            instance.update_avatar(request.data['avatar'])
+
+        if 'banner' in request.data:
+            instance.update_banner(request.data['banner'])
+
+        return Response(serializer.data)

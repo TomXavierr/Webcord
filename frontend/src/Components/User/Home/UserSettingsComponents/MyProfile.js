@@ -1,9 +1,10 @@
 import { Avatar, Box, Button, Divider, Stack, Typography } from "@mui/material";
 import React, { useState } from "react";
 import { useSelector } from "react-redux";
-import ChangePasswordModal from "./Modals/ChangePasswordModal";
 import axios from "axios";
+import ChangePasswordModal from "./Modals/ChangePasswordModal";
 import EditPhoneModal from "./Modals/EditPhoneModal";
+import EditAvatarModal from "./Modals/EditAvatarModal";
 
 const headingStyles = {
     fontSize: "10px",
@@ -41,6 +42,8 @@ const MyProfile = () => {
     const [user, setUser] = useState(useSelector((state) => state.auth.user));
     const [isPasswordModalOpen, setIsPasswordModalOpen] = useState(false);
     const [isPhoneModalOpen, setIsPhoneModalOpen] = useState(false);
+    const [isEditAvatarModalOpen, setEditAvatarModalOpen] = useState(false);
+    const [croppedImageUrl, setCroppedImageUrl] = useState(null);
 
     const handlePasswordChange = async (
         currentPassword,
@@ -127,7 +130,18 @@ const MyProfile = () => {
                         height: "48px",
                         width: "48px",
                     }}
-                ></Avatar>
+                >
+                    {" "}
+                    <img
+                        src={`${process.env.REACT_APP_API_URL}/${user.avatar}`}
+                        alt="User Avatar"
+                        style={{
+                            width: "100%",
+                            height: "100%",
+                            borderRadius: "50%",
+                        }}
+                    />
+                </Avatar>
                 <Box
                     sx={{
                         marginLeft: "72px",
@@ -157,15 +171,25 @@ const MyProfile = () => {
                             fontSize: "14px",
                             textTransform: "none",
                         }}
+                        onClick={() => setEditAvatarModalOpen(true)}
                     >
                         <Typography
                             style={{
                                 fontSize: "12px",
                             }}
                         >
-                            Edit User Profile
+                            Edit Avatar
                         </Typography>
                     </Button>
+                    <EditAvatarModal
+                        isOpen={isEditAvatarModalOpen}
+                        onCancel={() => setEditAvatarModalOpen(false)}
+                        onSave={(image) => {
+                            console.log("Selected image URL:", image);
+                            setEditAvatarModalOpen(false);
+                            setCroppedImageUrl(image);
+                        }}
+                    />
                 </Box>
 
                 <Box
