@@ -8,6 +8,9 @@ import AdminLogin from "./Components/Admin/AdminLogin";
 import AdminDashboard from "./Components/Admin/AdminDashboard";
 import Activate from "./Components/User/Login & SignUp/Activate";
 
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
 import { Provider } from "react-redux";
 import store from "./Redux/store";
 import ProtectedRoute from "./ProtectecRoutes/ProtectedRoute";
@@ -19,9 +22,10 @@ import AuthLoading from "./Components/Loadings/AuthLoading";
 import AdminProtectedRoute from "./ProtectecRoutes/AdminProtectedRoute";
 import { checkAdminAuthentication } from "./Redux/actions/adminAuthAction";
 import Channels from "./Components/User/Home/Channels";
-import UserSettings from "./Components/User/Home/UserSettings";
 import UserLayout from "./Components/User/Home/UserComponents/UserLayout";
 import ServerLayout from "./Components/User/Home/ServerComponents/ServerLayout";
+
+
 
 function App() {
     const [loading, setLoading] = useState(true);
@@ -83,6 +87,7 @@ function App() {
                     </Routes>
                 </Router>
             </Provider>
+            <ToastContainer theme="light"  />
         </div>
     );
 }

@@ -11,6 +11,7 @@ import {
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import axios from "axios";
+import { toast } from "react-toastify";
 
 const FriendRequests = () => {
     const [friendRequests, setFriendRequests] = useState([]);
@@ -30,13 +31,16 @@ const FriendRequests = () => {
                 config
             );
 
-            
+            toast("Friend Request Accepted", {
+                position: toast.POSITION.TOP_CENTER,
+                autoClose: 2000,
+            });
 
             fetchFriendRequests();
         } catch (error) {
             console.error("Error while accepting friend request", error);
         }
-    }
+    };
 
     const declineFriendRequest = async (friendRequestId) => {
         try {
@@ -46,15 +50,21 @@ const FriendRequests = () => {
                     Authorization: `Bearer ${token}`,
                 },
             };
-            await axios.post(`${process.env.REACT_APP_API_URL}/friends/friend-requests/${friendRequestId}/decline/`,
-            {},
-            config
-        );
+            await axios.post(
+                `${process.env.REACT_APP_API_URL}/friends/friend-requests/${friendRequestId}/decline/`,
+                {},
+                config
+            );
+            
+            toast("Friend Request Rejected", {
+                position: toast.POSITION.TOP_CENTER,
+                autoClose: 2000,
+            });
             fetchFriendRequests();
         } catch (error) {
             console.error("Error while declining friend request", error);
         }
-    }
+    };
 
     const fetchFriendRequests = async () => {
         try {
@@ -167,53 +177,55 @@ const FriendRequests = () => {
                                     </Box>
                                 </Box>
                                 <Box>
-
-                                
-                                <Button
-                                    onClick={() => acceptFriendRequest(request.id)}
-                                    sx={{
-                                        backgroundColor: "#32965d",
-                                        borderRadius: "4px",
-                                        height: "20px",
-                                        color: "white",
-                                        fontSize: "14px",
-                                        textTransform: "none",
-                                        marginRight: "10px",
-                                        "&:hover": {
-                                            backgroundColor: "#1e604e",
-                                        },
-                                    }}
-                                >
-                                    <Typography
-                                        style={{
-                                            fontSize: "12px",
+                                    <Button
+                                        onClick={() =>
+                                            acceptFriendRequest(request.id)
+                                        }
+                                        sx={{
+                                            backgroundColor: "#32965d",
+                                            borderRadius: "4px",
+                                            height: "20px",
+                                            color: "white",
+                                            fontSize: "14px",
+                                            textTransform: "none",
+                                            marginRight: "10px",
+                                            "&:hover": {
+                                                backgroundColor: "#1e604e",
+                                            },
                                         }}
                                     >
-                                        Accept
-                                    </Typography>
-                                </Button>
-                                <Button
-                                    onClick={() => declineFriendRequest(request.id)}
-                                    sx={{
-                                        backgroundColor: "#bf1e15",
-                                        borderRadius: "4px",
-                                        height: "20px",
-                                        color: "white",
-                                        fontSize: "14px",
-                                        textTransform: "none",
-                                        "&:hover": {
-                                            backgroundColor: "#751510",
-                                        },
-                                    }}
-                                >
-                                    <Typography
-                                        style={{
-                                            fontSize: "12px",
+                                        <Typography
+                                            style={{
+                                                fontSize: "12px",
+                                            }}
+                                        >
+                                            Accept
+                                        </Typography>
+                                    </Button>
+                                    <Button
+                                        onClick={() =>
+                                            declineFriendRequest(request.id)
+                                        }
+                                        sx={{
+                                            backgroundColor: "#bf1e15",
+                                            borderRadius: "4px",
+                                            height: "20px",
+                                            color: "white",
+                                            fontSize: "14px",
+                                            textTransform: "none",
+                                            "&:hover": {
+                                                backgroundColor: "#751510",
+                                            },
                                         }}
                                     >
-                                        Decline
-                                    </Typography>
-                                </Button>
+                                        <Typography
+                                            style={{
+                                                fontSize: "12px",
+                                            }}
+                                        >
+                                            Decline
+                                        </Typography>
+                                    </Button>
                                 </Box>
                             </ListItem>
                         </Box>

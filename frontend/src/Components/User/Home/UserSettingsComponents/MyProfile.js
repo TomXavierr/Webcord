@@ -1,7 +1,6 @@
 import { Avatar, Box, Button, Divider, Stack, Typography } from "@mui/material";
 import React, { useState } from "react";
 import { useSelector } from "react-redux";
-import axios from "axios";
 import ChangePasswordModal from "./Modals/ChangePasswordModal";
 import EditPhoneModal from "./Modals/EditPhoneModal";
 import EditAvatarModal from "./Modals/EditAvatarModal";
@@ -43,45 +42,23 @@ const MyProfile = () => {
     const [isPasswordModalOpen, setIsPasswordModalOpen] = useState(false);
     const [isPhoneModalOpen, setIsPhoneModalOpen] = useState(false);
     const [isEditAvatarModalOpen, setEditAvatarModalOpen] = useState(false);
-    const [croppedImageUrl, setCroppedImageUrl] = useState(null);
-
-    const handlePasswordChange = async (
-        currentPassword,
-        newPassword,
-        confirmPassword
-    ) => {
-        const token = localStorage.getItem("access");
-        const config = {
-            headers: {
-                Authorization: `Bearer ${token}`,
-            },
-        };
-
-        try {
-            const response = await axios.post(
-                `${process.env.REACT_APP_API_URL}/auth/users/set_password/`,
-                {
-                    current_password: currentPassword,
-                    new_password: newPassword,
-                    re_new_password: confirmPassword,
-                },
-                config
-            );
-            setIsPasswordModalOpen(false);
-        } catch (error) {
-            console.error("Password change failed:", error);
-        }
-    };
-
+    
+ 
     const handleEditPhoneClick = () => {
         setIsPhoneModalOpen(true);
     };
 
+    // const handleEditPhoneClick = () => {
+    //     setIsPhoneModalOpen(true);
+    // };
+
+    
     const handlePhoneChange = (newPhone) => {
         const updatedUser = { ...user, phone: newPhone };
         setUser(updatedUser);
         setIsPhoneModalOpen(false);
     };
+
 
     return (
         <Box
@@ -184,10 +161,12 @@ const MyProfile = () => {
                     <EditAvatarModal
                         isOpen={isEditAvatarModalOpen}
                         onCancel={() => setEditAvatarModalOpen(false)}
+                        currentAvatar={user.avatar}
                         onSave={(image) => {
                             console.log("Selected image URL:", image);
                             setEditAvatarModalOpen(false);
-                            setCroppedImageUrl(image);
+                            
+                            
                         }}
                     />
                 </Box>
@@ -336,7 +315,7 @@ const MyProfile = () => {
                     <ChangePasswordModal
                         isOpen={isPasswordModalOpen}
                         onCancel={() => setIsPasswordModalOpen(false)}
-                        onPasswordChange={handlePasswordChange}
+                    
                     />
                 </Button>
             </Stack>

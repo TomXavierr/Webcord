@@ -1,9 +1,0 @@
-# Query: "start": "react-scripts start"
-# ContextLines: 1
-
-1 result - 1 file
-
-frontend\package.json:
-  26    "scripts": {
-  27:     "start": "react-scripts --openssl-legacy-provider start",
-  28      "build": "react-scripts --openssl-legacy-provider build",

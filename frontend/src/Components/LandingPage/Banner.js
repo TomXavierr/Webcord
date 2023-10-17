@@ -13,7 +13,6 @@ const Banner = () => {
                     backgroundRepeat: "no-repeat",
                     backgroundPosition: "left bottom, right bottom", 
                     backgroundSize: "50% 60%, 50% 60%", 
-                    minHeight: "200px", 
                     position: "relative",
                     padding: "32px",
                     minHeight: "700px"

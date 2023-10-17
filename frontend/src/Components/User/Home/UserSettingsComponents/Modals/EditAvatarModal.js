@@ -1,27 +1,71 @@
 import { Box, Button, DialogActions, Modal, Typography } from "@mui/material";
-import React, { useState } from "react";
+import axios from "axios";
+import React, { useEffect, useState } from "react";
 
 
-const EditAvatarModal = ({ isOpen, onCancel, onSave }) => {
-    const [image, setImage] = useState(null);
+const EditAvatarModal = ({ isOpen, onCancel, onSave , currentAvatar }) => {
+    const [newAvatar, setNewAvatar] = useState(null)
+    const [previewUrl, setPreviewUrl] = useState(
+        currentAvatar ? `${process.env.REACT_APP_API_URL}/${currentAvatar}` : null
+    );
 
-    const handleFileChange = (e) => {
-        const file = e.target.files[0];
+    const handleFileChange = (event) => {
+        const file = event.target.files[0];
+        setNewAvatar(file);
+
+        const reader = new FileReader();
+        reader.onloadend = () => {
+            setPreviewUrl(reader.result);
+        };
         if (file) {
-            const reader = new FileReader();
-            reader.onload = (e) => {
-                setImage(e.target.result);
-            };
             reader.readAsDataURL(file);
+        } else {
+            setPreviewUrl(null);
         }
+
     };
 
-    const handleSave = () => {
-        onSave(image); 
+    const handleSubmit = async(event) => {
+        event.preventDefault();
+
+        try{
+            const token = localStorage.getItem('access');
+            const formData = new FormData();
+            formData.append('avatar', newAvatar);
+
+            console.log("new" + newAvatar);
+
+            const config = {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                    'Content-Type': 'multipart/form-data',
+                }
+            }
+
+            const response = await axios.put(`${process.env.REACT_APP_API_URL}/account/update/`,
+            formData,
+            config);
+
+            console.log('Avatar updated successfully:', response.data.avatar);
+            onSave(response.data.avatar);
+        } catch (error) {
+            console.error('Failed to update Avatar:', error);
+        }
+    }
+
+    const handleClose = (event) => {
+        event.stopPropagation();
+        onCancel();
     };
+
+    useEffect(() => {
+        if (currentAvatar) {
+            setPreviewUrl(`${process.env.REACT_APP_API_URL}/${currentAvatar}`);
+        }
+    }, [currentAvatar]);
     
     return (
-        <Modal open={isOpen} onClose={onCancel} maxWidth="xs">
+        <Modal open={isOpen} onClose={onCancel} >
             <Box
                 style={{
                     display: "flex",
@@ -40,23 +84,26 @@ const EditAvatarModal = ({ isOpen, onCancel, onSave }) => {
                     >
                         Edit Avatar
                     </Typography>
-                    <input type="file" onChange={handleFileChange} />
-                    {image && (
+                    
+                    {previewUrl && (
                         <img
-                            src={image}
-                            alt="Selected Avatar"
+                            src={previewUrl}
+                            alt="Preview"
                             style={{
                                 width: "100%",
                                 height: "auto",
-                                marginTop: "16px",
+                                marginTop: "12px",
+                                borderRadius: "8px",
                             }}
                         />
                     )}
+                    <input type="file" onChange={handleFileChange}  />
+                    
                     <DialogActions>
-                        <Button onClick={onCancel} color="primary">
+                        <Button onClick={handleClose} color="primary">
                             Cancel
                         </Button>
-                        <Button type="submit" color="primary" onClick={handleSave}>
+                        <Button type="submit" color="primary" onClick={handleSubmit}>
                             Save
                         </Button>
                     </DialogActions>

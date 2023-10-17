@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Avatar, Box, Divider, IconButton, List, ListItem, ListItemAvatar, Tooltip, Typography } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
-import { useSelector } from "react-redux";
 import axios from "axios";
 
 const FriendsList = () => {

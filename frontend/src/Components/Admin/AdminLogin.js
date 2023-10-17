@@ -7,7 +7,7 @@ import {
     Link,
     Typography,
 } from "@mui/material";
-import { useDispatch, connect } from "react-redux";
+import { connect } from "react-redux";
 import { adminLogin } from "../../Redux/actions/adminAuthAction";
 import { selectAdminLoginError } from "../../Redux/selectors/adminAuthSelector";
 import React, { useEffect, useState } from "react";

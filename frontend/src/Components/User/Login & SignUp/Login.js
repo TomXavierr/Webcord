@@ -14,27 +14,29 @@ import { useNavigate } from "react-router-dom";
 import { login } from "../../../Redux/actions/userauthaction";
 import axios from "axios";
 
-const Login = ({ login: loginUser, error, isAuthenticated }) => {
-    const inputPropsStyle = {
-        color: "white", // Set the text color to white
-        backgroundColor: "#000000",
-        fontSize: "12px",
-    };
-    const LabelStyle = {
-        fontFamily: "Sofia Sans, sans-serif ",
-        fontWeight: 600,
-        letterSpacing: "1.5px",
-        fontSize: "12px",
+const inputPropsStyle = {
+    color: "white", // Set the text color to white
+    backgroundColor: "#000000",
+    fontSize: "12px",
+};
+const LabelStyle = {
+    fontFamily: "Sofia Sans, sans-serif ",
+    fontWeight: 600,
+    letterSpacing: "1.5px",
+    fontSize: "12px",
+    color: "#EBF2FA",
+    "&.Mui-focused": {
         color: "#EBF2FA",
-        "&.Mui-focused": {
-            color: "#EBF2FA",
-        },
-    };
-    const buttonStyle = {
-        backgroundColor: "#44CFCB",
-        marginBottom: "16px",
-        marginTop: "16px",
-    };
+    },
+};
+const buttonStyle = {
+    backgroundColor: "#44CFCB",
+    marginBottom: "16px",
+    marginTop: "16px",
+};
+
+
+const Login = ({ login: loginUser, error, isAuthenticated }) => {
 
     const navigate = useNavigate();
 

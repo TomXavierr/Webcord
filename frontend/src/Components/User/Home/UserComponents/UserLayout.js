@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import Box from "@mui/material/Box";
 import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
@@ -12,8 +12,6 @@ import ChatListDrawer from "./ChatListDrawer";
 import FriendsList from "./UserLayoutComponents/FriendsList";
 import AddFriend from "./UserLayoutComponents/AddFriend";
 import FriendRequests from "./UserLayoutComponents/FriendRequests";
-
-import { useToasts } from "react-toast-notifications";
 
 const drawerWidth = 60;
 
@@ -37,16 +35,29 @@ const tabstyle = {
 };
 
 const UserLayout = () => {
-    const [isUserSettingsOpen, setUserSettingsOpen] = useState(false);
     const [activeTab, setActiveTab] = useState("all");
-    const { addToast } = useToasts();
+
+    const [isUserSettingsOpen, setUserSettingsOpen] = useState(
+        localStorage.getItem("isUserSettingsOpen") === "true" || false
+    );
+
+    const [userSettingsActiveTab, setUserSettingsActiveTab] = useState(
+        localStorage.getItem("userSettingsActiveTab") || "My Profile"
+    );
+
+    const handleUserSettingsTabChange = (tab) => {
+        setUserSettingsActiveTab(tab);
+        localStorage.setItem("userSettingsActiveTab", tab);
+    };
 
     const handleSettingsIconClick = () => {
         setUserSettingsOpen(true);
+        localStorage.setItem("isUserSettingsOpen", "true");
     };
 
     const handleCloseUserSettings = () => {
         setUserSettingsOpen(false);
+        localStorage.setItem("isUserSettingsOpen", "false");
     };
 
     const handleTabChange = (tab) => {
@@ -202,15 +213,17 @@ const UserLayout = () => {
                                         height: "24px",
                                     }}
                                 >
-                                    <img
-                                        src={`${process.env.REACT_APP_API_URL}/${user.avatar}`}
-                                        alt="User Avatar"
-                                        style={{
-                                            width: "100%",
-                                            height: "100%",
-                                            borderRadius: "50%",
-                                        }}
-                                    />
+                                    {user && user.avatar && (
+                                        <img
+                                            src={`${process.env.REACT_APP_API_URL}/${user.avatar}`}
+                                            alt="User Avatar"
+                                            style={{
+                                                width: "100%",
+                                                height: "100%",
+                                                borderRadius: "50%",
+                                            }}
+                                        />
+                                    )}
                                 </Avatar>
                                 <Typography
                                     style={{
@@ -219,7 +232,7 @@ const UserLayout = () => {
                                         fontWeight: "bold",
                                     }}
                                 >
-                                    {user.username}
+                                    {user && user.username}
                                 </Typography>
                             </Stack>
                             <IconButton
@@ -235,6 +248,8 @@ const UserLayout = () => {
                             <UserSettings
                                 isOpen={isUserSettingsOpen}
                                 onClose={handleCloseUserSettings}
+                                activeTab={userSettingsActiveTab}
+                                onTabChange={handleUserSettingsTabChange}
                             />
                         </Box>
                     </Box>

@@ -11,7 +11,7 @@ import {
 import LogoutIcon from "@mui/icons-material/Logout";
 import HighlightOffIcon from "@mui/icons-material/HighlightOff";
 
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import MyProfile from "./UserSettingsComponents/MyProfile";
 import LoginAndSecurity from "./UserSettingsComponents/LoginAndSecurity";
 import Activity from "./UserSettingsComponents/Activity";
@@ -45,17 +45,17 @@ const ListStyle = {
     marginBlock: "6px",
 };
 
-const UserSettings = ({ isOpen, onClose }) => {
-    const [selectedMenuItem, setSelectedMenuItem] = useState("My Profile");
-
+const UserSettings = ({ isOpen, onClose, activeTab, onTabChange }) => {
     const handleMenuItemClick = (menuItem) => {
-        setSelectedMenuItem(menuItem);
+        onTabChange(menuItem);
     };
 
     const dispatch = useDispatch();
     const navigate = useNavigate();
 
     const handleLogout = () => {
+        localStorage.removeItem("isUserSettingsOpen");
+        localStorage.removeItem("userSettingsActiveTab");
         dispatch(logout());
         navigate("/");
     };
@@ -128,7 +128,7 @@ const UserSettings = ({ isOpen, onClose }) => {
                         >
                             <ListItem disablePadding style={ListStyle}>
                                 <ListItemButton
-                                    selected={selectedMenuItem === "My Profile"}
+                                    selected={activeTab === "My Profile"}
                                     onClick={() =>
                                         handleMenuItemClick("My Profile")
                                     }
@@ -141,7 +141,7 @@ const UserSettings = ({ isOpen, onClose }) => {
                             </ListItem>
                             <ListItem disablePadding style={ListStyle}>
                                 <ListItemButton
-                                    selected={selectedMenuItem === "Security"}
+                                    selected={activeTab === "Security"}
                                     onClick={() =>
                                         handleMenuItemClick("Security")
                                     }
@@ -154,7 +154,7 @@ const UserSettings = ({ isOpen, onClose }) => {
                             </ListItem>
                             <ListItem disablePadding style={ListStyle}>
                                 <ListItemButton
-                                    selected={selectedMenuItem === "Activity"}
+                                    selected={activeTab === "Activity"}
                                     onClick={() =>
                                         handleMenuItemClick("Activity")
                                     }
@@ -209,20 +209,20 @@ const UserSettings = ({ isOpen, onClose }) => {
                         paddingTop: "36px",
                     }}
                 >
-                    {selectedMenuItem === "My Profile" && <MyProfile />}
-                    {selectedMenuItem === "Security" && <LoginAndSecurity />}
-                    {selectedMenuItem === "Activity" && <Activity />}
+                    {activeTab === "My Profile" && <MyProfile />}
+                    {activeTab === "Security" && <LoginAndSecurity />}
+                    {activeTab === "Activity" && <Activity />}
                 </Box>
                 <Box
                     sx={{
-                        alignItems:"center",
+                        alignItems: "center",
                         position: "absolute",
                         top: 36,
                         right: 50,
                         color: "rgba(255, 255, 255, 0.3)",
-                            "&:hover": {
-                                color: "rgba(255, 255, 255, 0.8)",
-                            },
+                        "&:hover": {
+                            color: "rgba(255, 255, 255, 0.8)",
+                        },
                     }}
                     onClick={onClose}
                 >
@@ -231,9 +231,7 @@ const UserSettings = ({ isOpen, onClose }) => {
                             borderRadius: "12px",
                         }}
                     />
-                    <Typography>
-                        ESC
-                    </Typography>
+                    <Typography>ESC</Typography>
                 </Box>
             </Box>
         </Modal>

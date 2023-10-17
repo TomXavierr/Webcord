@@ -1,14 +1,12 @@
 import {
     Avatar,
     Box,
-    Button,
     Divider,
     IconButton,
     Input,
     List,
     ListItem,
     ListItemAvatar,
-    ListItemText,
     Tooltip,
     Typography,
 } from "@mui/material";
@@ -16,9 +14,10 @@ import PersonAddIcon from "@mui/icons-material/PersonAdd";
 import HowToRegIcon from "@mui/icons-material/HowToReg";
 import PersonRemoveIcon from "@mui/icons-material/PersonRemove";
 
+import { toast } from 'react-toastify';
+
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
-import { useToasts } from "react-toast-notifications";
 
 const inputPropsStyle = {
     color: "white", // Set the text color to white
@@ -35,9 +34,9 @@ const AddFriend = () => {
     const [searchResults, setSearchResults] = useState([]);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
-    const { addToast } = useToasts();
 
     const userId = useSelector((state) => state.auth.user?.id);
+
 
     const handleSearch = async (query) => {
         if (!query) {
@@ -109,10 +108,11 @@ const AddFriend = () => {
                 throw new Error(`HTTP error! Status: ${response.status}`);
             }
 
-            addToast("Friend request sent successfully", {
-                appearance: "success",
-                autoDismiss: true,
+            toast("Friend request sent successfully", {
+                position: toast.POSITION.TOP_CENTER,
+                autoClose: 2000,
             });
+
             handleSearch(searchQuery);
             console.log("Friend request sent successfully");
         } catch (error) {
@@ -124,7 +124,7 @@ const AddFriend = () => {
         try {
             const token = localStorage.getItem("access");
             const url = `${process.env.REACT_APP_API_URL}/friends/friend-requests/${friendRequestId}/cancel_request/`;
-    
+
             const config = {
                 method: "POST",
                 headers: {
@@ -132,20 +132,20 @@ const AddFriend = () => {
                     Authorization: `Bearer ${token}`,
                 },
             };
-    
+
             const response = await fetch(url, config);
-    
+
             if (!response.ok) {
                 throw new Error(`HTTP error! Status: ${response.status}`);
             }
-    
-            addToast("Friend request cancelled successfully", {
-                appearance: "warning",
-                autoDismiss: true,
+
+            toast("Friend request cancelled successfully", {
+                position: toast.POSITION.TOP_CENTER,
+                autoClose: 2000, 
             });
-    
+
             handleSearch(searchQuery);
-    
+
             console.log("Friend request canceled successfully");
         } catch (error) {
             console.error("Error canceling friend request:", error.message);
@@ -218,15 +218,19 @@ const AddFriend = () => {
                             >
                                 <Box sx={{ display: "flex" }}>
                                     <ListItemAvatar>
-                                        <Avatar> <img
-                                        src={`${process.env.REACT_APP_API_URL}/${user.avatar}`} 
-                                        alt="User Avatar"
-                                        style={{
-                                            width: "100%",
-                                            height: "100%",
-                                            borderRadius: "50%", 
-                                        }}
-                                    /></Avatar>
+                                        <Avatar>
+                                            {user && user.avatar && (
+                                                <img
+                                                    src={`${process.env.REACT_APP_API_URL}/${user.avatar}`}
+                                                    alt="User Avatar"
+                                                    style={{
+                                                        width: "100%",
+                                                        height: "100%",
+                                                        borderRadius: "50%",
+                                                    }}
+                                                />
+                                            )}
+                                        </Avatar>
                                     </ListItemAvatar>
                                     <Box>
                                         <Typography
@@ -261,7 +265,8 @@ const AddFriend = () => {
                                             />
                                         </IconButton>
                                     </Tooltip>
-                                ) : user.is_friend_request_sent && user.friend_request_status == "pending" ? (
+                                ) : user.is_friend_request_sent &&
+                                  user.friend_request_status === "pending" ? (
                                     <Tooltip
                                         title="Cancel request"
                                         onClick={() =>
@@ -279,7 +284,8 @@ const AddFriend = () => {
                                             />
                                         </IconButton>
                                     </Tooltip>
-                                ) : user.is_friend_request_sent && user.friend_request_status == "declined" ?(
+                                ) : user.is_friend_request_sent &&
+                                  user.friend_request_status === "declined" ? (
                                     <Tooltip
                                         title="Add friend"
                                         onClick={() => handleAddFriend(user)}
@@ -292,6 +298,7 @@ const AddFriend = () => {
                                                 sx={{ color: "white" }}
                                             />
                                         </IconButton>
+                                        
                                     </Tooltip>
                                 ) : (
                                     <Tooltip
@@ -313,6 +320,7 @@ const AddFriend = () => {
                     </Box>
                 ))}
             </List>
+            
         </Box>
     );
 };

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
     DialogActions,
     Button,
@@ -9,6 +9,7 @@ import {
     Modal,
     Typography,
 } from "@mui/material";
+import axios from "axios";
 
 const inputPropsStyle = {
     color: "white", // Set the text color to white
@@ -26,7 +27,7 @@ const LabelStyle = {
     },
 };
 
-const ChangePasswordModal = ({ isOpen, onCancel, onPasswordChange }) => {
+const ChangePasswordModal = ({ isOpen, onCancel }) => {
     const [passwordData, setPasswordData] = useState({
         currentPassword: "",
         newPassword: "",
@@ -38,6 +39,76 @@ const ChangePasswordModal = ({ isOpen, onCancel, onPasswordChange }) => {
         newPassword: "",
         confirmPassword: "",
     });
+
+    useEffect(() => {
+    }, [errors]);
+
+    const handleSave = async (event) => {
+        event.preventDefault();
+
+        if (
+            passwordData.currentPassword &&
+            passwordData.newPassword &&
+            passwordData.confirmPassword &&
+            !errors.currentPassword &&
+            !errors.newPassword &&
+            !errors.confirmPassword
+        ) {
+            if (passwordData.newPassword !== passwordData.confirmPassword) {
+                setErrors({
+                    ...errors,
+                    confirmPassword: "Passwords do not match.",
+                });
+                return;
+            }
+
+            try {
+                const response = await axios.patch(
+                    `${process.env.REACT_APP_API_URL}/account/change-password/`,
+                    {
+                        current_password: passwordData.currentPassword,
+                        new_password: passwordData.newPassword,
+                        confirm_password: passwordData.confirmPassword,
+                    },
+                    {
+                        headers: {
+                            Authorization: `Bearer ${localStorage.getItem(
+                                "access"
+                            )}`,
+                        },
+                    }
+                );
+
+                // Handle successful response here
+                console.log(response.data.detail);
+
+                // Close the modal
+                onCancel();
+            } catch (error) {
+                console.error(
+                    "Password change failed:",
+                    error.response.data.detail
+                );
+                if (error.response.data.error === 'current_password error') {
+                    setErrors({
+                        ...errors,
+                        currentPassword: error.response.data.detail,
+                    });
+                } else if (error.response.data.error === 'confirm_password error') {
+                    setErrors({
+                        ...errors,
+                        confirmPassword: error.response.data.detail,
+                    });
+                } else {
+                
+                    setErrors({
+                        ...errors,
+                        confirmPassword: "Password change failed. Please try again.",
+                    });
+                }
+            }
+        }
+    };
 
     const handleChange = (event) => {
         const { name, value } = event.target;
@@ -68,24 +139,6 @@ const ChangePasswordModal = ({ isOpen, onCancel, onPasswordChange }) => {
         }
     };
 
-    const handleSave = () => {
-        if (passwordData.newPassword !== passwordData.confirmPassword) {
-            setErrors({
-                ...errors,
-                confirmPassword: "Passwords do not match.",
-            });
-            return;
-        }
-
-        onPasswordChange(
-            passwordData.currentPassword,
-            passwordData.newPassword,
-            passwordData.confirmPassword
-        );
-            
-        onCancel();
-    };
-
     const handleClose = (event) => {
         event.stopPropagation();
         onCancel();
@@ -102,15 +155,15 @@ const ChangePasswordModal = ({ isOpen, onCancel, onPasswordChange }) => {
                 }}
             >
                 <Box width="400px" height="auto" p={4} bgcolor="#122C34">
-                <Typography
-                    variant="h4"
-                    color="#EBF2FA"
-                    style={{
-                        fontSize: "24px",
-                    }}
-                >
-                    Change Password
-                </Typography>
+                    <Typography
+                        variant="h4"
+                        color="#EBF2FA"
+                        style={{
+                            fontSize: "24px",
+                        }}
+                    >
+                        Change Password
+                    </Typography>
                     <form onSubmit={handleSave}>
                         <FormControl fullWidth margin="normal">
                             <FormLabel sx={LabelStyle}>
@@ -123,6 +176,14 @@ const ChangePasswordModal = ({ isOpen, onCancel, onPasswordChange }) => {
                                 onChange={handleChange}
                                 sx={inputPropsStyle}
                             />
+                            {errors.currentPassword && (
+                                <Typography
+                                    color="error"
+                                    style={{ fontSize: "12px" }}
+                                >
+                                    {errors.currentPassword}
+                                </Typography>
+                            )}
                         </FormControl>
 
                         <FormControl fullWidth margin="normal">
@@ -156,12 +217,20 @@ const ChangePasswordModal = ({ isOpen, onCancel, onPasswordChange }) => {
                                 sx={inputPropsStyle}
                             />
                             {errors.confirmPassword && (
-                                <div>{errors.confirmPassword}</div>
+                                <Typography
+                                    color="error"
+                                    style={{ fontSize: "12px" }}
+                                >
+                                    {errors.confirmPassword}
+                                </Typography>
                             )}
                         </FormControl>
 
                         <DialogActions>
-                            <Button onClick={(event) => handleClose(event)} color="primary">
+                            <Button
+                                onClick={(event) => handleClose(event)}
+                                color="primary"
+                            >
                                 Cancel
                             </Button>
                             <Button type="submit" color="primary">

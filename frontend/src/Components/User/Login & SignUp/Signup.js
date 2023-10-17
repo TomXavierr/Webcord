@@ -43,17 +43,17 @@ const Signup = ({ signup: createUser, signupError, isAccountCreated }) => {
 
     const [errors, setErrors] = useState({});
 
-    const ErrorMessages = ({ errors }) => {
-        return (
-            <div>
-                {Object.keys(errors).map((fieldName, index) => (
-                    <p key={index} style={{ color: "red" }}>
-                        {errors[fieldName]}
-                    </p>
-                ))}
-            </div>
-        );
-    };
+    // const ErrorMessages = ({ errors }) => {
+    //     return (
+    //         <div>
+    //             {Object.keys(errors).map((fieldName, index) => (
+    //                 <p key={index} style={{ color: "red" }}>
+    //                     {errors[fieldName]}
+    //                 </p>
+    //             ))}
+    //         </div>
+    //     );
+    // };
 
     const { email, username, display_name, password } = formData;
 

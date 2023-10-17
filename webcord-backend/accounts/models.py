@@ -79,15 +79,15 @@ class UserAccount(AbstractBaseUser, PermissionsMixin):
         return friends
 
     def update_avatar(self, new_avatar):
-        """
-        Update the user's avatar.
-        """
+        if self.avatar:
+            # Construct the path to the previous avatar file
+            previous_avatar_path = os.path.join(settings.MEDIA_ROOT, str(self.avatar))
+
+            # Delete the previous avatar file from the server
+            if os.path.isfile(previous_avatar_path):
+                os.remove(previous_avatar_path)
+
+        # Set the new avatar and save the instance
         self.avatar = new_avatar
         self.save()
 
-    def update_banner(self, new_banner):
-        """
-        Update the user's banner.
-        """
-        self.banner = new_banner
-        self.save()

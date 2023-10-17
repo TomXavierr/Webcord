@@ -3,7 +3,7 @@ import {
     Button,
     Typography,
 } from "@mui/material";
-import React, { useState } from "react";
+import React from "react";
 import { connect } from "react-redux";
 import { activate } from "../../../Redux/actions/userauthaction";
 import { useNavigate, useParams } from "react-router-dom";
@@ -16,12 +16,12 @@ const Activate = ({ activate, match }) => {
     const { uid, token } = useParams();
     console.log(uid);
     console.log(token);
-    const [verified, setVerified] = useState(false)
+    // const [verified, setVerified] = useState(false)
    
     const activate_account = async (e) => {
        
         await activate(uid, token);
-        setVerified(true);
+        // setVerified(true);
         navigate("/login");
     };
 
