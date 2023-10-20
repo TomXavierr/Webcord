@@ -26,7 +26,6 @@ const StyledList = styled(List)({
             color: "white",
         },
     },
-    // hover states
     "& .MuiListItemButton-root:hover": {
         backgroundColor: "rgba(255, 255, 255, 0.05)",
         "&, & .MuiListItemIcon-root": {

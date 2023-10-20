@@ -1,15 +1,13 @@
-from rest_framework_simplejwt.views import TokenObtainPairView
-from rest_framework.views import APIView
+from rest_framework import generics, status
 from rest_framework.generics import UpdateAPIView
-from rest_framework import generics
-from rest_framework import status
-from rest_framework.response import Response
-from django.contrib.auth.models import AnonymousUser
-from rest_framework.parsers import MultiPartParser, FormParser, JSONParser
-from .serializers import UserSerializer, UserUpdateSerializer, ChangePasswordSerializer
+from rest_framework.parsers import FormParser, JSONParser, MultiPartParser
 from rest_framework.permissions import IsAuthenticated
-from .models import UserAccount
+from rest_framework.response import Response
+from rest_framework.views import APIView
+from rest_framework_simplejwt.views import TokenObtainPairView
 
+from .serializers import (ChangePasswordSerializer, UserSerializer,
+                          UserUpdateSerializer)
 
 
 class CustomTokenObtainPairView(TokenObtainPairView):
@@ -17,16 +15,17 @@ class CustomTokenObtainPairView(TokenObtainPairView):
         response = super().post(request, *args, **kwargs)
 
         if response.status_code == status.HTTP_200_OK:
-           
+
             serializer = self.get_serializer(data=request.data)
             serializer.is_valid(raise_exception=True)
-            self.user = serializer.user 
+            self.user = serializer.user
             if self.user.is_banned:
                 # User is banned, you can customize the response accordingly
                 response.data = {'detail': 'This user is banned.'}
                 response.status_code = status.HTTP_403_FORBIDDEN
 
         return response
+
 
 class UserDetailView(APIView):
     permission_classes = [IsAuthenticated]
@@ -35,6 +34,7 @@ class UserDetailView(APIView):
         user = request.user
         serializer = UserSerializer(user)
         return Response(serializer.data, status=status.HTTP_200_OK)
+
 
 class UserUpdateView(generics.RetrieveUpdateAPIView):
     serializer_class = UserUpdateSerializer
@@ -51,15 +51,15 @@ class UserUpdateView(generics.RetrieveUpdateAPIView):
         # Delete the previous avatar if it exists
         if previous_avatar and previous_avatar != serializer.validated_data.get('avatar'):
             previous_avatar.delete()
-            
+
         # Call the superclass method to perform the update
         super().perform_update(serializer)
-
 
     def update(self, request, *args, **kwargs):
         partial = kwargs.pop('partial', False)
         instance = self.get_object()
-        serializer = self.get_serializer(instance, data=request.data, partial=partial)
+        serializer = self.get_serializer(
+            instance, data=request.data, partial=partial)
         serializer.is_valid(raise_exception=True)
         self.perform_update(serializer)
 

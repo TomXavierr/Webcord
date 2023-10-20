@@ -2,7 +2,8 @@
 
 # Backend-specific ignores
 /webcord-backend/.env
-/webcord-backend/venv/
+/webcord-backend/venv
+/webcord-backend/media/
 
 # Frontend-specific ignores
 /frontend/node_modules/

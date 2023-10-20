@@ -1,14 +1,16 @@
-from rest_framework import viewsets, status
-from rest_framework.decorators import action
-from rest_framework.response import Response
-from rest_framework.permissions import IsAuthenticated
+from accounts.serializers import UserSerializer
 from django.contrib.auth import get_user_model
 from django.db.models import Q
+from rest_framework import status, viewsets
+from rest_framework.decorators import action
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.response import Response
 
-
-from .models import Friendship, FriendRequest
-from .serializers import FriendRequestSerializer, FriendshipSerializer, UserSearchSerializer
-from accounts.serializers import UserSerializer
+from .models import FriendRequest, Friendship
+from .serializers import (
+    FriendRequestSerializer,
+    UserSearchSerializer
+    )
 
 
 class FriendRequestViewSet(viewsets.ModelViewSet):
@@ -30,7 +32,8 @@ class FriendRequestViewSet(viewsets.ModelViewSet):
         existing_request_from_receiver = FriendRequest.objects.filter(
             sender=receiver, receiver=sender).first()
         if existing_request_from_receiver and existing_request_from_receiver.status == FriendRequest.PENDING:
-            return Response({'detail': "The other user has already sent a friend request to you. You can accept or decline it."}, status=status.HTTP_400_BAD_REQUEST)
+            return Response({'detail': "The other user has already sent a friend request to you. \
+                You can accept or decline it."}, status=status.HTTP_400_BAD_REQUEST)
 
         existing_request = FriendRequest.objects.filter(
             sender=sender, receiver=receiver).first()
@@ -72,9 +75,12 @@ class FriendRequestViewSet(viewsets.ModelViewSet):
         friend_request = self.get_object()
 
         if friend_request.sender != request.user:
-            return Response({'detail': 'You do not have permission to cancel this request'}, status=status.HTTP_403_FORBIDDEN)
+            return Response(
+                {'detail': 'You do not have permission to cancel this request'}, status=status.HTTP_403_FORBIDDEN
+                )
         if friend_request.status != FriendRequest.PENDING:
-            return Response({'detail': 'Cannot cancel a request that is not pending'}, status=status.HTTP_400_BAD_REQUEST)
+            return Response(
+                {'detail': 'Cannot cancel a request that is not pending'}, status=status.HTTP_400_BAD_REQUEST)
         friend_request.delete()
 
         return Response({'detail': 'Friend request canceled'}, status=status.HTTP_200_OK)
