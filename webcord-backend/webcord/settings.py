@@ -54,6 +54,7 @@ INSTALLED_APPS = [
 
     'accounts',
     'friend_system',
+    'servers_api',
 
 ]
 
@@ -98,7 +99,7 @@ WSGI_APPLICATION = 'webcord.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME':  'Webcord',
+        'NAME':  'WebcordApp',
         'USER': 'postgres',
         'PASSWORD': 'Tom@2002',
         'HOST': 'localhost',
