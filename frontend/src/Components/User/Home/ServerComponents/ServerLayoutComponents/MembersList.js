@@ -3,63 +3,9 @@ import { Avatar, Box, Divider, IconButton, List, ListItem, ListItemAvatar, Toolt
 import DeleteIcon from "@mui/icons-material/Delete";
 import axios from "axios";
 
-const FriendsList = () => {
-
-    const [friendsList, setFriendsList] = useState([]);
+const MembersList = ({members}) => {
 
     
-    const fetchFriends = async () => {
-        try {
-            const token = localStorage.getItem("access");
-            const config = {
-                headers: {
-                    Authorization: `Bearer ${token}`,
-                },
-            };
-
-            const response = await axios.get(
-                `${process.env.REACT_APP_API_URL}/friends/friend-requests/friends_list/`,
-                config
-            );
-
-            if (response.status === 200) {
-                setFriendsList(response.data);
-            } else {
-                console.error("Failed to fetch friends");
-            }
-        } catch (error) {
-            console.error("Error while fetching friends", error);
-        }
-    };
-
-    useEffect(() => {
-        fetchFriends();
-    }, []); 
-
-    const removeFriend = async (friendId) => {
-        try {
-            const token = localStorage.getItem("access");
-            const config = {
-                headers: {
-                    Authorization: `Bearer ${token}`,
-                },
-            };
-
-            await axios.post(
-                `${process.env.REACT_APP_API_URL}/friends/friend-requests/remove_friend/`,
-                {
-                    "friend_user_id": friendId
-                },
-                config
-            );
-
-            // Fetch friends again to update the data
-            fetchFriends();
-
-        } catch (error) {
-            console.error("Error while removing friend", error);
-        }
-    };
 
     return (
         <Box sx={{
@@ -75,12 +21,12 @@ const FriendsList = () => {
                     color: "white",
                 }}
             >
-                All Friends
+                All Members
             </Typography>
 
             <List style={{ alignItems: "center" }}>
-                {friendsList.map((friend) => (
-                    <Box key={friend.id}>
+                {members.map((user) => (
+                    <Box key={user.id}>
                         <Divider
                             style={{
                                 backgroundColor: "#0A4C5C",
@@ -107,7 +53,7 @@ const FriendsList = () => {
                                 <Box sx={{ display: "flex" }}>
                                     <ListItemAvatar>
                                         <Avatar> <img
-                                        src={`${process.env.REACT_APP_API_URL}/${friend.avatar}`} 
+                                        // src={`${process.env.REACT_APP_API_URL}/${friend.avatar}`} 
                                         alt="User Avatar"
                                         style={{
                                             width: "100%",
@@ -123,7 +69,7 @@ const FriendsList = () => {
                                                 width: "inherit",
                                             }}
                                         >
-                                            {friend.username}
+                                            {user.user}
                                         </Typography>
                                         <Typography
                                             style={{
@@ -133,16 +79,11 @@ const FriendsList = () => {
                                                 fontSize: "12px",
                                             }}
                                         >
-                                            {friend.display_name}
+                                            {/* {friend.username} */}
                                         </Typography>
                                     </Box>
                                 </Box>
-                                <Tooltip title="Remove friend">
-                                <IconButton edge="end" aria-label="Remove friend"
-                                onClick={() => removeFriend(friend.id)}>
-                                    <DeleteIcon sx={{ color:"white"}} />
-                                </IconButton>
-                                </Tooltip>
+                                
                             </ListItem>
                         </Box>
                     </Box>
@@ -152,4 +93,4 @@ const FriendsList = () => {
     );
 };
 
-export default FriendsList;
+export default MembersList;

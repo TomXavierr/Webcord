@@ -8,8 +8,8 @@ import AdminLogin from "./Components/Admin/AdminLogin";
 import AdminDashboard from "./Components/Admin/AdminDashboard";
 import Activate from "./Components/User/Login & SignUp/Activate";
 
-import { ToastContainer } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 import { Provider } from "react-redux";
 import store from "./Redux/store";
@@ -24,8 +24,6 @@ import { checkAdminAuthentication } from "./Redux/actions/adminAuthAction";
 import Channels from "./Components/User/Home/Channels";
 import UserLayout from "./Components/User/Home/UserComponents/UserLayout";
 import ServerLayout from "./Components/User/Home/ServerComponents/ServerLayout";
-
-
 
 function App() {
     const [loading, setLoading] = useState(true);
@@ -72,9 +70,11 @@ function App() {
                                 exact
                             >
                                 <Route path="@me" element={<UserLayout />} />
-                                <Route path="server" element={<ServerLayout />} />
+                                <Route
+                                    path=":serverId"
+                                    element={<ServerLayout />}
+                                />
                             </Route>
-                            {/* <Route path="/settings" element={<UserSettings/>} exact /> */}
                         </Route>
 
                         <Route path="/admin" element={<AdminLogin />} />
@@ -87,7 +87,7 @@ function App() {
                     </Routes>
                 </Router>
             </Provider>
-            <ToastContainer theme="light"  />
+            <ToastContainer theme="light" />
         </div>
     );
 }

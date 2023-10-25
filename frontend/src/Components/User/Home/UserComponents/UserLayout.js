@@ -9,9 +9,9 @@ import { AppBar, Avatar, Button, IconButton, Stack } from "@mui/material";
 import { useSelector } from "react-redux";
 import UserSettings from "../UserSettings";
 import ChatListDrawer from "./ChatListDrawer";
-import FriendsList from "./UserLayoutComponents/FriendsList";
-import AddFriend from "./UserLayoutComponents/AddFriend";
-import FriendRequests from "./UserLayoutComponents/FriendRequests";
+import FriendsList from "./UserLayoutNavbar/FriendsList";
+import AddFriend from "./UserLayoutNavbar/AddFriend";
+import FriendRequests from "./UserLayoutNavbar/FriendRequests";
 
 const drawerWidth = 60;
 
@@ -232,7 +232,7 @@ const UserLayout = () => {
                                         fontWeight: "bold",
                                     }}
                                 >
-                                    {user && user.username}
+                                    {user && user.display_name}
                                 </Typography>
                             </Stack>
                             <IconButton

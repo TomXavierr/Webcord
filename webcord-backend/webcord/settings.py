@@ -51,10 +51,13 @@ INSTALLED_APPS = [
     'rest_framework_simplejwt',
     'social_django',
     'rest_framework_simplejwt.token_blacklist',
+    'drf_spectacular',
+
 
     'accounts',
     'friend_system',
     'servers_api',
+    'admin_api',
 
 ]
 
@@ -175,6 +178,8 @@ REST_FRAMEWORK = {
     ],
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
     'PAGE_SIZE': 15,
+
+    'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
 }
 
 AUTHENTICATION_BACKENDS = (
@@ -224,6 +229,12 @@ SIMPLE_JWT = {
 
 }
 
+SPECTACULAR_SETTINGS = {
+    'TITLE': 'Your Project API',
+    'DESCRIPTION': 'Your project description',
+    'VERSION': '1.0.0',
+    'SERVE_INCLUDE_SCHEMA': False,
+}
 
 CORS_ALLOW_ALL_ORIGINS = True
 

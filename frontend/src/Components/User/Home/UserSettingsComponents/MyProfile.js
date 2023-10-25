@@ -136,7 +136,7 @@ const MyProfile = () => {
                             color: "#EBF2FA",
                         }}
                     >
-                        {user.username}
+                        {user.display_name}
                     </Typography>
 
                     <Button

@@ -239,7 +239,7 @@ const AddFriend = () => {
                                                 width: "inherit",
                                             }}
                                         >
-                                            {user.username}
+                                            {user.display_name}
                                         </Typography>
                                         <Typography
                                             style={{
@@ -249,7 +249,7 @@ const AddFriend = () => {
                                                 fontSize: "12px",
                                             }}
                                         >
-                                            {user.display_name}
+                                            {user.username}
                                         </Typography>
                                     </Box>
                                 </Box>

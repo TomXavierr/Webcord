@@ -159,7 +159,7 @@ const FriendRequests = () => {
                                                 width: "inherit",
                                             }}
                                         >
-                                            {request.sender_details.username}
+                                            {request.sender_details.display_name}
                                         </Typography>
                                         <Typography
                                             style={{
@@ -171,7 +171,7 @@ const FriendRequests = () => {
                                         >
                                             {
                                                 request.sender_details
-                                                    .display_name
+                                                    .username
                                             }
                                         </Typography>
                                     </Box>

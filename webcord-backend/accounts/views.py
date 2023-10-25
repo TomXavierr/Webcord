@@ -5,6 +5,7 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework_simplejwt.views import TokenObtainPairView
+from servers_api.utils import get_user_servers
 
 from .serializers import (ChangePasswordSerializer, UserSerializer,
                           UserUpdateSerializer)
@@ -32,8 +33,11 @@ class UserDetailView(APIView):
 
     def get(self, request, *args, **kwargs):
         user = request.user
-        serializer = UserSerializer(user)
-        return Response(serializer.data, status=status.HTTP_200_OK)
+        user_servers = get_user_servers(user)
+
+        user_data = UserSerializer(user).data
+        user_data['servers'] = user_servers
+        return Response(user_data)
 
 
 class UserUpdateView(generics.RetrieveUpdateAPIView):
@@ -80,10 +84,16 @@ class ChangePasswordView(UpdateAPIView):
         confirm_password = serializer.validated_data['confirm_password']
 
         if not user.check_password(current_password):
-            return Response({'error': 'current_password error', 'detail': 'Current password is incorrect.'}, status=status.HTTP_400_BAD_REQUEST)
+            return Response(
+                {'error':
+                    'current_password error',
+                    'detail': 'Current password is incorrect.'
+                 }, status=status.HTTP_400_BAD_REQUEST)
 
         if new_password != confirm_password:
-            return Response({'error': 'confirm_password error', 'detail': 'New password and confirm password do not match.'}, status=status.HTTP_400_BAD_REQUEST)
+            return Response(
+                {'error': 'confirm_password error', 'detail': 'New password and confirm password do not match.'},
+                status=status.HTTP_400_BAD_REQUEST)
 
         user.set_password(new_password)
         user.save()

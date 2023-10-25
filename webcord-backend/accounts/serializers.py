@@ -12,23 +12,29 @@ class UserCreateSerializer(BaseUSerCreateSerializer):
         model = User
         fields = ('id', 'email', 'display_name', 'username', 'password')
 
+
 class UserLoginSerializer(serializers.ModelSerializer):
     email = serializers.EmailField(max_length=255)
+
     class Meta:
         model = User
-        fields=['email','password']
+        fields = ['email', 'password']
+
 
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields =  ('id', 'email', 'display_name', 'username',  'status', 'about', 'phone', 'avatar')
+        fields = ('id', 'email', 'display_name', 'username',  'status', 'about', 'phone', 'avatar')
+
 
 class UserUpdateSerializer(serializers.ModelSerializer):
     username = serializers.CharField(required=False)
     display_name = serializers.CharField(required=False)
+
     class Meta:
         model = User
         fields = ['username', 'display_name', 'status', 'about', 'phone', 'avatar']
+
 
 class ChangePasswordSerializer(serializers.Serializer):
     current_password = serializers.CharField(write_only=True, required=True)

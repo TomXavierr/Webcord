@@ -1,18 +1,18 @@
 import React from "react";
 import { Link, Outlet } from "react-router-dom";
 
-import { Box } from "@mui/material";
+import { Avatar, Box, Tooltip } from "@mui/material";
 import List from "@mui/material/List";
 import Divider from "@mui/material/Divider";
 import ListItem from "@mui/material/ListItem";
 import ChatIcon from "@mui/icons-material/Chat";
 import Drawer from "@mui/material/Drawer";
-
-
+import { useSelector } from "react-redux";
 
 const drawerWidth = 60;
 
 const Channels = () => {
+    const servers = useSelector((state) => state.auth.user.servers);
     return (
         <div
             style={{
@@ -50,30 +50,44 @@ const Channels = () => {
                                 <ChatIcon />
                             </ListItem>
                         </Link>
-                        <Divider
-                            style={{
-                                backgroundColor: "#EBF2FA",
-                                marginBlock: "10px",
-                            }}
-                        />
-                        <Link to="server" style={{ color: "white" }}>
+                    </List>
+                    <Divider
+                        style={{
+                            backgroundColor: "#EBF2FA",
+                            marginInline: "10px",
+                        }}
+                    />
+                    <List style={{ alignItems: "center", padding: "10px" }}>
+                        {servers.map((server) => (
                             <ListItem
+                                key={server.id}
                                 button
                                 // onClick={() => handleIconClick("server")}
                                 sx={{
                                     backgroundColor: "#073B4C",
                                     width: "40px",
                                     height: "40px",
-                                    borderRadius: "10px",
+                                    borderRadius: "50%",
                                     display: "flex",
                                     justifyContent: "center",
-                                    padding: 0,
-                                    
+                                    marginBlock: "10px",
                                 }}
                             >
-                                <ChatIcon />
+                                <Link to={`${server.id}`}>
+                                    <Tooltip title={server.server_name}>
+                                        <img
+                                            src={`${process.env.REACT_APP_API_URL}/${server.server_icon}`}
+                                            alt="User Avatar"
+                                            style={{
+                                                width: "40px",
+                                                height: "40px",
+                                                borderRadius: "50%",
+                                            }}
+                                        />
+                                    </Tooltip>
+                                </Link>
                             </ListItem>
-                        </Link>
+                        ))}
                     </List>
                 </Drawer>
                 <Outlet />

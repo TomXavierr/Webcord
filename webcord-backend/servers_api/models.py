@@ -13,14 +13,41 @@ class Server(models.Model):
     owner = models.ForeignKey(get_user_model(), on_delete=models.CASCADE)
     creation_date = models.DateTimeField(auto_now_add=True)
     server_icon = models.ImageField(
-        upload_to='useravatar', blank=True, null=True)
+        upload_to='server-icons', blank=True, null=True)
 
     def __str__(self):
         return self.server_name
 
 
+@receiver(post_save, sender=Server)
+def create_default_roles_and_assign_owner(sender, instance, created, **kwargs):
+    if created:
+        # Create the "member" role
+        member_role = Role.objects.create(
+            server=instance,
+            role_name="member",
+            position=10,
+        )
+
+        # Create the "owner" role
+        owner_role = Role.objects.create(
+            server=instance,
+            role_name="owner",
+            position=0,
+        )
+
+        # Create the first server member and assign the owner role
+        server_member = ServerMember.objects.create(
+            server=instance,
+            user=instance.owner,
+        )
+
+        # Assign roles to the user's assigned_roles
+        server_member.assigned_roles.add(owner_role, member_role)
+
+
 class Role(models.Model):
-    server_id = models.ForeignKey(Server, on_delete=models.CASCADE)
+    server = models.ForeignKey(Server, on_delete=models.CASCADE)
     role_name = models.CharField(max_length=50)
     color = models.CharField(max_length=50, null=True, blank=True)
     position = models.PositiveIntegerField()
@@ -35,12 +62,10 @@ class ServerMember(models.Model):
     server = models.ForeignKey(Server, on_delete=models.CASCADE)
     user = models.ForeignKey(get_user_model(), on_delete=models.CASCADE)
     join_date = models.DateTimeField(auto_now_add=True)
-    assigned_roles = models.ManyToManyField(Role)  # Many-to-many relationship
+    assigned_roles = models.ManyToManyField(Role, related_name='server_members')  # Many-to-many relationship
 
-
-class UserRole(models.Model):
-    role = models.ForeignKey(Role, on_delete=models.CASCADE)
-    server_member = models.ForeignKey(ServerMember, on_delete=models.CASCADE)
+    def __str__(self):
+        return f'{self.user.username} - {self.server.server_name}'
 
 
 class Channel(models.Model):
@@ -58,30 +83,3 @@ class Channel(models.Model):
 
     def __str__(self):
         return self.channel_name
-
-
-@receiver(post_save, sender=Server)
-def create_default_roles_and_assign_owner(sender, instance, created, **kwargs):
-    if created:
-        # Create the "member" role
-        member_role = Role.objects.create(
-            server_id=instance,
-            role_name="member",
-            position=1,
-        )
-
-        # Create the "owner" role
-        owner_role = Role.objects.create(
-            server_id=instance,
-            role_name="owner",
-            position=0,
-        )
-
-        # Create the first server member and assign the owner role
-        server_member = ServerMember.objects.create(
-            server=instance,
-            user=instance.owner,
-        )
-
-        # Assign roles to the user's assigned_roles
-        server_member.assigned_roles.add(owner_role, member_role)

@@ -5,13 +5,11 @@ from rest_framework.views import APIView
 from rest_framework_simplejwt.views import TokenObtainPairView
 from rest_framework.permissions import AllowAny
 from accounts.models import UserAccount
-from .serializers import UserListSerializer,AdminLoginSerializer
-from accounts.permissions import IsSuperuser
+from .serializers import UserListSerializer, AdminLoginSerializer
 
-from rest_framework.permissions import IsAuthenticated
 
 class AdminLoginView(TokenObtainPairView):
-    permission_classes = [AllowAny]  
+    permission_classes = [AllowAny]
 
     def post(self, request, *args, **kwargs):
         response = super(AdminLoginView, self).post(
@@ -46,13 +44,12 @@ class AdminUsersListView(APIView):
             return Response(status=status.HTTP_404_NOT_FOUND)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
-
     def patch(self, request, user_id):
         try:
             User = UserAccount.objects.get(id=user_id)
             print(request.data['is_banned'])
 
-        except user.DoesNotExist:
+        except User.DoesNotExist:
             return Response({"error": "user does not exist"}, status=status.HTTP_404_NOT_FOUND)
 
         if User:
@@ -60,9 +57,9 @@ class AdminUsersListView(APIView):
                 instance=User, data=request.data, partial=True)
             if serializer.is_valid():
                 serializer.save()
-                if User.is_banned == True:
+                if User.is_banned is True:
                     return Response({'message': "user banned successfully"})
-                elif User.is_banned == False:
+                else:
                     return Response({'message': "user unbanned successfully"})
             else:
                 return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
