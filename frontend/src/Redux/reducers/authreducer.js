@@ -13,8 +13,6 @@ import {
     ACTIVATION_FAIL,
     GOOGLE_AUTH_SUCCESS,
     GOOGLE_AUTH_FAIL,
-    FRIENDS_LIST_SUCCESS, 
-    FRIENDS_LIST_FAIL
 } from "../actions/types";
 
 const initialState = {
@@ -60,17 +58,6 @@ const authReducer = (state = initialState, action) => {
                 user: payload,
             };
 
-        case FRIENDS_LIST_SUCCESS:
-            return {
-                ...state,
-                friendsList: action.payload,
-            };
-            
-        case FRIENDS_LIST_FAIL:
-            return {
-                ...state,
-                friendsList: [],
-            };
 
         case AUTHENTICATED_FAIL:
             return {

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Link, Outlet } from "react-router-dom";
 
 import { Avatar, Box, Tooltip } from "@mui/material";
@@ -7,12 +7,28 @@ import Divider from "@mui/material/Divider";
 import ListItem from "@mui/material/ListItem";
 import ChatIcon from "@mui/icons-material/Chat";
 import Drawer from "@mui/material/Drawer";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import {
+    checkAuthenticated,
+    load_user,
+} from "../../../Redux/actions/userauthaction";
 
 const drawerWidth = 60;
 
 const Channels = () => {
-    const servers = useSelector((state) => state.auth.user.servers);
+    const dispatch = useDispatch();
+    const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
+    const user = useSelector((state) => state.auth.user);
+
+    useEffect(() => {
+        dispatch(load_user());
+        dispatch(checkAuthenticated());
+    }, [dispatch]);
+
+    if (isAuthenticated === null || user === null) {
+        return <div>Loading...</div>; // You can display a loading indicator.
+    }
+
     return (
         <div
             style={{
@@ -58,7 +74,7 @@ const Channels = () => {
                         }}
                     />
                     <List style={{ alignItems: "center", padding: "10px" }}>
-                        {servers.map((server) => (
+                        {user.servers.map((server) => (
                             <ListItem
                                 key={server.id}
                                 button

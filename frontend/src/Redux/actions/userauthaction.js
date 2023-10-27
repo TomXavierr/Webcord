@@ -14,8 +14,7 @@ import {
     ACTIVATION_FAIL,
     GOOGLE_AUTH_SUCCESS,
     GOOGLE_AUTH_FAIL,
-    FRIENDS_LIST_FAIL,
-    FRIENDS_LIST_SUCCESS
+
 } from "./types";
 
 
@@ -33,7 +32,7 @@ export const load_user = () => async (dispatch) => {
             type: USER_LOADED_SUCCESS,
             payload: res.data,
         });
-        dispatch(loadFriendsList());
+        // dispatch(loadFriendsList());
     } catch (err) {
         dispatch({
             type: USER_LOADED_FAIL,
@@ -41,27 +40,7 @@ export const load_user = () => async (dispatch) => {
     }
 };
 
-export const loadFriendsList = () => async (dispatch) => {
-    const token = localStorage.getItem("access");
-    const config = {
-        headers: {
-            Authorization: `Bearer ${token}`,
-        },
-    };
 
-    try {
-        const res = await axios.get(`${process.env.REACT_APP_API_URL}/friends/friend-requests/friends_list`,config);
-        
-        dispatch({
-            type: FRIENDS_LIST_SUCCESS,
-            payload: res.data,
-        });
-    } catch (err) {
-        dispatch({
-            type: FRIENDS_LIST_FAIL,
-        });
-    }
-};
 
 // =========================Djoser Loaduser=============================
 // export const load_user = () => async (dispatch) => {
