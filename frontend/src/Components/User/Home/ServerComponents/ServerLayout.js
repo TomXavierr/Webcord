@@ -25,6 +25,7 @@ import MembersList from "./ServerLayoutComponents/MembersList";
 // import FriendRequests from "./UserLayoutComponents/FriendRequests";
 
 const drawerWidth = 60;
+const appBarHeight = 36;
 
 const toolbarStyle = {
     minHeight: "36px",
@@ -110,7 +111,7 @@ const ServerLayout = () => {
     const handleChannelSelect = (channelId) => {
         if (channelId === "members") {
             setSelectedChannel(null); // Clear the selected channel
-            setShowMembers(true); // Show the MembersList
+            setShowMembers(true); 
         } else {
             setSelectedChannel(channelId);
             setShowMembers(false); // Hide the MembersList
@@ -176,6 +177,7 @@ const ServerLayout = () => {
                         sx={{
                             marginTop: "36px",
                             width: `calc(100% - ${60}px)`,
+                            height:  `calc(100vh - ${appBarHeight}px)`,
                             display: "flex",
                             flexDirection: "row",
                         }}
@@ -186,6 +188,7 @@ const ServerLayout = () => {
                                 sx: {
                                     borderRadius: "20px 0 0 0",
                                     marginLeft: `${drawerWidth}px`,
+                                    height:  `calc(100vh - ${appBarHeight}px)`,
                                     width: "200px",
                                     color: "#EBF2FA",
                                     backgroundColor: "#122C34",

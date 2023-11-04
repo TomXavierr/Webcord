@@ -2,13 +2,12 @@
 
 from django.urls import path, include
 from rest_framework import routers
-from .views import UserServerViewSet, ServerDetailsAPIView
+from .views import ServerDetailsAPIView
 
 # Create a router
 router = routers.DefaultRouter()
 
 # Register your viewsets with the router
-router.register(r'userservers', UserServerViewSet, basename='user_servers')
 # router.register(r'servermembers', views.ServerMemberViewSet)
 # router.register(r'channels', views.ChannelViewSet)
 

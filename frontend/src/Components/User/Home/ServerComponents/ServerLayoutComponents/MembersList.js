@@ -25,8 +25,8 @@ const MembersList = ({members}) => {
             </Typography>
 
             <List style={{ alignItems: "center" }}>
-                {members.map((user) => (
-                    <Box key={user.id}>
+                {members.map((member) => (
+                    <Box key={member.user.id}>
                         <Divider
                             style={{
                                 backgroundColor: "#0A4C5C",
@@ -53,7 +53,7 @@ const MembersList = ({members}) => {
                                 <Box sx={{ display: "flex" }}>
                                     <ListItemAvatar>
                                         <Avatar> <img
-                                        // src={`${process.env.REACT_APP_API_URL}/${friend.avatar}`} 
+                                        src={`${process.env.REACT_APP_API_URL}/${member.user.avatar}`} 
                                         alt="User Avatar"
                                         style={{
                                             width: "100%",
@@ -69,7 +69,7 @@ const MembersList = ({members}) => {
                                                 width: "inherit",
                                             }}
                                         >
-                                            {user.user}
+                                            {member.user.display_name}
                                         </Typography>
                                         <Typography
                                             style={{

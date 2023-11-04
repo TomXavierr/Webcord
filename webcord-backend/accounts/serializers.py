@@ -1,7 +1,7 @@
 from django.contrib.auth import get_user_model
-from django.urls import reverse
+# from django.urls import reverse
 from djoser.serializers import UserCreateSerializer as BaseUSerCreateSerializer
-from djoser.serializers import UserSerializer as BaseUserSerializer
+# from djoser.serializers import UserSerializer as BaseUserSerializer
 from rest_framework import serializers
 
 User = get_user_model()
@@ -24,7 +24,8 @@ class UserLoginSerializer(serializers.ModelSerializer):
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ('id', 'email', 'display_name', 'username',  'status', 'about', 'phone', 'avatar')
+        fields = ('id', 'email', 'display_name', 'username',
+                  'status', 'about', 'phone', 'avatar')
 
 
 class UserUpdateSerializer(serializers.ModelSerializer):
@@ -33,7 +34,8 @@ class UserUpdateSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = ['username', 'display_name', 'status', 'about', 'phone', 'avatar']
+        fields = ['username', 'display_name',
+                  'status', 'about', 'phone', 'avatar']
 
 
 class ChangePasswordSerializer(serializers.Serializer):

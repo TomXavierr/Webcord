@@ -1,23 +1,7 @@
+from django.contrib.auth import get_user_model
 from rest_framework import serializers
-from .models import ServerMember, Channel, Server
-from accounts.models import UserAccount
 
-
-class UserServerSerializer(serializers.ModelSerializer):
-    server = serializers.SerializerMethodField()
-
-    class Meta:
-        model = ServerMember
-        fields = ('server', 'join_date', 'assigned_roles')
-
-    def get_server(self, obj):
-        server = obj.server
-        server_icon_url = server.server_icon.url if server.server_icon else None
-        return {
-            'id': server.id,
-            'server_name': server.server_name,
-            'server_icon': server_icon_url
-        }
+from .models import Channel, Server, ServerMember
 
 
 class ChannelSerializer(serializers.ModelSerializer):
@@ -26,11 +10,15 @@ class ChannelSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
+class MemberDetailsSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = get_user_model()
+        fields = ['id', 'display_name', 'username',
+                  'status', 'avatar']
+
+
 class ServerMemberSerializer(serializers.ModelSerializer):
-    user = serializers.SlugRelatedField(
-        slug_field='username', queryset=UserAccount.objects.all())  # Replace 'User' with the actual user model
-    server = serializers.SlugRelatedField(
-        slug_field='server_name', queryset=Server.objects.all())
+    user = MemberDetailsSerializer()
     assigned_roles = serializers.SerializerMethodField()
 
     class Meta:
@@ -43,9 +31,13 @@ class ServerMemberSerializer(serializers.ModelSerializer):
 
 
 class ServerSerializer(serializers.ModelSerializer):
-    channels = ChannelSerializer(many=True, read_only=True)
-    members = ServerMemberSerializer(many=True, read_only=True)
+    member_count = serializers.SerializerMethodField()
+    # channel_server = ChannelSerializer()
+    # server_members = ServerMemberSerializer()
 
     class Meta:
         model = Server
         fields = '__all__'
+
+    def get_member_count(self, obj):
+        return ServerMember.objects.filter(server=obj).count()

@@ -2,11 +2,15 @@ import React from "react";
 import { Box, Button, Divider, Typography } from "@mui/material";
 import PeopleIcon from "@mui/icons-material/People";
 
+
+const appBarHeight = 36;
+
 const ServerChannelsDrawer = ({ channels, onChannelSelect }) => {
     return (
         <div
             style={{
-                paddingTop: "36px",
+                marginTop: "36px",
+                height: `calc(100vh - ${appBarHeight}px)`,
             }}
         >
             <Box sx={{ height: "36px", width: "180px", padding: "10px" }}>

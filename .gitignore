@@ -1,9 +1,11 @@
 # Global .gitignore
 
 # Backend-specific ignores
-/webcord-backend/.env
+.env
 /webcord-backend/venv
 /webcord-backend/media
+
+__pycache__
 
 # Frontend-specific ignores
 /frontend/node_modules/

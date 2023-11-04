@@ -1,40 +1,49 @@
-from rest_framework import decorators, permissions, response, status, viewsets
+from rest_framework import status
 from rest_framework.generics import RetrieveAPIView
-from rest_framework.decorators import action
 from rest_framework.response import Response
 
-from .models import Channel, Role, Server, ServerMember
+from .models import Server, ServerMember
 from .serializers import (ChannelSerializer, ServerMemberSerializer,
-                          ServerSerializer, UserServerSerializer)
-
-
-class UserServerViewSet(viewsets.ModelViewSet):
-    serializer_class = UserServerSerializer
-    permission_classes = [permissions.IsAuthenticated]
-    queryset = ServerMember.objects.all()
-
-    @action(detail=False, methods=['GET'])
-    def user_servers(self, request):
-        user = request.user
-        server_memberships = ServerMember.objects.filter(user=user)
-        serializer = UserServerSerializer(server_memberships, many=True)
-        return Response(serializer.data, status=status.HTTP_200_OK)
+                          ServerSerializer)
 
 
 class ServerDetailsAPIView(RetrieveAPIView):
     queryset = Server.objects.all()
     serializer_class = ServerSerializer
-    lookup_field = 'id'  # This should match the field used in the URL path
+    lookup_field = 'id'
 
     def retrieve(self, request, *args, **kwargs):
+        """
+        API view to retrieve details of a server, including channels and server members.
+
+        This view retrieves information about a server, its associated channels, and server members.
+        It uses the ServerSerializer to serialize the server information, ChannelSerializer for channels,
+        and ServerMemberSerializer for server members.
+
+        Attributes:
+            queryset (QuerySet): The queryset for the Server model.
+            serializer_class (Serializer): The serializer class to use for server details.
+            lookup_field (str): The field used for looking up server details in the URL.
+
+        Methods:
+            retrieve(request, *args, **kwargs): Handles the HTTP GET request to retrieve server details.
+                Retrieves the server, channels, and server members, serializes the data,
+                and returns a response with the server's information, channels, and server members.
+
+        Examples:
+            To retrieve details for a specific server, make a GET request to the server's API endpoint.
+        """
         instance = self.get_object()
 
-        channels = instance.channel_server.all()
-        server_members = ServerMember.objects.filter(server=instance)
+        # channels = instance.channel_server.all()
+        server_members = ServerMember.objects.select_related(
+            'user').filter(server=instance)
 
-        server_serializer = ServerSerializer(instance, context={'request': request})
-        channel_serializer = ChannelSerializer(channels, many=True, context={'request': request})
-        server_member_serializer = ServerMemberSerializer(server_members, many=True, context={'request': request})
+        server_serializer = ServerSerializer(instance)
+        channel_serializer = ChannelSerializer(
+            instance.channel_server.all(), many=True)
+        server_member_serializer = ServerMemberSerializer(
+            server_members, many=True)
 
         data = {
             'server': server_serializer.data,
