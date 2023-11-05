@@ -1,0 +1,20 @@
+/* style.css */
+.custom-scrollbar {
+    scrollbar-width: thin;
+    scrollbar-color: #555 #222;
+    height: calc(100% - 36px); 
+    overflow-y: auto;
+  }
+  
+  .custom-scrollbar::-webkit-scrollbar {
+    width: 5px;
+  }
+  
+  .custom-scrollbar::-webkit-scrollbar-thumb {
+    background-color: #555;
+    border-radius: 5px;
+  }
+  
+  .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+    background-color: #777;
+  }

@@ -56,7 +56,8 @@ INSTALLED_APPS = [
 
     'accounts',
     'friend_system',
-    'servers_api',
+    # 'servers_api',
+    'server',
     'admin_api',
 
 ]

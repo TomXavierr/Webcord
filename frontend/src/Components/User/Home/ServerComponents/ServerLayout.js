@@ -6,6 +6,8 @@ import Drawer from "@mui/material/Drawer";
 import SettingsIcon from "@mui/icons-material/Settings";
 import axios from "axios";
 
+import "./style.css";
+
 import {
     AppBar,
     Avatar,
@@ -19,10 +21,6 @@ import UserSettings from "../UserSettings";
 import { useParams } from "react-router-dom";
 import ServerChannelsDrawer from "./ServerChannelsDrawer";
 import MembersList from "./ServerLayoutComponents/MembersList";
-// import ChatListDrawer from "./ChatListDrawer";
-// import FriendsList from "./UserLayoutComponents/FriendsList";
-// import AddFriend from "./UserLayoutComponents/AddFriend";
-// import FriendRequests from "./UserLayoutComponents/FriendRequests";
 
 const drawerWidth = 60;
 const appBarHeight = 36;
@@ -51,7 +49,7 @@ const ServerLayout = () => {
     const [serverData, setServerData] = useState(null);
     const [loading, setLoading] = useState(true);
     const [selectedChannel, setSelectedChannel] = useState(null);
-    const [showMembers, setShowMembers] = useState(false);
+    const [showMembers, setShowMembers] = useState(true);
 
     const getServerDetails = async () => {
         setLoading(true);
@@ -64,7 +62,7 @@ const ServerLayout = () => {
             };
 
             const response = await axios.get(
-                `${process.env.REACT_APP_API_URL}/server-api/server_details/${serverId}`,
+                `${process.env.REACT_APP_API_URL}/server/server-details/${serverId}`,
                 config
             );
 
@@ -111,7 +109,7 @@ const ServerLayout = () => {
     const handleChannelSelect = (channelId) => {
         if (channelId === "members") {
             setSelectedChannel(null); // Clear the selected channel
-            setShowMembers(true); 
+            setShowMembers(true);
         } else {
             setSelectedChannel(channelId);
             setShowMembers(false); // Hide the MembersList
@@ -141,7 +139,7 @@ const ServerLayout = () => {
                     <CircularProgress />
                 </Box>
             ) : (
-                <>
+                <Box>
                     <AppBar
                         position="fixed"
                         sx={{
@@ -167,7 +165,7 @@ const ServerLayout = () => {
                                     }}
                                     pl={2}
                                 >
-                                    {serverData.server.server_name}
+                                    {serverData.name}
                                 </Typography>
                             </Box>
                         </Toolbar>
@@ -175,36 +173,47 @@ const ServerLayout = () => {
 
                     <Box
                         sx={{
-                            marginTop: "36px",
                             width: `calc(100% - ${60}px)`,
-                            height:  `calc(100vh - ${appBarHeight}px)`,
                             display: "flex",
                             flexDirection: "row",
                         }}
                     >
-                        <Drawer
-                            variant="permanent"
-                            PaperProps={{
-                                sx: {
-                                    borderRadius: "20px 0 0 0",
-                                    marginLeft: `${drawerWidth}px`,
-                                    height:  `calc(100vh - ${appBarHeight}px)`,
-                                    width: "200px",
-                                    color: "#EBF2FA",
-                                    backgroundColor: "#122C34",
-                                    zIndex: 1,
-                                    position: "absolute",
-                                    alignItems: "center",
-                                },
+                        <Box
+                            sx={{
+                                height:"100vh",
+                                width: "200px",
+                                backgroundColor: "#122C34",
+                                borderRadius: "20px 0 0 0",
                             }}
                         >
-                            <ServerChannelsDrawer
-                                channels={serverData.channels}
-                                onChannelSelect={handleChannelSelect}
-                            />
+                            <Drawer
+                                variant="permanent"
+                                
+                                PaperProps={{
+                                    sx: {
+                                        marginTop: "36px",
+                                        marginLeft: `${drawerWidth}px`,
+                                        height: `calc(100vh - ${appBarHeight}px - 40px)`,
+                                        
+                                        color: "#EBF2FA",
+                                        backgroundColor: "#122C34",
+
+                                        zIndex: 1,
+                                        position: "absolute",
+                                        alignItems: "center",
+                                    },
+                                    className: "custom-scrollbar",
+                                }}
+                            >
+                                <ServerChannelsDrawer
+                                    channels={serverData.channels}
+                                    onChannelSelect={handleChannelSelect}
+                                />
+                            </Drawer>
                             <Box
                                 sx={{
-                                    width: "200px",
+                                    marginLeft: `${drawerWidth}px`,
+                                    width: "190px",
                                     height: "40px",
                                     backgroundColor: "#031D25",
                                     color: "#EBF2FA",
@@ -270,18 +279,16 @@ const ServerLayout = () => {
                                     />
                                 </Box>
                             </Box>
-                        </Drawer>
+                        </Box>
                         <Box
                             sx={{
-                                marginLeft: "200px",
+                                marginTop: `${appBarHeight}px`,
                                 height: `calc(100vh - ${36}px)`,
                                 width: `calc(100vw - ${260}px)`,
                             }}
                         >
                             {showMembers ? (
-                                <MembersList
-                                    members={serverData.server_members}
-                                />
+                                <MembersList members={serverData.members} />
                             ) : selectedChannel ? (
                                 `#${selectedChannel}`
                             ) : (
@@ -289,7 +296,7 @@ const ServerLayout = () => {
                             )}
                         </Box>
                     </Box>
-                </>
+                </Box>
             )}
         </Box>
     );

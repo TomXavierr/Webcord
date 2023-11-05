@@ -9,15 +9,15 @@ const ServerChannelsDrawer = ({ channels, onChannelSelect }) => {
     return (
         <div
             style={{
-                marginTop: "36px",
-                height: `calc(100vh - ${appBarHeight}px)`,
+                width: "184px",
+                height: `calc(100vh - ${appBarHeight}px - 40px)`,
             }}
         >
-            <Box sx={{ height: "36px", width: "180px", padding: "10px" }}>
+            <Box sx={{ height: "36px", padding: "10px" }}>
                 <Button
                     sx={{
                         height: "36px",
-                        width: "180px",
+                        width: "100%",
                         color: "white",
                         textTransform: "none",
                         justifyContent: "left",
@@ -31,12 +31,16 @@ const ServerChannelsDrawer = ({ channels, onChannelSelect }) => {
                 </Button>
             </Box>
             <Divider />
+            {/* {[...Array(50)].map((_, i) => (
+                <Typography >
+                {i+1}
+            </Typography>
+            ))} */}
             {channels.map((channel) => (
-                <Box sx={{ height: "36px", width: "180px", padding: "5px" }}>
+                <Box key={channel.id} sx={{ height: "36px", padding: "5px" }}>
                     <Button
                         sx={{
                             height: "36px",
-                            width: "180px",
                             color: "white",
                             textTransform: "none",
                             justifyContent: "left",
@@ -44,7 +48,7 @@ const ServerChannelsDrawer = ({ channels, onChannelSelect }) => {
                         onClick={() => onChannelSelect(channel.id)}
                     >
                         <Typography component="div">
-                            # {channel.channel_name}
+                            # {channel.name}
                         </Typography>
                     </Button>
                 </Box>

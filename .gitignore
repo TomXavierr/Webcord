@@ -3,10 +3,10 @@
 # Backend-specific ignores
 .env
 /webcord-backend/venv
-/webcord-backend/media
+/webcord-backend/media/
+/media
 
-__pycache__
-
+/webcord-backend/webcord/__pycache__
 # Frontend-specific ignores
 /frontend/node_modules/
 /frontend/.env
@@ -28,3 +28,4 @@ yarn-error.log*
 .pnp.js
 /coverage
 /build
+

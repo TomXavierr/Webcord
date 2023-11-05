@@ -15,7 +15,8 @@ urlpatterns = [
     path('admin/', include('admin_api.urls')),
     path('account/', include('accounts.urls')),
     path('friends/', include('friend_system.urls')),
-    path('server-api/', include('servers_api.urls')),
+#     path('server-api/', include('servers_api.urls')),
+    path('server/', include('server.urls')),
 
 
     path('api-auth/', include('rest_framework.urls')),
@@ -39,4 +40,5 @@ urlpatterns = [
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 
-# urlpatterns += [re_path(r'^.*',TemplateView.as_view(template_name='index.html'))]
+# if settings.DEBUG:
+#      urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

@@ -5,7 +5,8 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework_simplejwt.views import TokenObtainPairView
-from servers_api.utils import get_user_servers
+# from servers_api.utils import get_user_servers
+from server.models import Server
 
 from .serializers import (ChangePasswordSerializer, UserSerializer,
                           UserUpdateSerializer)
@@ -21,7 +22,6 @@ class CustomTokenObtainPairView(TokenObtainPairView):
             serializer.is_valid(raise_exception=True)
             self.user = serializer.user
             if self.user.is_banned:
-                # User is banned, you can customize the response accordingly
                 response.data = {'detail': 'This user is banned.'}
                 response.status_code = status.HTTP_403_FORBIDDEN
 
@@ -33,10 +33,15 @@ class UserDetailView(APIView):
 
     def get(self, request, *args, **kwargs):
         user = request.user
-        user_servers = get_user_servers(user)
-
+        user_servers = Server.objects.filter(servermember__user=user)
         user_data = UserSerializer(user).data
-        user_data['servers'] = user_servers
+        user_data['servers'] = [
+            {
+                'id': server.id,
+                'name': server.name,
+                'icon': server.icon.url if server.icon else ''
+            }
+            for server in user_servers]
         return Response(user_data)
 
 
@@ -92,7 +97,8 @@ class ChangePasswordView(UpdateAPIView):
 
         if new_password != confirm_password:
             return Response(
-                {'error': 'confirm_password error', 'detail': 'New password and confirm password do not match.'},
+                {'error': 'confirm_password error',
+                    'detail': 'New password and confirm password do not match.'},
                 status=status.HTTP_400_BAD_REQUEST)
 
         user.set_password(new_password)

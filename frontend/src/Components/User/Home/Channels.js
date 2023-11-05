@@ -90,9 +90,9 @@ const Channels = () => {
                                 }}
                             >
                                 <Link to={`${server.id}`}>
-                                    <Tooltip title={server.server_name}>
+                                    <Tooltip title={server.name}>
                                         <img
-                                            src={`${process.env.REACT_APP_API_URL}/${server.server_icon}`}
+                                            src={`${process.env.REACT_APP_API_URL}/${server.icon}`}
                                             alt="User Avatar"
                                             style={{
                                                 width: "40px",
