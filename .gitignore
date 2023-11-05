@@ -4,7 +4,7 @@
 .env
 /webcord-backend/venv
 /webcord-backend/media/
-/media
+
 
 /webcord-backend/webcord/__pycache__
 # Frontend-specific ignores

@@ -67,7 +67,7 @@ const EditPhoneModal = ({ isOpen, onCancel, value, onChange, onSave }) => {
     };
 
     return (
-        <Modal open={isOpen} onClose={onCancel} maxWidth="xs">
+        <Modal open={isOpen} onClose={onCancel} maxwidth="xs">
             <Box
                 style={{
                     display: "flex",
