@@ -145,7 +145,7 @@ const ChangePasswordModal = ({ isOpen, onCancel }) => {
     };
 
     return (
-        <Modal open={isOpen} onClose={onCancel} maxwidth="xs">
+        <Modal open={isOpen} onClose={onCancel} maxWidth="xs">
             <Box
                 style={{
                     display: "flex",

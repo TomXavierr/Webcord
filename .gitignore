@@ -3,14 +3,10 @@
 # Backend-specific ignores
 .env
 /webcord-backend/venv
-/webcord-backend/media/server
-/webcord-backend/media/useravatar/
-
-
+/webcord-backend/media/
+/media
 
 /webcord-backend/webcord/__pycache__
-__pycache__
-
 # Frontend-specific ignores
 /frontend/node_modules/
 /frontend/.env

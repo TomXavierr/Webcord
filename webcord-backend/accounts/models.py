@@ -2,15 +2,9 @@ import os
 from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin, BaseUserManager
 from django.db.models import Q
-from django.shortcuts import get_object_or_404
 
 
-def avatar_upload_path(instance, filename):
-    return f"user/{instance.id}/avatar/{filename}"
-
-def banner_upload_path(instance, filename):
-    return f"user/{instance.id}/banner/{filename}"
-
+# Create your models here.
 
 class UserAccountManager(BaseUserManager):
     def create_user(self, email, username, display_name, password=None):
@@ -48,8 +42,8 @@ class UserAccount(AbstractBaseUser, PermissionsMixin):
     username = models.CharField(max_length=255, unique=True)
     display_name = models.CharField(max_length=255)
     registration_date = models.DateField(auto_now_add=True)
-    avatar = models.ImageField(upload_to=avatar_upload_path, blank=True, null=True)
-    banner = models.ImageField(upload_to=banner_upload_path, blank=True, null=True)
+    avatar = models.ImageField(upload_to='useravatar', blank=True, null=True)
+    banner = models.ImageField(upload_to='userbanner', blank=True, null=True)
     status = models.TextField(blank=True)
     about = models.TextField(blank=True)
     phone = models.CharField(max_length=15, blank=True)
@@ -82,13 +76,16 @@ class UserAccount(AbstractBaseUser, PermissionsMixin):
 
         return friends
 
-    def save(self, *args, **kwargs):
-        if self.id:
-            existing = get_object_or_404(UserAccount, id=self.id)
-            if existing.avatar and existing.avatar != self.avatar:
-                existing.avatar.delete(save=False)
-            if existing.banner and existing.banner != self.banner:
-                existing.banner.delete(save=False)
-        super().save(*args, **kwargs)
+    def update_avatar(self, new_avatar):
+        if self.avatar:
+            # Construct the path to the previous avatar file
+            previous_avatar_path = os.path.join(
+                settings.MEDIA_ROOT, str(self.avatar))
 
+            # Delete the previous avatar file from the server
+            if os.path.isfile(previous_avatar_path):
+                os.remove(previous_avatar_path)
 
+        # Set the new avatar and save the instance
+        self.avatar = new_avatar
+        self.save()
