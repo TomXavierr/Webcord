@@ -53,17 +53,6 @@ class UserUpdateView(generics.RetrieveUpdateAPIView):
     def get_object(self):
         return self.request.user
 
-    def perform_update(self, serializer):
-        # Get the previous avatar before updating
-        previous_avatar = self.get_object().avatar
-
-        # Delete the previous avatar if it exists
-        if previous_avatar and previous_avatar != serializer.validated_data.get('avatar'):
-            previous_avatar.delete()
-
-        # Call the superclass method to perform the update
-        super().perform_update(serializer)
-
     def update(self, request, *args, **kwargs):
         partial = kwargs.pop('partial', False)
         instance = self.get_object()
@@ -72,7 +61,16 @@ class UserUpdateView(generics.RetrieveUpdateAPIView):
         serializer.is_valid(raise_exception=True)
         self.perform_update(serializer)
 
-        return Response(serializer.data)
+        updated_fields = {}
+        for field in serializer.fields.keys():
+            if field in serializer.validated_data:
+                updated_fields[field] = f"{field} updated successfully"
+
+        response_data = {
+            'message': updated_fields if updated_fields else 'No fields updated',
+        }
+
+        return Response(response_data)
 
 
 class ChangePasswordView(UpdateAPIView):
