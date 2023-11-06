@@ -1,18 +1,22 @@
 import React from "react";
-import { Box, Button, Divider, Typography } from "@mui/material";
+import {
+    Box,
+    Button,
+    Divider,
+    List,
+    ListItem,
+    ListItemIcon,
+    ListItemText,
+    Typography,
+} from "@mui/material";
+import TagIcon from "@mui/icons-material/Tag";
 import PeopleIcon from "@mui/icons-material/People";
-
 
 const appBarHeight = 36;
 
 const ServerChannelsDrawer = ({ channels, onChannelSelect }) => {
     return (
-        <div
-            style={{
-                width: "184px",
-                height: `calc(100vh - ${appBarHeight}px - 40px)`,
-            }}
-        >
+        <>
             <Box sx={{ height: "36px", padding: "10px" }}>
                 <Button
                     sx={{
@@ -36,24 +40,39 @@ const ServerChannelsDrawer = ({ channels, onChannelSelect }) => {
                 {i+1}
             </Typography>
             ))} */}
-            {channels.map((channel) => (
-                <Box key={channel.id} sx={{ height: "36px", padding: "5px" }}>
-                    <Button
+
+            <List sx={{ padding: 0}}>
+                {channels.map((channel) => (
+                    <ListItem
+                        key={channel.id}
                         sx={{
-                            height: "36px",
                             color: "white",
-                            textTransform: "none",
-                            justifyContent: "left",
+                            display: "flex",
+                            justifyContent: "flex-start"
                         }}
                         onClick={() => onChannelSelect(channel.id)}
                     >
-                        <Typography component="div">
-                            # {channel.name}
-                        </Typography>
-                    </Button>
-                </Box>
-            ))}
-        </div>
+                        <ListItemIcon sx={{ color: "white", minWidth: "24px" }}>
+                            <TagIcon />
+                        </ListItemIcon>
+                        <ListItemText>
+                            <Typography
+                                sx={{
+                                    textOverflow: "ellipsis",
+                                    overflow: "hidden",
+                                    whiteSpace: "nowrap",
+                                    paddingLeft: "10px"
+                                }}
+                            >
+                               {channel.name} 
+                            </Typography>
+                        </ListItemText>
+                    </ListItem>
+                ))}
+            </List>
+
+    
+        </>
     );
 };
 

@@ -1,17 +1,47 @@
-import React, { useEffect, useState } from "react";
-import { Avatar, Box, Divider, IconButton, List, ListItem, ListItemAvatar, Tooltip, Typography } from "@mui/material";
-import DeleteIcon from "@mui/icons-material/Delete";
-import axios from "axios";
+import React from "react";
+import {
+    Avatar,
+    Box,
+    Typography,
+} from "@mui/material";
+import { styled } from "@mui/material/styles";
+import Table from "@mui/material/Table";
+import TableBody from "@mui/material/TableBody";
+import TableCell, { tableCellClasses } from "@mui/material/TableCell";
+import TableContainer from "@mui/material/TableContainer";
+import TableHead from "@mui/material/TableHead";
+import TableRow from "@mui/material/TableRow";
+import Paper from "@mui/material/Paper";
 
-const MembersList = ({members}) => {
+const StyledTableCell = styled(TableCell)(({ theme }) => ({
+    [`&.${tableCellClasses.head}`]: {
+        backgroundColor: theme.palette.common.black,
+        color: theme.palette.common.white,
+    },
+    [`&.${tableCellClasses.body}`]: {
+        backgroundColor: "#073B4C",
+        color: "white",
+        fontSize: 14,
+    },
+}));
 
-    
+const StyledTableRow = styled(TableRow)(({ theme }) => ({
+    "&:nth-of-type(odd)": {
+        backgroundColor: theme.palette.action.hover,
+    },
+    "&:last-child td, &:last-child th": {
+        border: 0,
+    },
+}));
 
+const MembersList = ({ members }) => {
     return (
-        <Box sx={{
-            paddingLeft: "20px",
-            paddingTop: "10px",
-        }}p
+        <Box
+            sx={{
+                paddingLeft: "20px",
+                paddingTop: "10px",
+            }}
+            p
         >
             <Typography
                 style={{
@@ -24,71 +54,108 @@ const MembersList = ({members}) => {
                 All Members
             </Typography>
 
-            <List style={{ alignItems: "center" }}>
-                {members.map((member) => (
-                    <Box key={member.user.id}>
-                        <Divider
-                            style={{
-                                backgroundColor: "#0A4C5C",
-                                marginInline: "10px",
-                            }}
-                        />
-                        <Box
-                            sx={{
-                                borderRadius: "10px",
-                                py: "8px",
-                                "&:hover": {
-                                    backgroundColor: "#0A4C5C",
-                                },
-                            }}
-                        >
-                            <ListItem
-                                sx={{
-                                    width: "inherit",
-                                    height: "40px",
-                                    display: "flex",
-                                    justifyContent: "space-between",
-                                }}
-                            >
-                                <Box sx={{ display: "flex" }}>
-                                    <ListItemAvatar>
-                                        <Avatar> <img
-                                        src={`${process.env.REACT_APP_API_URL}/${member.user.avatar}`} 
-                                        alt="User Avatar"
-                                        style={{
-                                            width: "100%",
-                                            height: "100%",
-                                            borderRadius: "50%", 
+            
+            <TableContainer component={Paper}>
+                <Table sx={{ minWidth: 700 }} aria-label="customized table">
+                    <TableHead>
+                        <TableRow>
+                            <StyledTableCell>NAME</StyledTableCell>
+                            <StyledTableCell align="left">
+                                MEMBER SINCE
+                            </StyledTableCell>
+                            <StyledTableCell align="left">
+                                ROLES
+                            </StyledTableCell>
+                            <StyledTableCell align="right">
+                                {/* Carbs&nbsp;(g) */}
+                            </StyledTableCell>
+                            <StyledTableCell align="right">
+                                {/* Protein&nbsp;(g) */}
+                            </StyledTableCell>
+                        </TableRow>
+                    </TableHead>
+                    <TableBody>
+                        {members.map((member) => (
+                            <StyledTableRow key={member.user.id}>
+                                <StyledTableCell component="th" scope="row">
+                                    <Box
+                                        sx={{
+                                            
+                                            display: "flex",
+                                            alignItems: "center",
                                         }}
-                                    /></Avatar>
-                                    </ListItemAvatar>
-                                    <Box>
-                                        <Typography
-                                            style={{
-                                                color: "white",
-                                                width: "inherit",
-                                            }}
-                                        >
-                                            {member.user.display_name}
-                                        </Typography>
-                                        <Typography
-                                            style={{
-                                                color: "#EBF2FA",
-                                                fontFamily:
-                                                    "Noto Sans, sans-serif",
-                                                fontSize: "12px",
-                                            }}
-                                        >
-                                            {/* {friend.username} */}
-                                        </Typography>
+                                    >
+                                        <Avatar sx={{
+                                            marginRight: "10px"
+                                        }}>
+                                            {" "}
+                                            <img
+                                                src={`${process.env.REACT_APP_API_URL}/${member.user.avatar}`}
+                                                alt="User Avatar"
+                                                style={{
+                                                    width: "100%",
+                                                    height: "100%",
+                                                    borderRadius: "50%",
+                                                }}
+                                            />
+                                        </Avatar>
+                                        {member.user.display_name}
                                     </Box>
-                                </Box>
-                                
-                            </ListItem>
-                        </Box>
-                    </Box>
-                ))}
-            </List>
+                                </StyledTableCell>
+                                <StyledTableCell align="left">
+                                    {member.join_date}
+                                </StyledTableCell>
+                                <StyledTableCell
+                                    align="center"
+
+                                >
+                                    <Box sx={{display:"flex"}}>
+                                    <Box
+                                        sx={{
+                                            backgroundColor: "#0A4C5C",
+                                            borderRadius: "4px",
+                                            paddingX: "4px",
+                                            paddingY: "2px",
+                                            color: "white",
+                                            display: "flex",
+                                            alignItems: "center",
+                                            marginRight: "4px",
+                                            
+                                        }}
+                                    >
+                                        {member.roles[0]}
+                                    </Box>
+                                    {member.roles.length > 1 && (
+                                        <span
+                                            title={`+${
+                                                member.roles.length - 1
+                                            } more roles`}
+                                        >
+                                            <Box
+                                                sx={{
+                                                    backgroundColor: "#0A4C5C",
+                                                    borderRadius: "4px",
+                                                    padding: "4px",
+                                                    color: "white",
+                                                }}
+                                            >
+                                                +{member.roles.length - 1}
+                                            </Box>
+                                        </span>
+                                    )}
+                                    </Box>
+                                </StyledTableCell>
+                                <StyledTableCell align="right">
+                                    {/* {member.user.display_name} */}
+                                </StyledTableCell>
+                                <StyledTableCell align="right">
+                                    {/* {member.user.display_name} */}
+                                </StyledTableCell>
+                            </StyledTableRow>
+                        ))}
+                    </TableBody>
+                </Table>
+            </TableContainer>
         </Box>
     );
 };

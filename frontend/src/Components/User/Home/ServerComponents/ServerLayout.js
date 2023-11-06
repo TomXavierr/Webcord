@@ -21,6 +21,7 @@ import UserSettings from "../UserSettings";
 import { useParams } from "react-router-dom";
 import ServerChannelsDrawer from "./ServerChannelsDrawer";
 import MembersList from "./ServerLayoutComponents/MembersList";
+import ChatWindow from "./ServerLayoutComponents/ChatWindow";
 
 const drawerWidth = 60;
 const appBarHeight = 36;
@@ -181,7 +182,7 @@ const ServerLayout = () => {
                         <Box
                             sx={{
                                 height:"100vh",
-                                width: "200px",
+                                minWidth: "200px",
                                 backgroundColor: "#122C34",
                                 borderRadius: "20px 0 0 0",
                             }}
@@ -194,13 +195,13 @@ const ServerLayout = () => {
                                         marginTop: "36px",
                                         marginLeft: `${drawerWidth}px`,
                                         height: `calc(100vh - ${appBarHeight}px - 40px)`,
-                                        
+                                        width: "200px",
                                         color: "#EBF2FA",
                                         backgroundColor: "#122C34",
-
+                                        border: 0,
                                         zIndex: 1,
                                         position: "absolute",
-                                        alignItems: "center",
+                                        
                                     },
                                     className: "custom-scrollbar",
                                 }}
@@ -213,7 +214,7 @@ const ServerLayout = () => {
                             <Box
                                 sx={{
                                     marginLeft: `${drawerWidth}px`,
-                                    width: "190px",
+                                    width: "200px",
                                     height: "40px",
                                     backgroundColor: "#031D25",
                                     color: "#EBF2FA",
@@ -285,12 +286,13 @@ const ServerLayout = () => {
                                 marginTop: `${appBarHeight}px`,
                                 height: `calc(100vh - ${36}px)`,
                                 width: `calc(100vw - ${260}px)`,
+                                overflow: "hidden"
                             }}
                         >
                             {showMembers ? (
                                 <MembersList members={serverData.members} />
                             ) : selectedChannel ? (
-                                `#${selectedChannel}`
+                                <ChatWindow channel={selectedChannel} />
                             ) : (
                                 "#ContentBox"
                             )}

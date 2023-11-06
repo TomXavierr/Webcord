@@ -2,7 +2,6 @@
 .custom-scrollbar {
     scrollbar-width: thin;
     scrollbar-color: #555 #222;
-    height: calc(100% - 36px); 
     overflow-y: auto;
   }
   

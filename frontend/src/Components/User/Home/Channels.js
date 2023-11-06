@@ -1,7 +1,13 @@
 import React, { useEffect } from "react";
 import { Link, Outlet } from "react-router-dom";
 
-import { Avatar, Box, Tooltip } from "@mui/material";
+import {
+    Avatar,
+    Box,
+    ListItemAvatar,
+    ListItemIcon,
+    Tooltip,
+} from "@mui/material";
 import List from "@mui/material/List";
 import Divider from "@mui/material/Divider";
 import ListItem from "@mui/material/ListItem";
@@ -26,7 +32,7 @@ const Channels = () => {
     }, [dispatch]);
 
     if (isAuthenticated === null || user === null) {
-        return <div>Loading...</div>; // You can display a loading indicator.
+        return <div>Loading...</div>;
     }
 
     return (
@@ -77,29 +83,32 @@ const Channels = () => {
                         {user.servers.map((server) => (
                             <ListItem
                                 key={server.id}
-                                button
-                                // onClick={() => handleIconClick("server")}
                                 sx={{
-                                    backgroundColor: "#073B4C",
-                                    width: "40px",
-                                    height: "40px",
-                                    borderRadius: "50%",
                                     display: "flex",
-                                    justifyContent: "center",
-                                    marginBlock: "10px",
+                                    alignContent: "center",
                                 }}
+                                disableGutters
                             >
                                 <Link to={`${server.id}`}>
                                     <Tooltip title={server.name}>
-                                        <img
-                                            src={`${process.env.REACT_APP_API_URL}/${server.icon}`}
-                                            alt="User Avatar"
-                                            style={{
-                                                width: "40px",
+                                        <ListItemIcon
+                                            sx={{
+                                                minWidth: "40px",
                                                 height: "40px",
-                                                borderRadius: "50%",
                                             }}
-                                        />
+                                        >
+                                            <ListItemAvatar
+                                                sx={{
+                                                    minWidth: "40px",
+                                                    height: "40px",
+                                                }}
+                                            >
+                                                <Avatar
+                                                    alt="server icon"
+                                                    src={`${process.env.REACT_APP_API_URL}/${server.icon}`}
+                                                ></Avatar>
+                                            </ListItemAvatar>
+                                        </ListItemIcon>
                                     </Tooltip>
                                 </Link>
                             </ListItem>

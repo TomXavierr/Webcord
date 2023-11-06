@@ -50,29 +50,6 @@ class Server(models.Model):
                 existing.icon.delete(save=False)
 
         super().save(*args, **kwargs)
-    # def save(self, *args, **kwargs):
-    #     is_new_server = self._state.adding
-    #     # super(Server, self).save(*args, **kwargs)
-
-    #     if is_new_server:
-    #         # Create the server first
-    #         super(Server, self).save(*args, **kwargs)
-
-    #         # Create a 'member' role for the new server
-    #         member_role = Role.objects.create(
-    #             name="member",
-    #             server=self
-    #         )
-
-    #         # Assign the "member" role to the owner (creator)
-    #         server_member = ServerMember.objects.create(user=self.owner, server=self)
-    #         server_member.role.add(member_role)
-
-    #     if self.id:
-    #         existing = get_object_or_404(Server, id=self.id)
-    #         if existing.icon != self.icon:
-    #             existing.icon.delete(save=False)
-    #     super(Server, self).save(*args, **kwargs)
 
     def channels(self):
         # Use the reverse relationship to get all channels for the server
@@ -100,10 +77,14 @@ class ServerMember(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL,
                              on_delete=models.CASCADE)
     server = models.ForeignKey(Server, on_delete=models.CASCADE)
+    join_date = models.DateField(auto_now_add=True)
     role = models.ManyToManyField('Role')
 
     def get_role_names(self):
         return self.role.values_list('name', flat=True)
+
+    # def get_join_date(self):
+        
 
     def __str__(self):
         return f'{self.user.username} in {self.server.name}'

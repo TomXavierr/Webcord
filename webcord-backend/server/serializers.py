@@ -42,7 +42,7 @@ class ServerMemberSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = ServerMember
-        fields = ['id', 'user', 'roles']
+        fields = ['id', 'user', 'roles', 'join_date']
 
 
 class ServerDetailSerializer(serializers.ModelSerializer):
