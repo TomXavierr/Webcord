@@ -8,6 +8,7 @@ from drf_spectacular.views import (SpectacularAPIView, SpectacularRedocView,
                                    SpectacularSwaggerView)
 from rest_framework_simplejwt.views import (TokenObtainPairView,
                                             TokenRefreshView, TokenVerifyView)
+from webchat.consumer import WebChatConsumer
 
 urlpatterns = [
 
@@ -15,7 +16,7 @@ urlpatterns = [
     path('admin/', include('admin_api.urls')),
     path('account/', include('accounts.urls')),
     path('friends/', include('friend_system.urls')),
-#     path('server-api/', include('servers_api.urls')),
+    #     path('server-api/', include('servers_api.urls')),
     path('server/', include('server.urls')),
 
 
@@ -38,6 +39,8 @@ urlpatterns = [
          SpectacularRedocView.as_view(url_name='schema'), name='redoc'),
 
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+
+websocket_urlpatterns = [path("ws/test", WebChatConsumer.as_asgi())]
 
 
 # if settings.DEBUG:

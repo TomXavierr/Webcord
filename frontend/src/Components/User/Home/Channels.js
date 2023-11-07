@@ -105,7 +105,7 @@ const Channels = () => {
                                             >
                                                 <Avatar
                                                     alt="server icon"
-                                                    src={`${process.env.REACT_APP_API_URL}/${server.icon}`}
+                                                    src={`${process.env.REACT_APP_API_URL}${server.icon}`}
                                                 ></Avatar>
                                             </ListItemAvatar>
                                         </ListItemIcon>

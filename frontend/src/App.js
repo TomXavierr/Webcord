@@ -71,7 +71,7 @@ function App() {
                             >
                                 <Route path="@me" element={<UserLayout />} />
                                 <Route
-                                    path=":serverId"
+                                    path=":serverId/:channelId?"
                                     element={<ServerLayout />}
                                 />
                             </Route>

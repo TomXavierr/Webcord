@@ -46,7 +46,7 @@ const tabstyle = {
 };
 
 const ServerLayout = () => {
-    const { serverId } = useParams();
+    const { serverId, channelId } = useParams();
     const [serverData, setServerData] = useState(null);
     const [loading, setLoading] = useState(true);
     const [selectedChannel, setSelectedChannel] = useState(null);
@@ -239,7 +239,7 @@ const ServerLayout = () => {
                                         >
                                             {user && user.avatar && (
                                                 <img
-                                                    src={`${process.env.REACT_APP_API_URL}/${user.avatar}`}
+                                                    src={`${process.env.REACT_APP_API_URL}${user.avatar}`}
                                                     alt="User Avatar"
                                                     style={{
                                                         width: "100%",

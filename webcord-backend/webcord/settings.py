@@ -276,8 +276,15 @@ DJOSER = {
 }
 
 
-SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = '916074769064-855jm539v9s7ksprqc6u00pc2dmiuc8e.apps.googleusercontent.com'
-SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = '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'
-SOCIAL_AUTH_GOOGLE_OAUTH2_SCOPE = ['https://www.googleapis.com/auth/userinfo.email',
-                                   'https://www.googleapis.com/auth/userinfo.profile', 'openid']
-SOCIAL_AUTH_GOOGLE_OAUTH2_EXTRA_DATA = ['first_name', 'last_name']
+# SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = '916074769064-855jm539v9s7ksprqc6u00pc2dmiuc8e.apps.googleusercontent.com'
+# SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = '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'
+# SOCIAL_AUTH_GOOGLE_OAUTH2_SCOPE = ['https://www.googleapis.com/auth/userinfo.email',
+#                                    'https://www.googleapis.com/auth/userinfo.profile', 'openid']
+# SOCIAL_AUTH_GOOGLE_OAUTH2_EXTRA_DATA = ['first_name', 'last_name']
+
+
+CHANNEL_LAYERS = {
+    "default": {
+        "BACKEND": "channels.layers.InMemoryChannelLayer"
+    }
+}
