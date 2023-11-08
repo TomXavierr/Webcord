@@ -50,7 +50,7 @@ const ServerChannelsDrawer = ({ channels, onChannelSelect }) => {
                             display: "flex",
                             justifyContent: "flex-start"
                         }}
-                        onClick={() => onChannelSelect(channel.id)}
+                        onClick={() => onChannelSelect(channel)}
                     >
                         <ListItemIcon sx={{ color: "white", minWidth: "24px" }}>
                             <TagIcon />

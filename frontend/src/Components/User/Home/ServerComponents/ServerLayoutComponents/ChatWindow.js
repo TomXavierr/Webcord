@@ -1,17 +1,51 @@
 import { Box, Button, Divider, Input, Typography } from "@mui/material";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
 import useWebSocket from "react-use-websocket";
-
-const socketUrl = "ws://127.0.0.1:8000/ws/test";
+import axios from "axios";
 
 const ChatWindow = (channel) => {
     const [message, setMessage] = useState("");
-    // const [inputValue, setInputValue] = useState("")
-    const [newMessage, setNewMessage] = useState([]);
+    const [messages, setMessages] = useState([]); // Define 'messages' state
+    const { serverId, channelId } = useParams();
+
+    const socketUrl = channelId
+        ? `ws://127.0.0.1:8000/${serverId}/${channelId}`
+        : null;
+
+    const fetchMessages = async (channelId) => {
+        const token = localStorage.getItem("access");
+        const config = {
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+        };
+        try {
+            const response = await axios.get(
+                `${process.env.REACT_APP_API_URL}/chats/${channelId}/`,
+                config
+            );
+            return response.data;
+        } catch (error) {
+            console.error("Error fetching messages:", error);
+            return [];
+        }
+    };
+
+    useEffect(() => {
+        const loadMessages = async () => {
+            if (channelId) {
+                const messages = await fetchMessages(channelId);
+                setMessages(messages); // Set 'messages' state
+            }
+        };
+
+        loadMessages();
+    }, [channelId]);
 
     const { sendJsonMessage } = useWebSocket(socketUrl, {
         onOpen: () => {
-            console.log("Connencted!");
+            console.log("Connected!");
         },
         onClose: () => {
             console.log("Closed!");
@@ -21,7 +55,8 @@ const ChatWindow = (channel) => {
         },
         onMessage: (msg) => {
             const data = JSON.parse(msg.data);
-            setNewMessage((prev_msg) => [...prev_msg, data.new_message]);
+            const newMessage = data.new_message;
+            setMessages((prevMessages) => [...prevMessages, newMessage]);
         },
     });
 
@@ -33,17 +68,14 @@ const ChatWindow = (channel) => {
                 overflow: "hidden",
                 color: "white",
             }}
-            // class
-        >
-            <Typography>ChatWindow</Typography>
+        >   
             <Divider />
-            {newMessage.map((msg, index) => {
-                return (
-                    <div key={index}>
-                        <p>{msg}</p>
-                    </div>
-                );
-            })}
+            {messages.map((msg, index) => (
+                <div key={index}>
+                    <p>{msg.sender.display_name}</p>
+                    <p>{msg.content}</p>
+                </div>
+            ))}
             <form>
                 <label>
                     Enter message:
@@ -61,12 +93,7 @@ const ChatWindow = (channel) => {
             >
                 Send
             </Button>
-            <Typography></Typography>
-            {/* {[...Array(50)].map((_, i) => (
-                <Typography >
-                {i+1}
-            </Typography>
-            ))} */}
+            
         </Box>
     );
 };

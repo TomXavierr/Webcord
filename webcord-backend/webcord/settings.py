@@ -56,7 +56,7 @@ INSTALLED_APPS = [
 
     'accounts',
     'friend_system',
-    # 'servers_api',
+    'webchat',
     'server',
     'admin_api',
 

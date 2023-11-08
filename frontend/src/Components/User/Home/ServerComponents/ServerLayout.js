@@ -18,7 +18,7 @@ import {
 } from "@mui/material";
 import { useSelector } from "react-redux";
 import UserSettings from "../UserSettings";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import ServerChannelsDrawer from "./ServerChannelsDrawer";
 import MembersList from "./ServerLayoutComponents/MembersList";
 import ChatWindow from "./ServerLayoutComponents/ChatWindow";
@@ -51,6 +51,7 @@ const ServerLayout = () => {
     const [loading, setLoading] = useState(true);
     const [selectedChannel, setSelectedChannel] = useState(null);
     const [showMembers, setShowMembers] = useState(true);
+    const navigate = useNavigate();
 
     const getServerDetails = async () => {
         setLoading(true);
@@ -83,6 +84,8 @@ const ServerLayout = () => {
     useEffect(() => {
         getServerDetails();
     }, [serverId]);
+    
+
 
     const [isUserSettingsOpen, setUserSettingsOpen] = useState(
         localStorage.getItem("isUserSettingsOpen") === "true" || false
@@ -107,15 +110,19 @@ const ServerLayout = () => {
         localStorage.setItem("isUserSettingsOpen", "false");
     };
 
-    const handleChannelSelect = (channelId) => {
-        if (channelId === "members") {
+    const handleChannelSelect = (channel) => {
+        if (channel === "members") {
             setSelectedChannel(null); // Clear the selected channel
+            navigate(`/channels/${serverId}`);
             setShowMembers(true);
         } else {
-            setSelectedChannel(channelId);
-            setShowMembers(false); // Hide the MembersList
+            setSelectedChannel(channel);
+            setShowMembers(false); 
+            navigate(`/channels/${serverId}/${channel.id}`);
         }
     };
+
+    
 
     const user = useSelector((state) => state.auth.user);
 
@@ -169,6 +176,18 @@ const ServerLayout = () => {
                                     {serverData.name}
                                 </Typography>
                             </Box>
+                            {selectedChannel != null &&(
+                                <Typography
+                                    style={{
+                                        fontSize: "16px",
+                                        fontFamily: "Sofia Sans,sans-serif ",
+                                        color: "#EBF2FA",
+                                    }}
+                                    pl={2}
+                                >
+                                    {selectedChannel.name}
+                                </Typography>
+                            )}
                         </Toolbar>
                     </AppBar>
 
@@ -181,7 +200,7 @@ const ServerLayout = () => {
                     >
                         <Box
                             sx={{
-                                height:"100vh",
+                                height: "100vh",
                                 minWidth: "200px",
                                 backgroundColor: "#122C34",
                                 borderRadius: "20px 0 0 0",
@@ -189,7 +208,6 @@ const ServerLayout = () => {
                         >
                             <Drawer
                                 variant="permanent"
-                                
                                 PaperProps={{
                                     sx: {
                                         marginTop: "36px",
@@ -201,7 +219,6 @@ const ServerLayout = () => {
                                         border: 0,
                                         zIndex: 1,
                                         position: "absolute",
-                                        
                                     },
                                     className: "custom-scrollbar",
                                 }}
@@ -286,16 +303,14 @@ const ServerLayout = () => {
                                 marginTop: `${appBarHeight}px`,
                                 height: `calc(100vh - ${36}px)`,
                                 width: `calc(100vw - ${260}px)`,
-                                overflow: "hidden"
+                                overflow: "hidden",
                             }}
                         >
                             {showMembers ? (
                                 <MembersList members={serverData.members} />
-                            ) : selectedChannel ? (
+                            ) : selectedChannel && (
                                 <ChatWindow channel={selectedChannel} />
-                            ) : (
-                                "#ContentBox"
-                            )}
+                            ) }
                         </Box>
                     </Box>
                 </Box>
