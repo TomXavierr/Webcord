@@ -19,7 +19,7 @@ class MessageViewSet(generics.ListAPIView):
             conversation = Conversation.objects.get(channel_id=channel_id)
             return Message.objects.filter(conversation=conversation)
         except Conversation.DoesNotExist:
-            return response([])
+            return Message.objects.none()  # Return an empty queryset
 
     def list(self, request, *args, **kwargs):
         queryset = self.get_queryset()

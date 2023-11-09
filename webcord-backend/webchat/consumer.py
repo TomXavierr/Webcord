@@ -3,6 +3,7 @@ import json
 from asgiref.sync import async_to_sync
 from channels.generic.websocket import JsonWebsocketConsumer
 from django.contrib.auth import get_user_model
+from server.serializers import UserSerializer
 
 from .models import Conversation, Message
 
@@ -37,13 +38,16 @@ class WebChatConsumer(JsonWebsocketConsumer):
 
         new_message = Message.objects.create(conversation=conversation, sender=sender, content=message,)
 
+        user_serializer = UserSerializer(sender)
+        serialized_user = user_serializer.data
+
         async_to_sync(self.channel_layer.group_send)(
             self.channel_id,
             {
                 "type": "chat.message",
                 "new_message": {
                     "id": new_message.id,
-                    "sender": new_message.sender.display_name,
+                    "sender": serialized_user,
                     "content": new_message.content,
                     "timestamp": new_message.timestamp.isoformat()
                 },

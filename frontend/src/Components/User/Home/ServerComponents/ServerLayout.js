@@ -84,8 +84,18 @@ const ServerLayout = () => {
     useEffect(() => {
         getServerDetails();
     }, [serverId]);
-    
 
+    useEffect(() => {
+        const channelJSON = localStorage.getItem("selectedChannel");
+
+        if (channelJSON && serverData) {
+            const channel = JSON.parse(channelJSON);
+            console.log(channel.id);
+            setSelectedChannel(channel);
+            setShowMembers(false);
+            navigate(`/channels/${serverId}/${channel.id}`);
+        }
+    }, [serverData]);
 
     const [isUserSettingsOpen, setUserSettingsOpen] = useState(
         localStorage.getItem("isUserSettingsOpen") === "true" || false
@@ -112,17 +122,16 @@ const ServerLayout = () => {
 
     const handleChannelSelect = (channel) => {
         if (channel === "members") {
-            setSelectedChannel(null); // Clear the selected channel
-            navigate(`/channels/${serverId}`);
+            setSelectedChannel(null);
             setShowMembers(true);
+            navigate(`/channels/${serverId}`);
         } else {
             setSelectedChannel(channel);
-            setShowMembers(false); 
+            setShowMembers(false);
             navigate(`/channels/${serverId}/${channel.id}`);
+            localStorage.setItem("selectedChannel", JSON.stringify(channel));
         }
     };
-
-    
 
     const user = useSelector((state) => state.auth.user);
 
@@ -176,7 +185,7 @@ const ServerLayout = () => {
                                     {serverData.name}
                                 </Typography>
                             </Box>
-                            {selectedChannel != null &&(
+                            {selectedChannel != null && (
                                 <Typography
                                     style={{
                                         fontSize: "16px",
@@ -193,7 +202,7 @@ const ServerLayout = () => {
 
                     <Box
                         sx={{
-                            width: `calc(100% - ${60}px)`,
+                            width: `calc(100%)`,
                             display: "flex",
                             flexDirection: "row",
                         }}
@@ -302,15 +311,17 @@ const ServerLayout = () => {
                             sx={{
                                 marginTop: `${appBarHeight}px`,
                                 height: `calc(100vh - ${36}px)`,
-                                width: `calc(100vw - ${260}px)`,
-                                overflow: "hidden",
+                                width: `calc(100vw - 260px)`,
+                         
                             }}
                         >
                             {showMembers ? (
                                 <MembersList members={serverData.members} />
-                            ) : selectedChannel && (
-                                <ChatWindow channel={selectedChannel} />
-                            ) }
+                            ) : (
+                                selectedChannel && (
+                                    <ChatWindow channel={selectedChannel} />
+                                )
+                            )}
                         </Box>
                     </Box>
                 </Box>

@@ -1,8 +1,29 @@
-import { Box, Button, Divider, Input, Typography } from "@mui/material";
+import {
+    Avatar,
+    Box,
+    Button,
+    Divider,
+    FormControl,
+    Input,
+    InputBase,
+    List,
+    ListItem,
+    ListItemAvatar,
+    ListItemText,
+    TextField,
+    Typography,
+} from "@mui/material";
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import useWebSocket from "react-use-websocket";
 import axios from "axios";
+
+const inputPropsStyle = {
+    color: "white",
+    backgroundColor: "#0A4C5C",
+    fontSize: "12px",
+    minWidth: `calc(100% - ${20}px)`
+};
 
 const ChatWindow = (channel) => {
     const [message, setMessage] = useState("");
@@ -54,6 +75,7 @@ const ChatWindow = (channel) => {
             console.log("Error!");
         },
         onMessage: (msg) => {
+            console.log(msg);
             const data = JSON.parse(msg.data);
             const newMessage = data.new_message;
             setMessages((prevMessages) => [...prevMessages, newMessage]);
@@ -61,40 +83,106 @@ const ChatWindow = (channel) => {
     });
 
     return (
-        <Box
-            sx={{
-                height: "auto",
-                width: "auto",
-                overflow: "hidden",
-                color: "white",
-            }}
-        >   
-            <Divider />
-            {messages.map((msg, index) => (
-                <div key={index}>
-                    <p>{msg.sender.display_name}</p>
-                    <p>{msg.content}</p>
-                </div>
-            ))}
-            <form>
-                <label>
-                    Enter message:
-                    <input
-                        type="text"
-                        value={message}
-                        onChange={(e) => setMessage(e.target.value)}
-                    />
-                </label>
-            </form>
-            <Button
-                onClick={() => {
-                    sendJsonMessage({ type: "message", message });
+        <>
+            <Box
+                sx={{
+                    height: `calc(100vh - ${92}px )`,
+                    // width: "auto",
+                    overflow: "hidden",
+                    color: "white",
                 }}
             >
-                Send
-            </Button>
-            
-        </Box>
+                <List sx={{ width: "100%" }}>
+                    {messages.map((msg, index) => {
+                        return (
+                            <ListItem key={index} alignItems="flex-start">
+                                <ListItemAvatar>
+                                    <Avatar
+                                        alt="user image"
+                                        src={`${process.env.REACT_APP_API_URL}${msg.sender.avatar}`}
+                                    />
+                                </ListItemAvatar>
+                                <ListItemText
+                                    primaryTypographyProps={{
+                                        fontSize: "12px",
+                                        variant: "body2",
+                                    }}
+                                    primary={
+                                        <Typography
+                                            component={"span"}
+                                            variant="body1"
+                                        >
+                                            {msg.sender.display_name}
+                                        </Typography>
+                                    }
+                                    secondary={
+                                        <Typography
+                                            // component={"span"}
+                                            variant="body1"
+                                            style={{
+                                                overflow: "visible",
+                                                whiteSpace: "normal",
+                                                textOverflow: "clip",
+                                            }}
+                                            sx={{
+                                                // display: "inline",
+                                                lineHeight: 1.2,
+                                                fontWeight: 400,
+                                                fontSize: "10px",
+                                                letterSpacing: "-0.2px",
+                                                color: "white",
+                                            }}
+                                        >
+                                            {msg.content}
+                                        </Typography>
+                                    }
+                                />
+                            </ListItem>
+                        );
+                    })}
+                </List>
+                {/* <Divider /> */}
+
+                <form>
+                    <label>
+                        Enter message:
+                        <input
+                            type="text"
+                            value={message}
+                            onChange={(e) => setMessage(e.target.value)}
+                        />
+                    </label>
+                </form>
+                <Button
+                    onClick={() => {
+                        sendJsonMessage({ type: "message", message });
+                    }}
+                >
+                    Send
+                </Button>
+            </Box>
+            <Box sx={{ position: "sticky", bottom: 0,minWidth: `calc(100% - ${20}px)` , paddingX:"10px"}}>
+                <form
+                    style={{
+                        bottom: 0,
+                        right: 0,
+
+                        zIndex: 1,
+                    }}
+                >
+                   
+                        <FormControl fullWidth  margin="normal">
+                            
+                            <InputBase
+                                type="text"
+                                // onChange={(e) => onChange(e)}
+                                sx={inputPropsStyle}
+                            />
+                        </FormControl>
+                   
+                </form>
+            </Box>
+        </>
     );
 };
 
