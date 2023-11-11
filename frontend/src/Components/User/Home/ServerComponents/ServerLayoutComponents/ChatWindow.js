@@ -86,7 +86,7 @@ const ChatWindow = (channel) => {
         <>
             <Box
                 sx={{
-                    height: `calc(100vh - ${92}px )`,
+                    height: `calc(100vh - ${76}px )`,
                     // width: "auto",
                     overflow: "hidden",
                     color: "white",
@@ -161,7 +161,7 @@ const ChatWindow = (channel) => {
                     Send
                 </Button>
             </Box>
-            <Box sx={{ position: "sticky", bottom: 0,minWidth: `calc(100% - ${20}px)` , paddingX:"10px"}}>
+            <Box sx={{ position: "sticky", bottom: 0, minWidth: `calc(100% - ${20}px)` , paddingX:"10px", paddingTop:"7px"}}>
                 <form
                     style={{
                         bottom: 0,
@@ -171,7 +171,7 @@ const ChatWindow = (channel) => {
                     }}
                 >
                    
-                        <FormControl fullWidth  margin="normal">
+                        <FormControl fullWidth >
                             
                             <InputBase
                                 type="text"

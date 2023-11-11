@@ -13,6 +13,7 @@ import { connect } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { login } from "../../../Redux/actions/userauthaction";
 import axios from "axios";
+import LoadingButton from "@mui/lab/LoadingButton";
 
 const inputPropsStyle = {
     color: "white", // Set the text color to white
@@ -35,9 +36,8 @@ const buttonStyle = {
     marginTop: "16px",
 };
 
-
 const Login = ({ login: loginUser, error, isAuthenticated }) => {
-
+    const [loading, setLoading] = useState(false);
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -68,28 +68,31 @@ const Login = ({ login: loginUser, error, isAuthenticated }) => {
         }
 
         try {
+            setLoading(true);
             const response = await loginUser(email, password);
 
             if (response && response.data) {
                 console.log(response.data);
                 navigate("/channels/@me");
-            } 
+            }
         } catch (error) {
             console.error("API call failed:", error);
 
-        if (error.response && error.response.data) {
-            setLocalError({
-                detail: error.response.data.detail || "An error occurred.",
-            });
-        } else if (error.message === "Network Error") {
-            setLocalError({
-                detail: "Unable to connect to the server. Please try again later.",
-            });
-        } else {
-            setLocalError({
-                detail: "An error occurred.",
-            });
-        }
+            if (error.response && error.response.data) {
+                setLocalError({
+                    detail: error.response.data.detail || "An error occurred.",
+                });
+            } else if (error.message === "Network Error") {
+                setLocalError({
+                    detail: "Unable to connect to the server. Please try again later.",
+                });
+            } else {
+                setLocalError({
+                    detail: "An error occurred.",
+                });
+            }
+        } finally {
+            setLoading(false);
         }
     };
 
@@ -157,14 +160,15 @@ const Login = ({ login: loginUser, error, isAuthenticated }) => {
                             </Link>
                         </Typography>
                     </FormControl>
-                    <Button
+                    <LoadingButton
                         type="submit"
                         variant="contained"
                         style={buttonStyle}
                         fullWidth
+                        loading={loading}
                     >
                         Login
-                    </Button>
+                    </LoadingButton>
                 </form>
                 <Button
                     type="submit"

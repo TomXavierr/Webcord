@@ -8,52 +8,45 @@ import {
     Link,
     Typography,
 } from "@mui/material";
+import LoadingButton from '@mui/lab/LoadingButton';
 import React, { useState } from "react";
 import { connect } from "react-redux";
+
 import { signup } from "../../../Redux/actions/userauthaction";
 
-const Signup = ({ signup: createUser, signupError, isAccountCreated }) => {
-    const inputPropsStyle = {
-        color: "white",
-        backgroundColor: "#000000",
-        fontSize: "12px",
-        paddingLeft: "12px",
-    };
-    const LabelStyle = {
-        fontFamily: "Sofia Sans, sans-serif",
-        fontWeight: "bold",
-        fontSize: "12px",
+const inputPropsStyle = {
+    color: "white",
+    backgroundColor: "#000000",
+    fontSize: "12px",
+    paddingLeft: "12px",
+};
+const LabelStyle = {
+    fontFamily: "Sofia Sans, sans-serif",
+    fontWeight: "bold",
+    fontSize: "12px",
+    color: "#EBF2FA",
+    "&.Mui-focused": {
         color: "#EBF2FA",
-        "&.Mui-focused": {
-            color: "#EBF2FA",
-        },
-    };
-    const buttonStyle = {
-        backgroundColor: "#44CFCB",
-        marginBottom: "16px",
-        marginTop: "16px",
-    };
+    },
+};
+const buttonStyle = {
+    backgroundColor: "#44CFCB",
+    marginBottom: "16px",
+    marginTop: "16px",
+};
 
+
+const Signup = ({ signup: createUser, signupError, isAccountCreated }) => {
+    
     const [formData, setFormData] = useState({
         email: "",
         username: "",
         display_name: "",
         password: "",
     });
-
+    
     const [errors, setErrors] = useState({});
-
-    // const ErrorMessages = ({ errors }) => {
-    //     return (
-    //         <div>
-    //             {Object.keys(errors).map((fieldName, index) => (
-    //                 <p key={index} style={{ color: "red" }}>
-    //                     {errors[fieldName]}
-    //                 </p>
-    //             ))}
-    //         </div>
-    //     );
-    // };
+    const [loading, setLoading] = useState(false);
 
     const { email, username, display_name, password } = formData;
 
@@ -75,7 +68,6 @@ const Signup = ({ signup: createUser, signupError, isAccountCreated }) => {
         const { name, value } = e.target;
         setFormData({ ...formData, [name]: value });
 
-        // Real-time validation
         const newErrors = { ...errors };
 
         switch (name) {
@@ -103,14 +95,20 @@ const Signup = ({ signup: createUser, signupError, isAccountCreated }) => {
 
     const onSubmit = async (e) => {
         e.preventDefault();
-        console.log(formData.display_name);
         if (Object.keys(errors).every((key) => errors[key] === "")) {
-            await createUser(
-                formData.email,
-                formData.username,
-                formData.display_name,
-                formData.password
-            );
+            setLoading(true);
+
+            try{
+
+                await createUser(
+                    formData.email,
+                    formData.username,
+                    formData.display_name,
+                    formData.password
+                );
+            }finally {
+                setLoading(false); 
+            }
         }
     };
 
@@ -131,7 +129,7 @@ const Signup = ({ signup: createUser, signupError, isAccountCreated }) => {
                     align="center"
                     color="#EBF2FA"
                     style={{
-                        fontFamily: "Cascadia Code, monospace", // Use the correct font family
+                        fontFamily: "Cascadia Code, monospace", 
                         fontSize: "24px",
                     }}
                 >
@@ -236,14 +234,15 @@ const Signup = ({ signup: createUser, signupError, isAccountCreated }) => {
                             )}
                         {/* {passwordError && <FormHelperText>This field is required</FormHelperText>} */}
                     </FormControl>
-                    <Button
+                    <LoadingButton 
                         type="submit"
                         variant="contained"
                         style={buttonStyle}
                         fullWidth
+                        loading={loading}
                     >
                         Continue
-                    </Button>
+                    </LoadingButton>
                     {/* {signupError && (
                         <Typography color="error" style={{ fontSize: "12px" }}>
                             {signupError}

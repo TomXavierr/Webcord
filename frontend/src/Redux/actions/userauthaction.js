@@ -241,7 +241,7 @@ export const activate = (uid, token) => async (dispatch) => {
 
         dispatch({
             type: ACTIVATION_SUCCESS,
-            // payload: res.data,/
+            
         });
     } catch (err) {
         dispatch({

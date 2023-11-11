@@ -6,7 +6,8 @@
 /webcord-backend/media/
 
 
-/webcord-backend/webcord/__pycache__
+
+__pycache__
 # Frontend-specific ignores
 /frontend/node_modules/
 /frontend/.env

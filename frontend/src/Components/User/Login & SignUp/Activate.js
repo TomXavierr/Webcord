@@ -3,26 +3,25 @@ import {
     Button,
     Typography,
 } from "@mui/material";
-import React from "react";
+import React, { useState } from "react";
 import { connect } from "react-redux";
 import { activate } from "../../../Redux/actions/userauthaction";
 import { useNavigate, useParams } from "react-router-dom";
+import LoadingButton from "@mui/lab/LoadingButton";
 
 const Activate = ({ activate, match }) => {
-
-    
     const navigate = useNavigate();
-
+    const [loading,setLoading] = useState(false)
     const { uid, token } = useParams();
-    console.log(uid);
-    console.log(token);
-    // const [verified, setVerified] = useState(false)
    
     const activate_account = async (e) => {
-       
-        await activate(uid, token);
-        // setVerified(true);
-        navigate("/login");
+        try{
+            setLoading(true)
+            await activate(uid, token);
+            navigate("/login")
+        } finally {
+            setLoading(false)
+        }     
     };
 
 
@@ -52,11 +51,11 @@ const Activate = ({ activate, match }) => {
                 </Typography>
                 
                     
-                    <Button
+                    <LoadingButton
                         type="submit"
                         variant="contained"
                         onClick={activate_account}
-
+                        loading={loading}
                         style={{
                             backgroundColor: "#44CFCB",
                             marginBottom: "16px",
@@ -66,7 +65,7 @@ const Activate = ({ activate, match }) => {
                         fullWidth
                     >
                         Activate
-                    </Button>
+                    </LoadingButton>
                     
                 
             </Box>
