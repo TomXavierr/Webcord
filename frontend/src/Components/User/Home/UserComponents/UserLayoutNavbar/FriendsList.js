@@ -24,6 +24,7 @@ const FriendsList = () => {
 
             if (response.status === 200) {
                 setFriendsList(response.data);
+                console.log(response.data);
             } else {
                 console.error("Failed to fetch friends");
             }
@@ -107,8 +108,9 @@ const FriendsList = () => {
                                 <Box sx={{ display: "flex" }}>
                                     <ListItemAvatar>
                                         <Avatar> <img
-                                        src={`${process.env.REACT_APP_API_URL}/${friend.avatar}`} 
-                                        alt="User Avatar"
+                                        src={friend.avatar && `${process.env.REACT_APP_API_URL}/${friend.avatar}`} 
+
+                                        
                                         style={{
                                             width: "100%",
                                             height: "100%",

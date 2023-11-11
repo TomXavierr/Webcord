@@ -124,6 +124,7 @@ const ServerLayout = () => {
         if (channel === "members") {
             setSelectedChannel(null);
             setShowMembers(true);
+            localStorage.removeItem("selectedChannel", JSON.stringify(channel));
             navigate(`/channels/${serverId}`);
         } else {
             setSelectedChannel(channel);
@@ -288,11 +289,13 @@ const ServerLayout = () => {
                                     </Stack>
                                     <IconButton
                                         onClick={handleSettingsIconClick}
-                                        style={{
+                                        sx={{
                                             width: "24px",
                                             height: "24px",
                                             color: "white",
+                                            
                                         }}
+                                        
                                     >
                                         <SettingsIcon />
                                     </IconButton>
@@ -309,9 +312,9 @@ const ServerLayout = () => {
                         </Box>
                         <Box
                             sx={{
-                                marginTop: `${appBarHeight}px`,
+                                marginTop: `${36}px`,
                                 height: `calc(100vh - ${36}px)`,
-                                width: `calc(100vw - 260px)`,
+                                width: `calc(100vw - ${260}px)`,
                          
                             }}
                         >

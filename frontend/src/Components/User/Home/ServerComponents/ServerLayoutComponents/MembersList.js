@@ -91,7 +91,7 @@ const MembersList = ({ members }) => {
                                             {" "}
                                             <img
                                                 src={`${process.env.REACT_APP_API_URL}${member.user.avatar}`}
-                                                alt="User Avatar"
+                                              
                                                 style={{
                                                     width: "100%",
                                                     height: "100%",
