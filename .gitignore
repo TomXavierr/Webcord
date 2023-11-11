@@ -7,7 +7,7 @@
 
 
 
-__pycache__
+__pycache__/
 # Frontend-specific ignores
 /frontend/node_modules/
 /frontend/.env
