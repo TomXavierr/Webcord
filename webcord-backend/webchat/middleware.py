@@ -5,6 +5,4 @@ class JWTAuthMiddleWare:
     async def __call__(self, scope, recieve, send):
         headers_dict = dict(scope["headers"])
 
-        print(headers_dict)
-
         return await self.app(scope, recieve, send)

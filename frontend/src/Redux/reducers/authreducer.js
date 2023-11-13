@@ -37,6 +37,8 @@ const authReducer = (state = initialState, action) => {
 
         case LOGIN_SUCCESS:
             localStorage.setItem("access", payload.access);
+            localStorage.setItem("refresh", payload.refresh);
+
             return {
                 ...state,
                 isAuthenticated: true,

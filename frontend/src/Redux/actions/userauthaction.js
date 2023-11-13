@@ -14,9 +14,7 @@ import {
     ACTIVATION_FAIL,
     GOOGLE_AUTH_SUCCESS,
     GOOGLE_AUTH_FAIL,
-
 } from "./types";
-
 
 export const load_user = () => async (dispatch) => {
     const token = localStorage.getItem("access");
@@ -26,21 +24,21 @@ export const load_user = () => async (dispatch) => {
         },
     };
     try {
-        const res = await axios.get(`${process.env.REACT_APP_API_URL}/account/user-details/`, config);
+        const res = await axios.get(
+            `${process.env.REACT_APP_API_URL}/account/user-details/`,
+            config
+        );
 
         dispatch({
             type: USER_LOADED_SUCCESS,
             payload: res.data,
         });
-        // dispatch(loadFriendsList());
     } catch (err) {
         dispatch({
             type: USER_LOADED_FAIL,
         });
     }
 };
-
-
 
 // =========================Djoser Loaduser=============================
 // export const load_user = () => async (dispatch) => {
@@ -74,39 +72,46 @@ export const load_user = () => async (dispatch) => {
 //     }
 // };
 
-export const googleAuthenticate = (state,code) => async dispatch => {
-    if (state && code && !localStorage.getItem('access')) {
-        const config =  {
+export const googleAuthenticate = (state, code) => async (dispatch) => {
+    if (state && code && !localStorage.getItem("access")) {
+        const config = {
             headers: {
-                'Content-Type': 'application/x-www.form-urlencoded'
-            }
-        }
-
-        const details = {
-            'state' : state,
-            'code': code
+                "Content-Type": "application/x-www.form-urlencoded",
+            },
         };
 
-        const formBody = Object.keys(details).map(key => encodeURIComponent(key) + '=' + encodeURIComponent(details[key])).join('&');
+        const details = {
+            state: state,
+            code: code,
+        };
+
+        const formBody = Object.keys(details)
+            .map(
+                (key) =>
+                    encodeURIComponent(key) +
+                    "=" +
+                    encodeURIComponent(details[key])
+            )
+            .join("&");
 
         try {
-            const res = await axios.post(`${process.env.REACT_APP_API_URL}/auth/o/google-oauth2/?${formBody}`, config);
+            const res = await axios.post(
+                `${process.env.REACT_APP_API_URL}/auth/o/google-oauth2/?${formBody}`,
+                config
+            );
             dispatch({
                 type: GOOGLE_AUTH_SUCCESS,
-                payload: res.data 
+                payload: res.data,
             });
 
             dispatch(load_user());
-        } catch(err) {
+        } catch (err) {
             dispatch({
-                type: GOOGLE_AUTH_FAIL
+                type: GOOGLE_AUTH_FAIL,
             });
-
         }
     }
 };
-
-
 
 export const checkAuthenticated = () => async (dispatch) => {
     if (localStorage.getItem("access")) {
@@ -120,7 +125,7 @@ export const checkAuthenticated = () => async (dispatch) => {
 
         try {
             const res = await axios.post(
-                `${process.env.REACT_APP_API_URL}/auth/jwt/verify/`,
+                `${process.env.REACT_APP_API_URL}/api/token/verify/`,
                 body,
                 config
             );
@@ -130,12 +135,48 @@ export const checkAuthenticated = () => async (dispatch) => {
                     type: AUTHENTICATED_SUCCESS,
                 });
                 await dispatch(load_user());
-            } else {
-                dispatch({
-                    type: AUTHENTICATED_FAIL,
-                });
             }
         } catch (err) {
+            if (err.response && err.response.status === 401) {
+                const refreshConfig = {
+                    headers: {
+                        "Content-Type": "application/json",
+                        Accept: "application/json",
+                    },
+                };
+                const refreshBody = JSON.stringify({
+                    refresh: localStorage.getItem("refresh"),
+                });
+
+                try {
+                    const refreshRes = await axios.post(
+                        `${process.env.REACT_APP_API_URL}/api/token/refresh/`,
+                        refreshBody,
+                        refreshConfig
+                    );
+
+                    localStorage.setItem("access", refreshRes.data.access);
+
+                    const verifyRes = await axios.post(
+                        `${process.env.REACT_APP_API_URL}/api/token/verify/`,
+                        JSON.stringify({ token: refreshRes.data.access }),
+                        config
+                    );
+
+                    if (verifyRes.data.code !== "token_not_valid") {
+                        dispatch({
+                            type: AUTHENTICATED_SUCCESS,
+                        });
+                        await dispatch(load_user());
+                        return; 
+                    }
+                } catch (refreshErr) {
+                    dispatch({
+                        type: AUTHENTICATED_FAIL,
+                    });
+                    return; 
+                }
+            }
             dispatch({
                 type: AUTHENTICATED_FAIL,
             });
@@ -214,11 +255,10 @@ export const signup =
                 type: CLEAR_ERROR,
             });
         } catch (err) {
-                dispatch({
-                    type: SIGNUP_FAIL,
-                    payload: err.response.data,
-                
-                });
+            dispatch({
+                type: SIGNUP_FAIL,
+                payload: err.response.data,
+            });
             // }
         }
     };
@@ -241,7 +281,6 @@ export const activate = (uid, token) => async (dispatch) => {
 
         dispatch({
             type: ACTIVATION_SUCCESS,
-            
         });
     } catch (err) {
         dispatch({
