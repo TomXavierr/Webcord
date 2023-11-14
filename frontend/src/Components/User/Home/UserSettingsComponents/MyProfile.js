@@ -110,12 +110,13 @@ const MyProfile = () => {
                 >
                     {" "}
                     <img
-                        src={`${process.env.REACT_APP_API_URL}/${user.avatar}`}
+                        src={`${process.env.REACT_APP_API_URL}${user.avatar}`}
                         alt="User Avatar"
                         style={{
                             width: "100%",
                             height: "100%",
                             borderRadius: "50%",
+                            objectFit: "cover",
                         }}
                     />
                 </Avatar>
@@ -161,7 +162,6 @@ const MyProfile = () => {
                     <EditAvatarModal
                         isOpen={isEditAvatarModalOpen}
                         onCancel={() => setEditAvatarModalOpen(false)}
-                        currentAvatar={user.avatar}
                         onSave={(image) => {
                             console.log("Selected image URL:", image);
                             setEditAvatarModalOpen(false);

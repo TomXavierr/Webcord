@@ -46,10 +46,23 @@ class ServerMemberSerializer(serializers.ModelSerializer):
 
 
 class ServerDetailSerializer(serializers.ModelSerializer):
-    channels = ChannelSerializer(many=True, source='channel_server')
+    channels = ChannelSerializer(many=True, read_only=True)
     members = ServerMemberSerializer(many=True, source='servermember_set')
-    owner = UserSerializer()
+    # owner = UserSerializer(read_only=True)
 
+    class Meta:
+        model = Server
+        fields = '__all__'
+
+
+
+class ServerSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Server
+        fields = '__all__'
+
+
+class ServerUpdateSerializer(serializers.ModelSerializer):
     class Meta:
         model = Server
         fields = '__all__'

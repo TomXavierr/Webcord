@@ -1,12 +1,25 @@
-import { Box, Button, DialogActions, Modal, Typography } from "@mui/material";
+import {
+    Box,
+    Button,
+    DialogActions,
+    IconButton,
+    Input,
+    Modal,
+    Typography,
+} from "@mui/material";
 import axios from "axios";
+import CloseIcon from "@mui/icons-material/Close";
 import React, { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
 
+const EditAvatarModal = ({ isOpen, onCancel, onSave }) => {
+    const [newAvatar, setNewAvatar] = useState(null);
+    const currentAvatar = useSelector((state) => state.auth.user.avatar);
 
-const EditAvatarModal = ({ isOpen, onCancel, onSave , currentAvatar }) => {
-    const [newAvatar, setNewAvatar] = useState(null)
     const [previewUrl, setPreviewUrl] = useState(
-        currentAvatar ? `${process.env.REACT_APP_API_URL}/${currentAvatar}` : null
+        currentAvatar
+            ? `${process.env.REACT_APP_API_URL}${currentAvatar}`
+            : null
     );
 
     const handleFileChange = (event) => {
@@ -22,36 +35,37 @@ const EditAvatarModal = ({ isOpen, onCancel, onSave , currentAvatar }) => {
         } else {
             setPreviewUrl(null);
         }
-
     };
 
-    const handleSubmit = async(event) => {
+    const handleSubmit = async (event) => {
         event.preventDefault();
 
-        try{
-            const token = localStorage.getItem('access');
+        try {
+            const token = localStorage.getItem("access");
             const formData = new FormData();
-            formData.append('avatar', newAvatar);
+            formData.append("avatar", newAvatar);
 
             console.log("new" + newAvatar);
 
             const config = {
                 headers: {
                     Authorization: `Bearer ${token}`,
-                    'Content-Type': 'multipart/form-data',
-                }
-            }
+                    "Content-Type": "multipart/form-data",
+                },
+            };
 
-            const response = await axios.put(`${process.env.REACT_APP_API_URL}/account/update/`,
-            formData,
-            config);
+            const response = await axios.put(
+                `${process.env.REACT_APP_API_URL}/account/update/`,
+                formData,
+                config
+            );
 
-            console.log('Avatar updated successfully:', response.data.avatar);
+            console.log("Avatar updated successfully:", response.data.avatar);
             onSave(response.data.avatar);
         } catch (error) {
-            console.error('Failed to update Avatar:', error);
+            console.error("Failed to update Avatar:", error);
         }
-    }
+    };
 
     const handleClose = (event) => {
         event.stopPropagation();
@@ -60,12 +74,12 @@ const EditAvatarModal = ({ isOpen, onCancel, onSave , currentAvatar }) => {
 
     useEffect(() => {
         if (currentAvatar) {
-            setPreviewUrl(`${process.env.REACT_APP_API_URL}/${currentAvatar}`);
+            setPreviewUrl(`${process.env.REACT_APP_API_URL}${currentAvatar}`);
         }
     }, [currentAvatar]);
-    
+
     return (
-        <Modal open={isOpen} onClose={onCancel} >
+        <Modal open={isOpen} onClose={onCancel}>
             <Box
                 style={{
                     display: "flex",
@@ -74,39 +88,88 @@ const EditAvatarModal = ({ isOpen, onCancel, onSave , currentAvatar }) => {
                     height: "100vh",
                 }}
             >
-                <Box width="400px" height="auto" p={4} bgcolor="#122C34">
-                    <Typography
-                        variant="h4"
-                        color="#EBF2FA"
-                        style={{
-                            fontSize: "24px",
-                        }}
+                <Box width="400px" p={4} bgcolor="#122C34" borderRadius={2}>
+                    <Box
+                        display="flex"
+                        justifyContent="space-between"
+                        alignItems="center"
+                        mb={2}
                     >
-                        Edit Avatar
-                    </Typography>
-                    
-                    {previewUrl && (
-                        <img
-                            src={previewUrl}
-                            alt="Preview"
-                            style={{
-                                width: "100%",
-                                height: "auto",
-                                marginTop: "12px",
-                                borderRadius: "8px",
-                            }}
-                        />
-                    )}
-                    <input type="file" onChange={handleFileChange}  />
-                    
-                    <DialogActions>
-                        <Button onClick={handleClose} color="primary">
-                            Cancel
-                        </Button>
-                        <Button type="submit" color="primary" onClick={handleSubmit}>
-                            Save
-                        </Button>
-                    </DialogActions>
+                        <Typography
+                            variant="h4"
+                            color="#EBF2FA"
+                            fontSize="24px"
+                        >
+                            Edit Avatar
+                        </Typography>
+                        <IconButton onClick={onCancel} color="primary">
+                            <CloseIcon />
+                        </IconButton>
+                    </Box>
+
+                    {/* Centered Image Preview */}
+                    <Box
+                        display="flex"
+                        justifyContent="center"
+                        alignItems="center"
+                    >
+                        {previewUrl !== null && (
+                            <img
+                                src={previewUrl}
+                                alt="Preview"
+                                style={{
+                                    width: "100px",
+                                    height: "100px",
+                                    borderRadius: "50px",
+                                    border: "1px solid #44CFCB",
+                                    objectFit: "cover",
+                                }}
+                            />
+                        )}
+                    </Box>
+
+                    <Box sx={{ display: "flex", justifyContent: "space-between", alignItems:"center" }}>
+                        <label
+                            htmlFor="avatar-input"
+                            style={{ display: "block" }}
+                        >
+                            <Input
+                                type="file"
+                                id="avatar-input"
+                                onChange={handleFileChange}
+                                style={{
+                                    display: "none",
+                                }}
+                            />
+                            <Button
+                                sx={{
+                                    backgroundColor: "#44CFCB",
+                                    borderRadius: "4px",
+                                    height: "24px",
+                                    color: "#000000",
+                                    fontSize: "14px",
+                                    textTransform: "none",
+                                    marginTop: "12px", // Adjust the spacing
+                                }}
+                            >
+                                Choose Avatar
+                            </Button>
+                        </label>
+
+                        <DialogActions
+                            display="flex"
+                            justifyContent="space-between"
+                            width="100%"
+                            marginTop="12px" // Adjust the spacing
+                        >
+                            <Button onClick={handleClose} color="primary">
+                                Cancel
+                            </Button>
+                            <Button type="submit" color="primary" onClick={handleSubmit}>
+                                Save
+                            </Button>
+                        </DialogActions>
+                    </Box>
                 </Box>
             </Box>
         </Modal>

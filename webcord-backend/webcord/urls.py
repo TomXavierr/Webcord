@@ -18,7 +18,6 @@ urlpatterns = [
     path('friends/', include('friend_system.urls')),
     path('server/', include('server.urls')),
     path('chats/', include('webchat.urls')),
-    
 
 
     path('api-auth/', include('rest_framework.urls')),
@@ -40,7 +39,9 @@ urlpatterns = [
 
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
-websocket_urlpatterns = [path("<str:serverId>/<str:channelId>", WebChatConsumer.as_asgi())]
+
+websocket_urlpatterns = [
+    path("<str:serverId>/<str:channelId>", WebChatConsumer.as_asgi())]
 
 
 # if settings.DEBUG:

@@ -318,7 +318,7 @@ const ChatWindow = (channel) => {
                     width: "100%",
                     display: "flex",
                     alignItems: "center",
-                    width: `calc(100vw - ${260}px)`,
+                    // width: `calc(100vw - ${260}px)`,
                     paddingBottom: "7px",
                 }}
             >

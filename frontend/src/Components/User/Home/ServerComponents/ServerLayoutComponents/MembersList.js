@@ -1,9 +1,5 @@
 import React from "react";
-import {
-    Avatar,
-    Box,
-    Typography,
-} from "@mui/material";
+import { Avatar, Box, Typography } from "@mui/material";
 import { styled } from "@mui/material/styles";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
@@ -54,7 +50,6 @@ const MembersList = ({ members }) => {
                 All Members
             </Typography>
 
-            
             <TableContainer component={Paper}>
                 <Table sx={{ minWidth: 700 }} aria-label="customized table">
                     <TableHead>
@@ -80,69 +75,58 @@ const MembersList = ({ members }) => {
                                 <StyledTableCell component="th" scope="row">
                                     <Box
                                         sx={{
-                                            
                                             display: "flex",
                                             alignItems: "center",
                                         }}
                                     >
-                                        <Avatar sx={{
-                                            marginRight: "10px"
-                                        }}>
-                                            {" "}
-                                            <img
-                                                src={`${process.env.REACT_APP_API_URL}${member.user.avatar}`}
-                                              
-                                                style={{
-                                                    width: "100%",
-                                                    height: "100%",
-                                                    borderRadius: "50%",
-                                                }}
-                                            />
-                                        </Avatar>
+                                        <Avatar
+                                            sx={{
+                                                marginRight: "10px",
+                                            }}
+                                            alt={member.user.display_name}
+                                            src={`${process.env.REACT_APP_API_URL}${member.user.avatar}`}
+                                        ></Avatar>
                                         {member.user.display_name}
                                     </Box>
                                 </StyledTableCell>
                                 <StyledTableCell align="left">
                                     {member.join_date}
                                 </StyledTableCell>
-                                <StyledTableCell
-                                    align="center"
-
-                                >
-                                    <Box sx={{display:"flex"}}>
-                                    <Box
-                                        sx={{
-                                            backgroundColor: "#0A4C5C",
-                                            borderRadius: "4px",
-                                            paddingX: "4px",
-                                            paddingY: "2px",
-                                            color: "white",
-                                            display: "flex",
-                                            alignItems: "center",
-                                            marginRight: "4px",
-                                            
-                                        }}
-                                    >
-                                        {member.roles[0]}
-                                    </Box>
-                                    {member.roles.length > 1 && (
-                                        <span
-                                            title={`+${
-                                                member.roles.length - 1
-                                            } more roles`}
+                                <StyledTableCell align="center">
+                                    <Box sx={{ display: "flex" }}>
+                                        <Box
+                                            sx={{
+                                                backgroundColor: "#0A4C5C",
+                                                borderRadius: "4px",
+                                                paddingX: "4px",
+                                                paddingY: "2px",
+                                                color: "white",
+                                                display: "flex",
+                                                alignItems: "center",
+                                                marginRight: "4px",
+                                            }}
                                         >
-                                            <Box
-                                                sx={{
-                                                    backgroundColor: "#0A4C5C",
-                                                    borderRadius: "4px",
-                                                    padding: "4px",
-                                                    color: "white",
-                                                }}
+                                            {member.roles[0]}
+                                        </Box>
+                                        {member.roles.length > 1 && (
+                                            <span
+                                                title={`+${
+                                                    member.roles.length - 1
+                                                } more roles`}
                                             >
-                                                +{member.roles.length - 1}
-                                            </Box>
-                                        </span>
-                                    )}
+                                                <Box
+                                                    sx={{
+                                                        backgroundColor:
+                                                            "#0A4C5C",
+                                                        borderRadius: "4px",
+                                                        padding: "4px",
+                                                        color: "white",
+                                                    }}
+                                                >
+                                                    +{member.roles.length - 1}
+                                                </Box>
+                                            </span>
+                                        )}
                                     </Box>
                                 </StyledTableCell>
                                 <StyledTableCell align="right">

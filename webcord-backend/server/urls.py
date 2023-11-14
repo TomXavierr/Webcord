@@ -1,10 +1,10 @@
 from django.urls import path
-from .views import ServerDetailAPIView, ServerCreateAPIView, ServerUpdateAPIView, ServerDeleteAPIView
+from .views import ServerDetailAPIView, ServerCreateView, ServerUpdateAPIView, ServerDeleteAPIView
 
 urlpatterns = [
     path('server-details/<int:pk>/', ServerDetailAPIView.as_view(), name='server-detail'),
 
-    path('servers/create/', ServerCreateAPIView.as_view(), name='server-create'),
+    path('servers/create/', ServerCreateView.as_view(), name='server-create'),
     path('servers/update/<int:pk>/', ServerUpdateAPIView.as_view(), name='server-update'),
     path('servers/delete/<int:pk>/', ServerDeleteAPIView.as_view(), name='server-delete'),
 

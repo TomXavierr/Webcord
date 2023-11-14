@@ -1,7 +1,8 @@
 from django.db import models
 from django.conf import settings
 from django.shortcuts import get_object_or_404
-
+from django.db.models.signals import post_save
+from django.dispatch import receiver
 
 def server_icon_upload_path(instance, filename):
     return f"server/{instance.id}/server_icon/{filename}"
@@ -22,37 +23,15 @@ class Server(models.Model):
         return self.name
 
     def save(self, *args, **kwargs):
-        is_new_server = self._state.adding
-        if is_new_server:
-            # Create the server first
-            super().save(*args, **kwargs)
-
-            # Create a 'member' role for the new server
-            try:
-                member_role = Role.objects.create(
-                    name="member",
-                    server=self
-                )
-
-                # Assign the "member" role to the owner (creator)
-                server_member = ServerMember.objects.create(
-                    user=self.owner, server=self)
-                server_member.role.add(member_role)
-            except Exception as e:
-                # Handle any exceptions that might occur during role creation
-                print(f"Error creating 'member' role: {e}")
-
-        # Handle updating of the icon
         if self.id:
             existing = get_object_or_404(Server, id=self.id)
             if existing.icon and existing.icon != self.icon:
-                # Delete the old icon
+                
                 existing.icon.delete(save=False)
 
         super().save(*args, **kwargs)
 
     def channels(self):
-        # Use the reverse relationship to get all channels for the server
         return Channel.objects.filter(server=self)
 
     def roles(self):
@@ -97,3 +76,23 @@ class Role(models.Model):
 
     def __str__(self):
         return self.name
+
+
+@receiver(post_save, sender=Server)
+def create_server_member_and_role(sender, instance, created, **kwargs):
+    if created:
+        try:
+            member_role = Role.objects.create(
+                name="member",
+                server=instance
+            )
+            server_member = ServerMember.objects.create(
+                user=instance.owner, server=instance)
+            server_member.role.add(member_role)
+
+            default_channel = Channel.objects.create(
+                name="default",
+                server=instance
+            )
+        except Exception as e:
+            print(f"Error creating 'member' role: {e}")
