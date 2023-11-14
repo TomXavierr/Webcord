@@ -12,7 +12,6 @@ import {
     List,
     ListItem,
     ListItemText,
-    Paper,
 } from "@mui/material";
 import Banner from "./Banner";
 import MenuIcon from "@mui/icons-material/Menu";

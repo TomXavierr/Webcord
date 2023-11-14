@@ -11,7 +11,6 @@ import "./style.css";
 import {
     AppBar,
     Avatar,
-    Button,
     CircularProgress,
     IconButton,
     Stack,
@@ -32,21 +31,8 @@ const toolbarStyle = {
     padding: "0",
 };
 
-const tabstyle = {
-    borderRadius: "4px",
-    color: "white",
-    fontSize: "14px",
-    marginInline: "10px",
-    paddingInline: "10px",
-    height: "20px",
-    transition: "background-color 0.2s ease-in-out",
-    "&:hover": {
-        backgroundColor: "#0a424f",
-    },
-};
-
 const ServerLayout = () => {
-    const { serverId, channelId } = useParams();
+    const { serverId } = useParams();
     const [serverData, setServerData] = useState(null);
     const [loading, setLoading] = useState(true);
     const [selectedChannel, setSelectedChannel] = useState(null);
@@ -70,7 +56,6 @@ const ServerLayout = () => {
 
             if (response.status === 200) {
                 setServerData(response.data);
-                console.log(response.data);
             } else {
                 console.error("Failed to fetch server details");
             }
@@ -90,10 +75,18 @@ const ServerLayout = () => {
 
         if (channelJSON && serverData) {
             const channel = JSON.parse(channelJSON);
-            console.log(channel.id);
-            setSelectedChannel(channel);
-            setShowMembers(false);
-            navigate(`/channels/${serverId}/${channel.id}`);
+
+            const channelServerAsString = String(channel.server);
+
+            if (channelServerAsString === serverId) {
+                setSelectedChannel(channel);
+                setShowMembers(false);
+                navigate(`/channels/${serverId}/${channel.id}`);
+            } else {
+                setShowMembers(true);
+                setSelectedChannel(null);
+                navigate(`/channels/${serverId}`);
+            }
         }
     }, [serverData]);
 
@@ -124,8 +117,8 @@ const ServerLayout = () => {
         if (channel === "members") {
             setSelectedChannel(null);
             setShowMembers(true);
-            localStorage.removeItem("selectedChannel", JSON.stringify(channel));
             navigate(`/channels/${serverId}`);
+            localStorage.removeItem("selectedChannel");
         } else {
             setSelectedChannel(channel);
             setShowMembers(false);
@@ -293,9 +286,7 @@ const ServerLayout = () => {
                                             width: "24px",
                                             height: "24px",
                                             color: "white",
-                                            
                                         }}
-                                        
                                     >
                                         <SettingsIcon />
                                     </IconButton>
@@ -315,7 +306,6 @@ const ServerLayout = () => {
                                 marginTop: `${36}px`,
                                 height: `calc(100vh - ${36}px)`,
                                 width: `calc(100vw - ${260}px)`,
-                         
                             }}
                         >
                             {showMembers ? (

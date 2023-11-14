@@ -12,8 +12,6 @@ import {
 import TagIcon from "@mui/icons-material/Tag";
 import PeopleIcon from "@mui/icons-material/People";
 
-const appBarHeight = 36;
-
 const ServerChannelsDrawer = ({ channels, onChannelSelect }) => {
     return (
         <>

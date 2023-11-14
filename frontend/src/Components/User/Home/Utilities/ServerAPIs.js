@@ -1,5 +1,4 @@
 import axios from "axios";
-import { useSelector } from "react-redux";
 
 export const createServer = async (serverName, iconFile, userId) => {
     try {

@@ -154,7 +154,8 @@ const Channels = () => {
 
                             </Tooltip>
                             <CreateServerModal
-                                isOpen={isCreateServerModelOpen} onCancel={() => setCreateServerModelOpen(false)}
+                                isOpen={isCreateServerModelOpen}
+                                onCancel={() => setCreateServerModelOpen(false)}
                             />
                     </Box>
                 </Drawer>

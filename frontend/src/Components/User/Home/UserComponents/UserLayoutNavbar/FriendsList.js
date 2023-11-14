@@ -107,16 +107,10 @@ const FriendsList = () => {
                             >
                                 <Box sx={{ display: "flex" }}>
                                     <ListItemAvatar>
-                                        <Avatar> <img
-                                        src={friend.avatar && `${process.env.REACT_APP_API_URL}/${friend.avatar}`} 
-
-                                        
-                                        style={{
-                                            width: "100%",
-                                            height: "100%",
+                                        <Avatar style={{
                                             borderRadius: "50%", 
-                                        }}
-                                    /></Avatar>
+                                        }} src={friend.avatar && `${process.env.REACT_APP_API_URL}/${friend.avatar}`}  /> 
+                                    
                                     </ListItemAvatar>
                                     <Box>
                                         <Typography
