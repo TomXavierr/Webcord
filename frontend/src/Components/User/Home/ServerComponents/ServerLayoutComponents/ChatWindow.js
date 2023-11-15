@@ -14,6 +14,7 @@ import { useParams } from "react-router-dom";
 import useWebSocket from "react-use-websocket";
 import SendIcon from "@mui/icons-material/Send";
 import axios from "axios";
+import { useSelector } from "react-redux";
 
 const inputPropsStyle = {
     color: "white",
@@ -28,6 +29,8 @@ const ChatWindow = (channel) => {
     const [messages, setMessages] = useState([]); // Define 'messages' state
     const { serverId, channelId } = useParams();
     const [inputHeight, setInputHeight] = useState("24px");
+    const userId = useSelector((state) => state.auth.user.id);
+
 
     const inputRef = useRef(null);
     const scrollRef = useRef(null);
@@ -101,7 +104,7 @@ const ChatWindow = (channel) => {
         if (e.key === "Enter") {
             e.preventDefault();
             if (message.trim() !== "") {
-                sendJsonMessage({ type: "message", message });
+                sendJsonMessage({ type: "message", message, userId });
                 setMessage("");
                 updateListHeight();
             }
@@ -110,7 +113,8 @@ const ChatWindow = (channel) => {
 
     const handleSendClick = () => {
         if (message.trim() !== "") {
-            sendJsonMessage({ type: "message", message });
+       
+            sendJsonMessage({ type: "message", message, userId });
             setMessage("");
             updateListHeight();
         }
@@ -170,64 +174,7 @@ const ChatWindow = (channel) => {
                     },
                 }}
             >
-                {/* <List sx={{ width: "100%" }}>
-                    {messages.map((msg, index) => {
-                        return (
-                            <ListItem key={index} alignItems="flex-start">
-                                <ListItemAvatar>
-                                    <Avatar
-                                        alt="user image"
-                                        src={`${process.env.REACT_APP_API_URL}${msg.sender.avatar}`}
-                                    />
-                                </ListItemAvatar>
-                                <ListItemText
-                                    primaryTypographyProps={{
-                                        fontSize: "12px",
-                                        variant: "body2",
-                                    }}
-                                    primary={
-                                        <>
-                                            <Typography
-                                                component={"span"}
-                                                variant="body1"
-                                            >
-                                                {msg.sender.display_name}
-                                            </Typography>
-                                            <Typography
-                                                component="span"
-                                                variant="caption"
-                                                sx={{ color: "#999999" }}
-                                            >
-                                                {" "}
-                                                {formatTimeStamp(msg.timestamp)}
-                                            </Typography>
-                                        </>
-                                    }
-                                    secondary={
-                                        <Typography
-                                            variant="body1"
-                                            style={{
-                                                overflow: "visible",
-                                                whiteSpace: "normal",
-                                                textOverflow: "clip",
-                                                wordWrap: "break-word",
-                                            }}
-                                            sx={{
-                                                lineHeight: 1.2,
-                                                fontWeight: 400,
-                                                fontSize: "10px",
-                                                letterSpacing: "-0.2px",
-                                                color: "white",
-                                            }}
-                                        >
-                                            {msg.content}
-                                        </Typography>
-                                    }
-                                />
-                            </ListItem>
-                        );
-                    })}
-                </List> */}
+        
                 <List sx={{ width: "100%" }}>
                     {messages.map((msg, index) => {
                         const prevMessage = messages[index - 1];
@@ -255,7 +202,7 @@ const ChatWindow = (channel) => {
                                 <ListItem alignItems="flex-start">
                                     <ListItemAvatar>
                                         <Avatar
-                                            alt="user image"
+                                            alt={msg.sender.display_name}
                                             src={`${process.env.REACT_APP_API_URL}${msg.sender.avatar}`}
                                         />
                                     </ListItemAvatar>
@@ -315,10 +262,10 @@ const ChatWindow = (channel) => {
                 sx={{
                     position: "fixed",
                     bottom: 0,
-                    width: "100%",
+                    // width: "100%",
                     display: "flex",
                     alignItems: "center",
-                    // width: `calc(100vw - ${260}px)`,
+                    width: `calc(100vw - ${260}px)`,
                     paddingBottom: "7px",
                 }}
             >

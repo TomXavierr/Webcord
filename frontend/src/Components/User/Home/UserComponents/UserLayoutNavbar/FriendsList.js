@@ -109,7 +109,7 @@ const FriendsList = () => {
                                     <ListItemAvatar>
                                         <Avatar style={{
                                             borderRadius: "50%", 
-                                        }} src={friend.avatar && `${process.env.REACT_APP_API_URL}/${friend.avatar}`}  /> 
+                                        }} src={friend.avatar && `${process.env.REACT_APP_API_URL}${friend.avatar}`}  /> 
                                     
                                     </ListItemAvatar>
                                     <Box>

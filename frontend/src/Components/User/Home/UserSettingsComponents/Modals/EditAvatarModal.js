@@ -11,6 +11,7 @@ import axios from "axios";
 import CloseIcon from "@mui/icons-material/Close";
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
+import AddPhotoAlternateIcon from "@mui/icons-material/AddPhotoAlternate";
 
 const EditAvatarModal = ({ isOpen, onCancel, onSave }) => {
     const [newAvatar, setNewAvatar] = useState(null);
@@ -128,7 +129,13 @@ const EditAvatarModal = ({ isOpen, onCancel, onSave }) => {
                         )}
                     </Box>
 
-                    <Box sx={{ display: "flex", justifyContent: "space-between", alignItems:"center" }}>
+                    <Box
+                        sx={{
+                            display: "flex",
+                            justifyContent: "space-between",
+                            alignItems: "center",
+                        }}
+                    >
                         <label
                             htmlFor="avatar-input"
                             style={{ display: "block" }}
@@ -137,11 +144,10 @@ const EditAvatarModal = ({ isOpen, onCancel, onSave }) => {
                                 type="file"
                                 id="avatar-input"
                                 onChange={handleFileChange}
-                                style={{
-                                    display: "none",
-                                }}
+                                style={{ display: "none" }}
                             />
                             <Button
+                                component="span"
                                 sx={{
                                     backgroundColor: "#44CFCB",
                                     borderRadius: "4px",
@@ -149,7 +155,7 @@ const EditAvatarModal = ({ isOpen, onCancel, onSave }) => {
                                     color: "#000000",
                                     fontSize: "14px",
                                     textTransform: "none",
-                                    marginTop: "12px", // Adjust the spacing
+                                    marginTop: "12px",
                                 }}
                             >
                                 Choose Avatar
@@ -160,12 +166,16 @@ const EditAvatarModal = ({ isOpen, onCancel, onSave }) => {
                             display="flex"
                             justifyContent="space-between"
                             width="100%"
-                            marginTop="12px" // Adjust the spacing
+                            marginTop="12px"
                         >
                             <Button onClick={handleClose} color="primary">
                                 Cancel
                             </Button>
-                            <Button type="submit" color="primary" onClick={handleSubmit}>
+                            <Button
+                                type="submit"
+                                color="primary"
+                                onClick={handleSubmit}
+                            >
                                 Save
                             </Button>
                         </DialogActions>

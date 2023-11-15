@@ -1,4 +1,4 @@
-class JWTAuthMiddleWare:
+class TokenAuthMiddleware:
     def __init__(self, app):
         self.app = app
     
