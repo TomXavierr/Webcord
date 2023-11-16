@@ -5,14 +5,23 @@ import Typography from "@mui/material/Typography";
 import Drawer from "@mui/material/Drawer";
 import SettingsIcon from "@mui/icons-material/Settings";
 import axios from "axios";
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import ClickAwayListener from "@mui/material/ClickAwayListener";
 
 import "./style.css";
 
 import {
     AppBar,
     Avatar,
+    Button,
     CircularProgress,
+    Fade,
+    Grow,
     IconButton,
+    Menu,
+    MenuItem,
+    MenuList,
+    Popper,
     Stack,
 } from "@mui/material";
 import { useSelector } from "react-redux";
@@ -31,12 +40,18 @@ const toolbarStyle = {
     padding: "0",
 };
 
+const ITEM_HEIGHT = 48;
+
 const ServerLayout = () => {
     const { serverId } = useParams();
     const [serverData, setServerData] = useState(null);
     const [loading, setLoading] = useState(true);
     const [selectedChannel, setSelectedChannel] = useState(null);
     const [showMembers, setShowMembers] = useState(true);
+    const user = useSelector((state) => state.auth.user);
+    const [anchorEl, setAnchorEl] = React.useState(null);
+    const open = Boolean(anchorEl);
+
     const navigate = useNavigate();
 
     const getServerDetails = async () => {
@@ -55,6 +70,7 @@ const ServerLayout = () => {
             );
 
             if (response.status === 200) {
+                console.log(response.data);
                 setServerData(response.data);
             } else {
                 console.error("Failed to fetch server details");
@@ -127,7 +143,13 @@ const ServerLayout = () => {
         }
     };
 
-    const user = useSelector((state) => state.auth.user);
+    const handleToggle = (event) => {
+        setAnchorEl(event.currentTarget);
+    };
+
+    const handleClose = () => {
+        setAnchorEl(null);
+    };
 
     return (
         <Box
@@ -162,10 +184,12 @@ const ServerLayout = () => {
                         <Toolbar variant="dense" style={toolbarStyle}>
                             <Box
                                 sx={{
-                                    width: "200px",
+                                    width: "188px",
                                     height: "36px",
                                     display: "flex",
                                     alignItems: "center",
+                                    justifyContent: "space-between",
+                                    paddingRight: "12px",
                                 }}
                             >
                                 <Typography
@@ -178,6 +202,48 @@ const ServerLayout = () => {
                                 >
                                     {serverData.name}
                                 </Typography>
+                                <IconButton
+                                    aria-label="more"
+                                    id="long-button"
+                                    aria-controls={
+                                        open ? "long-menu" : undefined
+                                    }
+                                    aria-expanded={open ? "true" : undefined}
+                                    aria-haspopup="true"
+                                    onClick={handleToggle}
+                                    sx={{
+                                        padding: 0,
+                                        minWidth: "24px",
+                                        color: "white",
+                                    }}
+                                >
+                                    <ExpandMoreIcon />
+                                </IconButton>
+                                <Menu
+                                    id="long-menu"
+                                    MenuListProps={{
+                                        "aria-labelledby": "long-button",
+                                    }}
+                                    anchorEl={anchorEl}
+                                    open={open}
+                                    onClose={handleClose}
+                                    PaperProps={{
+                                        style: {
+                                            maxHeight: ITEM_HEIGHT * 4.5,
+                                            width: "20ch",
+                                        },
+                                    }}
+                                >
+                                   
+                                        <MenuItem
+                                            // key={option}
+                                            // selected={option === "Pyxis"}
+                                            onClick={handleClose}
+                                        >
+                                            leave server
+                                        </MenuItem>
+                             
+                                </Menu>
                             </Box>
                             {selectedChannel != null && (
                                 <Typography
@@ -227,7 +293,7 @@ const ServerLayout = () => {
                                 }}
                             >
                                 <ServerChannelsDrawer
-                                    channels={serverData.channels}
+                                    serverData={serverData}
                                     onChannelSelect={handleChannelSelect}
                                 />
                             </Drawer>

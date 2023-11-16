@@ -47,6 +47,8 @@ function App() {
         }
     }, []);
 
+
+
     if (loading) {
         return <AuthLoading />;
     }

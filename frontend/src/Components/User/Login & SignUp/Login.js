@@ -10,8 +10,11 @@ import {
 import React, { useEffect, useState } from "react";
 import { connect } from "react-redux";
 
-import { useNavigate } from "react-router-dom";
-import { login } from "../../../Redux/actions/userauthaction";
+import { useLocation, useNavigate } from "react-router-dom";
+import {
+    login,
+    googleAuthenticate,
+} from "../../../Redux/actions/userauthaction";
 import axios from "axios";
 import LoadingButton from "@mui/lab/LoadingButton";
 
@@ -36,7 +39,14 @@ const buttonStyle = {
     marginTop: "16px",
 };
 
-const Login = ({ login: loginUser, error, isAuthenticated }) => {
+const Login = ({
+    login: loginUser,
+    error,
+    isAuthenticated,
+    googleAuthenticate,
+}) => {
+    const location = useLocation();
+
     const [loading, setLoading] = useState(false);
     const navigate = useNavigate();
 
@@ -45,6 +55,17 @@ const Login = ({ login: loginUser, error, isAuthenticated }) => {
             navigate("/channels/@me");
         }
     }, [isAuthenticated, navigate]);
+
+    useEffect(() => {
+        const searchParams = new URLSearchParams(location.search);
+        const state = searchParams.get("state") || null;
+        const code = searchParams.get("code") || null;
+
+        console.log("state:" + state);
+        if (state && code) {
+            googleAuthenticate(state, code);
+        }
+    }, [location, googleAuthenticate]);
 
     const [formData, setFormData] = useState({
         email: "",
@@ -99,8 +120,9 @@ const Login = ({ login: loginUser, error, isAuthenticated }) => {
     const ContinueWithGoogle = async () => {
         try {
             const res = await axios.get(
-                `${process.env.REACT_APP_API_URL}/auth/o/google-oauth2/?redirect_uri=http://localhost:3000`
+                `${process.env.REACT_APP_API_URL}/auth/o/google-oauth2/?redirect_uri=http://localhost:3000/login`
             );
+            console.log(res);
             window.location.replace(res.data.authorization_url);
         } catch (err) {
             console.log(err);
@@ -214,4 +236,4 @@ const mapStateToProps = (state) => ({
     isAuthenticated: state.auth.isAuthenticated,
 });
 
-export default connect(mapStateToProps, { login })(Login);
+export default connect(mapStateToProps, { login, googleAuthenticate })(Login);

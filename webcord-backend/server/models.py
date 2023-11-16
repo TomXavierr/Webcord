@@ -3,6 +3,8 @@ from django.conf import settings
 from django.shortcuts import get_object_or_404
 from django.db.models.signals import post_save
 from django.dispatch import receiver
+from django.utils.crypto import get_random_string
+
 
 def server_icon_upload_path(instance, filename):
     return f"server/{instance.id}/server_icon/{filename}"
@@ -26,7 +28,7 @@ class Server(models.Model):
         if self.id:
             existing = get_object_or_404(Server, id=self.id)
             if existing.icon and existing.icon != self.icon:
-                
+
                 existing.icon.delete(save=False)
 
         super().save(*args, **kwargs)
@@ -36,6 +38,10 @@ class Server(models.Model):
 
     def roles(self):
         return Role.objects.filter(server=self)
+
+    def generate_invitation(self, sender):
+        invitation = Invitation.objects.create(sender=sender, server=self)
+        return invitation
 
 
 class Channel(models.Model):
@@ -62,9 +68,6 @@ class ServerMember(models.Model):
     def get_role_names(self):
         return self.role.values_list('name', flat=True)
 
-    # def get_join_date(self):
-        
-
     def __str__(self):
         return f'{self.user.username} in {self.server.name}'
 
@@ -76,6 +79,28 @@ class Role(models.Model):
 
     def __str__(self):
         return self.name
+
+
+class Invitation(models.Model):
+    sender = models.ForeignKey(
+        settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='sent_invitations'
+    )
+    server = models.ForeignKey(
+        'Server', on_delete=models.CASCADE, related_name='server_invitations'
+    )
+    created_at = models.DateTimeField(auto_now_add=True)
+    token = models.CharField(max_length=50, unique=True, blank=True, null=True)
+
+    def __str__(self):
+        return f'Invitation from {self.sender.username} to server {self.server.name}'
+
+    def save(self, *args, **kwargs):
+        if not self.token:
+            self.token = get_random_string(length=50)
+        super().save(*args, **kwargs)
+    
+    def get_join_url(self):
+        return f'http://yourdomain.com/join/{self.token}/' 
 
 
 @receiver(post_save, sender=Server)

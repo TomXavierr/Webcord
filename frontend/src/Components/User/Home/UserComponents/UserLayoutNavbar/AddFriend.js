@@ -221,7 +221,7 @@ const AddFriend = () => {
                                         <Avatar>
                                             {user && user.avatar && (
                                                 <img
-                                                    src={`${process.env.REACT_APP_API_URL}/${user.avatar}`}
+                                                    src={`${process.env.REACT_APP_API_URL}${user.avatar}`}
                                                     alt="User Avatar"
                                                     style={{
                                                         width: "100%",

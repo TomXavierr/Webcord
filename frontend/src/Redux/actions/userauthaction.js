@@ -40,38 +40,8 @@ export const load_user = () => async (dispatch) => {
     }
 };
 
-// =========================Djoser Loaduser=============================
-// export const load_user = () => async (dispatch) => {
-//     if (localStorage.getItem("access")) {
-//         const config = {
-//             headers: {
-//                 "Content-Type": "application/json",
-//                 Authorization: `JWT ${localStorage.getItem("access")}`,
-//                 Accept: "application/json",
-//             },
-//         };
-//         try {
-//             const res = await axios.get(
-//                 `${process.env.REACT_APP_API_URL}/auth/users/me/`,
-//                 config
-//             );
 
-//             dispatch({
-//                 type: USER_LOADED_SUCCESS,
-//                 payload: res.data,
-//             });
-//         } catch (err) {
-//             dispatch({
-//                 type: USER_LOADED_FAIL,
-//             });
-//         }
-//     } else {
-//         dispatch({
-//             type: USER_LOADED_FAIL,
-//         });
-//     }
-// };
-
+// =========================Google Authenticate=============================
 export const googleAuthenticate = (state, code) => async (dispatch) => {
     if (state && code && !localStorage.getItem("access")) {
         const config = {
@@ -89,7 +59,7 @@ export const googleAuthenticate = (state, code) => async (dispatch) => {
             .map(
                 (key) =>
                     encodeURIComponent(key) +
-                    "=" +
+                    '=' +
                     encodeURIComponent(details[key])
             )
             .join("&");

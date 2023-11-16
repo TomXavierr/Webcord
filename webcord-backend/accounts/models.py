@@ -13,7 +13,7 @@ def banner_upload_path(instance, filename):
 
 
 class UserAccountManager(BaseUserManager):
-    def create_user(self, email, username, display_name, password=None):
+    def create_user(self, email, username, display_name, password=None, **extra_fields):
         if not email:
             raise ValueError('Users must have an email address')
         if not username:

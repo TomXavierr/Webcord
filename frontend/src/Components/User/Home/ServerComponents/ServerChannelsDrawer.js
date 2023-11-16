@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
     Box,
     Button,
@@ -11,8 +11,14 @@ import {
 } from "@mui/material";
 import TagIcon from "@mui/icons-material/Tag";
 import PeopleIcon from "@mui/icons-material/People";
+import AddIcon from "@mui/icons-material/Add";
+import ChannelCreateModal from "./ServerLayoutComponents/ChannelCreateModal";
+import { useSelector } from "react-redux";
 
-const ServerChannelsDrawer = ({ channels, onChannelSelect }) => {
+const ServerChannelsDrawer = ({ serverData, onChannelSelect }) => {
+    const [isChannelCreateModalOpen, setChannelCreateModalOpen] = useState(false);
+    const userId = useSelector((state) => state.auth.user.id);
+
     return (
         <>
             <Box sx={{ height: "36px", padding: "10px" }}>
@@ -39,14 +45,14 @@ const ServerChannelsDrawer = ({ channels, onChannelSelect }) => {
             </Typography>
             ))} */}
 
-            <List sx={{ padding: 0}}>
-                {channels.map((channel) => (
+            <List sx={{ padding: 0 }}>
+                {serverData.channels.map((channel) => (
                     <ListItem
                         key={channel.id}
                         sx={{
                             color: "white",
                             display: "flex",
-                            justifyContent: "flex-start"
+                            justifyContent: "flex-start",
                         }}
                         onClick={() => onChannelSelect(channel)}
                     >
@@ -59,17 +65,42 @@ const ServerChannelsDrawer = ({ channels, onChannelSelect }) => {
                                     textOverflow: "ellipsis",
                                     overflow: "hidden",
                                     whiteSpace: "nowrap",
-                                    paddingLeft: "10px"
+                                    paddingLeft: "10px",
                                 }}
                             >
-                               {channel.name} 
+                                {channel.name}
                             </Typography>
                         </ListItemText>
                     </ListItem>
                 ))}
             </List>
-
-    
+            {serverData.owner === userId && (
+                <>
+                    <Divider />
+                    <Box sx={{ height: "36px", padding: "10px" }}>
+                        <Button
+                            sx={{
+                                height: "36px",
+                                width: "100%",
+                                color: "white",
+                                textTransform: "none",
+                                justifyContent: "left",
+                                backgroundColor: "#031D25",
+                            }}
+                            onClick={() => setChannelCreateModalOpen(true)}
+                        >
+                            <AddIcon />
+                            <Typography component="div" pl={2}>
+                                Create channel
+                            </Typography>
+                        </Button>
+                        <ChannelCreateModal
+                            isOpen={isChannelCreateModalOpen}
+                            onCancel={() => setChannelCreateModalOpen(false)}
+                        />
+                    </Box>
+                </>
+            )}
         </>
     );
 };
