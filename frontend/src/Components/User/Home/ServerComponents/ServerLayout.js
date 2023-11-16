@@ -233,16 +233,22 @@ const ServerLayout = () => {
                                             width: "20ch",
                                         },
                                     }}
+                                    transformOrigin={{
+                                        horizontal: "right",
+                                        vertical: "top",
+                                    }}
+                                    anchorOrigin={{
+                                        horizontal: "right",
+                                        vertical: "bottom",
+                                    }}
                                 >
-                                   
-                                        <MenuItem
-                                            // key={option}
-                                            // selected={option === "Pyxis"}
-                                            onClick={handleClose}
-                                        >
-                                            leave server
-                                        </MenuItem>
-                             
+                                    <MenuItem
+                                        // key={option}
+                                        // selected={option === "Pyxis"}
+                                        onClick={handleClose}
+                                    >
+                                        leave server
+                                    </MenuItem>
                                 </Menu>
                             </Box>
                             {selectedChannel != null && (

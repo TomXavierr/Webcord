@@ -10,13 +10,13 @@ class UserSerializer(serializers.ModelSerializer):
         model = UserAccount
         fields = ['id', 'username', 'display_name', 'avatar']
 
-    def to_representation(self, instance):
-        data = super().to_representation(instance)
-        # Remove the base URL prefix from the avatar URL
-        if 'avatar' in data and data['avatar']:
-            data['avatar'] = data['avatar'].replace(
-                "http://127.0.0.1:8000", "")
-        return data
+    # def to_representation(self, instance):
+    #     data = super().to_representation(instance)
+    #     # Remove the base URL prefix from the avatar URL
+    #     if 'avatar' in data and data['avatar']:
+    #         data['avatar'] = data['avatar'].replace(
+    #             "http://127.0.0.1:8000", "")
+    #     return data
 
 
 class ChannelSerializer(serializers.ModelSerializer):

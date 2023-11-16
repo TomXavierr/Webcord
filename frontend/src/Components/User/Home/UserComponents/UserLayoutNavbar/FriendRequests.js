@@ -9,13 +9,15 @@ import {
     Typography,
 } from "@mui/material";
 import React, { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import axios from "axios";
 import { toast } from "react-toastify";
+import { load_user } from "../../../../../Redux/actions/userauthaction";
 
 const FriendRequests = () => {
     const [friendRequests, setFriendRequests] = useState([]);
     const receiverId = useSelector((state) => state.auth.user.id);
+    const dispatch = useDispatch();
 
     const acceptFriendRequest = async (friendRequestId) => {
         try {
@@ -36,6 +38,7 @@ const FriendRequests = () => {
                 autoClose: 2000,
             });
 
+            dispatch(load_user());
             fetchFriendRequests();
         } catch (error) {
             console.error("Error while accepting friend request", error);
@@ -142,7 +145,7 @@ const FriendRequests = () => {
                                         <Avatar>
                                             {" "}
                                             <img
-                                                src={`${process.env.REACT_APP_API_URL}/${request.sender_details.avatar}`}
+                                                src={`${process.env.REACT_APP_API_URL}${request.sender_details.avatar}`}
                                                 alt="User Avatar"
                                                 style={{
                                                     width: "100%",

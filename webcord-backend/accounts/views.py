@@ -34,6 +34,7 @@ class UserDetailView(APIView):
     def get(self, request, *args, **kwargs):
         user = request.user
         user_servers = Server.objects.filter(servermember__user=user)
+        friends = user.get_friends()
         user_data = UserSerializer(user).data
         user_data['servers'] = [
             {
@@ -42,6 +43,15 @@ class UserDetailView(APIView):
                 'icon': server.icon.url if server.icon else ''
             }
             for server in user_servers]
+        user_data['friends'] = [
+            {
+                'id': friend.id,
+                'username': friend.username,
+                'display_name': friend.display_name,
+                'avatar':  friend.avatar.url if friend.avatar else ''
+            }
+            for friend in friends
+        ]
         return Response(user_data)
 
 

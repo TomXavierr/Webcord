@@ -62,10 +62,10 @@ const MembersList = ({ members }) => {
                                 ROLES
                             </StyledTableCell>
                             <StyledTableCell align="right">
-                                {/* Carbs&nbsp;(g) */}
+    
                             </StyledTableCell>
                             <StyledTableCell align="right">
-                                {/* Protein&nbsp;(g) */}
+                    
                             </StyledTableCell>
                         </TableRow>
                     </TableHead>
@@ -84,7 +84,7 @@ const MembersList = ({ members }) => {
                                                 marginRight: "10px",
                                             }}
                                             alt={member.user.display_name}
-                                            src={`${process.env.REACT_APP_API_URL}${member.user.avatar}`}
+                                            src={`${member.user.avatar}`}
                                         ></Avatar>
                                         {member.user.display_name}
                                     </Box>

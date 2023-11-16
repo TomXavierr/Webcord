@@ -2,40 +2,44 @@ import React, { useEffect, useState } from "react";
 import { Avatar, Box, Divider, IconButton, List, ListItem, ListItemAvatar, Tooltip, Typography } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
 import axios from "axios";
+import { useDispatch, useSelector } from "react-redux";
+import { load_user } from "../../../../../Redux/actions/userauthaction";
 
 const FriendsList = () => {
 
-    const [friendsList, setFriendsList] = useState([]);
+    // const [friendsList, setFriendsList] = useState([]);
 
-    
-    const fetchFriends = async () => {
-        try {
-            const token = localStorage.getItem("access");
-            const config = {
-                headers: {
-                    Authorization: `Bearer ${token}`,
-                },
-            };
+    const friendsList = useSelector((state) => state.auth.user.friends)
+    const dispatch = useDispatch();
 
-            const response = await axios.get(
-                `${process.env.REACT_APP_API_URL}/friends/friend-requests/friends_list/`,
-                config
-            );
+    // const fetchFriends = async () => {
+    //     try {
+    //         const token = localStorage.getItem("access");
+    //         const config = {
+    //             headers: {
+    //                 Authorization: `Bearer ${token}`,
+    //             },
+    //         };
 
-            if (response.status === 200) {
-                setFriendsList(response.data);
-                console.log(response.data);
-            } else {
-                console.error("Failed to fetch friends");
-            }
-        } catch (error) {
-            console.error("Error while fetching friends", error);
-        }
-    };
+    //         const response = await axios.get(
+    //             `${process.env.REACT_APP_API_URL}/friends/friend-requests/friends_list/`,
+    //             config
+    //         );
 
-    useEffect(() => {
-        fetchFriends();
-    }, []); 
+    //         if (response.status === 200) {
+    //             setFriendsList(response.data);
+    //             console.log(response.data);
+    //         } else {
+    //             console.error("Failed to fetch friends");
+    //         }
+    //     } catch (error) {
+    //         console.error("Error while fetching friends", error);
+    //     }
+    // };
+
+    // useEffect(() => {
+    //     fetchFriends();
+    // }, []); 
 
     const removeFriend = async (friendId) => {
         try {
@@ -54,9 +58,8 @@ const FriendsList = () => {
                 config
             );
 
-            // Fetch friends again to update the data
-            fetchFriends();
-
+            dispatch(load_user());
+         
         } catch (error) {
             console.error("Error while removing friend", error);
         }

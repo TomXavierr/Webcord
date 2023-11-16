@@ -20,7 +20,6 @@ const initialState = {
     refresh: localStorage.getItem("refresh"),
     isAuthenticated: null,
     user: null,
-    friendsList: [],
     error: null,
     signupError: null,
     isAccountCreated: false,
