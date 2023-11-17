@@ -15,6 +15,7 @@ import {
     Avatar,
     Button,
     CircularProgress,
+    Divider,
     Fade,
     Grow,
     IconButton,
@@ -30,6 +31,8 @@ import { useNavigate, useParams } from "react-router-dom";
 import ServerChannelsDrawer from "./ServerChannelsDrawer";
 import MembersList from "./ServerLayoutComponents/MembersList";
 import ChatWindow from "./ServerLayoutComponents/ChatWindow";
+import ArrowCircleLeftIcon from "@mui/icons-material/ArrowCircleLeft";
+import ServerSettings from "./ServerSettingsComponents/ServerSettings";
 
 const drawerWidth = 60;
 const appBarHeight = 36;
@@ -51,6 +54,7 @@ const ServerLayout = () => {
     const user = useSelector((state) => state.auth.user);
     const [anchorEl, setAnchorEl] = React.useState(null);
     const open = Boolean(anchorEl);
+    const [isServerSettingsOpen, setServerSettingsOpen] = useState(false);
 
     const navigate = useNavigate();
 
@@ -151,6 +155,16 @@ const ServerLayout = () => {
         setAnchorEl(null);
     };
 
+    const handleserverSettings = () => {
+        setServerSettingsOpen(true);
+        
+      };
+      
+    const serverSettingsClose = () => {
+        setServerSettingsOpen(false);
+        
+    };
+
     return (
         <Box
             sx={{
@@ -231,6 +245,7 @@ const ServerLayout = () => {
                                         style: {
                                             maxHeight: ITEM_HEIGHT * 4.5,
                                             width: "20ch",
+                                            backgroundColor: "#073B4C",
                                         },
                                     }}
                                     transformOrigin={{
@@ -243,11 +258,71 @@ const ServerLayout = () => {
                                     }}
                                 >
                                     <MenuItem
+                                        sx={{
+                                            color: "#999999",
+                                            display: "flex",
+                                            justifyContent: "space-between",
+                                            paddingInline: "0px",
+                                            marginInline: "6px",
+                                            borderRadius: "3px",
+                                            ":hover": {
+                                                color: "white",
+                                                backgroundColor: "#44CFCB",
+                                            },
+                                        }}
                                         // key={option}
                                         // selected={option === "Pyxis"}
-                                        onClick={handleClose}
+                                        onClick={handleserverSettings}
                                     >
-                                        leave server
+                                        <Typography
+                                            pl={1}
+                                            style={{
+                                                fontSize: "12px",
+                                                fontWeight: "600",
+                                                letterSpacing: "1.5px",
+                                                fontFamily:
+                                                    "Noto Sans, sans-serif",
+                                            }}
+                                        >
+                                            Server Settings
+                                        </Typography>
+                                        <SettingsIcon sx={{ height: "16px" }} />
+
+                                    </MenuItem>
+                                    <ServerSettings isOpen={isServerSettingsOpen} onClose={() => setServerSettingsOpen(false)}/>
+                                    <Divider />
+                                    <MenuItem
+                                        sx={{
+                                            color: "#C72D2D",
+                                            display: "flex",
+                                            justifyContent: "space-between",
+                                            paddingInline: "0px",
+                                            marginInline: "6px",
+                                            borderRadius: "3px",
+                                            ":hover": {
+                                                color: "white",
+                                                backgroundColor: "#C72D2D",
+                                            },
+                                        }}
+                                        // key={option}
+                                        // selected={option === "Pyxis"}
+                                        // onClick={handleClose}
+                                    >
+                                        <Typography
+                                            pl={1}
+                                            style={{
+                                                fontSize: "12px",
+                                                fontWeight: "600",
+                                                letterSpacing: "1.5px",
+                                                fontFamily:
+                                                    "Noto Sans, sans-serif",
+                                            }}
+                                        >
+                                            leave server
+                                        </Typography>
+                                        <ArrowCircleLeftIcon
+                                            sx={{ height: "16px" }}
+                                        />
                                     </MenuItem>
                                 </Menu>
                             </Box>

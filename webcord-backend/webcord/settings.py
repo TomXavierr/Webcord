@@ -49,9 +49,8 @@ INSTALLED_APPS = [
     'corsheaders',
     'djoser',
     'rest_framework_simplejwt',
-
-    'social_django',
     'rest_framework_simplejwt.token_blacklist',
+    
     'drf_spectacular',
 
     'channels',
@@ -65,7 +64,6 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
-    'social_django.middleware.SocialAuthExceptionMiddleware',
     'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -187,7 +185,6 @@ REST_FRAMEWORK = {
 }
 
 AUTHENTICATION_BACKENDS = (
-    'social_core.backends.google.GoogleOAuth2',
     'django.contrib.auth.backends.ModelBackend',
 )
 
@@ -263,8 +260,6 @@ DJOSER = {
     'USERNAME_RESET_CONFIRM_URL': 'email/reset/confirm/{uid}/{token}',
     'ACTIVATION_URL': '/activate/{uid}/{token}/',
     'SEND_ACTIVATION_EMAIL': True,
-    'SOCIAL_AUTH_TOKEN_STRATEGY': 'djoser.social.token.jwt.TokenStrategy',
-    'SOCIAL_AUTH_ALLOWED_REDIRECT_URIS': ['http://localhost:3000/login', 'http://localhost:8000/facebook'],
     'SERIALIZERS': {
         'user_create': 'accounts.serializers.UserCreateSerializer',
         'user': 'accounts.serializers.UserCreateSerializer',
@@ -277,12 +272,6 @@ DJOSER = {
     },
 }
 
-
-SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = '916074769064-855jm539v9s7ksprqc6u00pc2dmiuc8e.apps.googleusercontent.com'
-SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = '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'
-SOCIAL_AUTH_GOOGLE_OAUTH2_SCOPE = ['https://www.googleapis.com/auth/userinfo.email',
-                                   'https://www.googleapis.com/auth/userinfo.profile', 'openid']
-SOCIAL_AUTH_GOOGLE_OAUTH2_EXTRA_DATA = ['first_name']
 
 
 CHANNEL_LAYERS = {

@@ -40,7 +40,6 @@ export const load_user = () => async (dispatch) => {
     }
 };
 
-
 // =========================Google Authenticate=============================
 export const googleAuthenticate = (state, code) => async (dispatch) => {
     if (state && code && !localStorage.getItem("access")) {
@@ -59,7 +58,7 @@ export const googleAuthenticate = (state, code) => async (dispatch) => {
             .map(
                 (key) =>
                     encodeURIComponent(key) +
-                    '=' +
+                    "=" +
                     encodeURIComponent(details[key])
             )
             .join("&");
@@ -84,7 +83,9 @@ export const googleAuthenticate = (state, code) => async (dispatch) => {
 };
 
 export const checkAuthenticated = () => async (dispatch) => {
-    if (localStorage.getItem("access")) {
+    const access = localStorage.getItem("access");
+
+    if (access) {
         const config = {
             headers: {
                 "Content-Type": "application/json",
@@ -107,6 +108,7 @@ export const checkAuthenticated = () => async (dispatch) => {
                 await dispatch(load_user());
             }
         } catch (err) {
+            console.log(err);
             if (err.response && err.response.status === 401) {
                 const refreshConfig = {
                     headers: {
@@ -138,13 +140,13 @@ export const checkAuthenticated = () => async (dispatch) => {
                             type: AUTHENTICATED_SUCCESS,
                         });
                         await dispatch(load_user());
-                        return; 
+                        return;
                     }
                 } catch (refreshErr) {
                     dispatch({
                         type: AUTHENTICATED_FAIL,
                     });
-                    return; 
+                    return;
                 }
             }
             dispatch({
