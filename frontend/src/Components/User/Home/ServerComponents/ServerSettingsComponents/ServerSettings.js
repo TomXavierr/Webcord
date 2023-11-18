@@ -1,10 +1,37 @@
-import { Box, Divider, Modal, Typography } from '@mui/material';
-import React from 'react'
+import { Box, Divider, List, ListItem, Modal, Typography } from "@mui/material";
+import React from "react";
 import HighlightOffIcon from "@mui/icons-material/HighlightOff";
+import { useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
 
-const ServerSettings = ({isOpen, onClose}) => {
-  return (
-    <Modal open={isOpen} onClose={onClose}>
+const ListItemStyle = {
+    ":hover": {
+        backgroundColor: "rgba(255, 255, 255, 0.05)",
+    }
+}
+
+const ListTextStyle = {
+    paddingLeft: "6px",
+    fontSize: "14px",
+    fontFamily: "Noto Sans, sans-serif",
+    color: "#EBF2FA",
+};
+
+const ServerSettings = ({
+    isOpen,
+    onClose,
+    activeServerSettingsTab,
+    onTabChange,
+}) => {
+    const handleMenuItemClick = (menuItem) => {
+        onTabChange(menuItem);
+    };
+
+    const dispatch = useDispatch();
+    const navigate = useNavigate();
+
+    return (
+        <Modal open={isOpen} onClose={onClose}>
             <Box
                 sx={{
                     display: "flex",
@@ -43,8 +70,28 @@ const ServerSettings = ({isOpen, onClose}) => {
                         >
                             SERVER SETTINGS
                         </Typography>
-
-                    
+                        <List>
+                            <ListItem sx={ListItemStyle}>
+                                <Typography style={ListTextStyle}>
+                                    Overview
+                                </Typography>
+                            </ListItem>
+                            <ListItem sx={ListItemStyle}>
+                                <Typography style={ListTextStyle}>
+                                    Roles
+                                </Typography>
+                            </ListItem>
+                            <ListItem sx={ListItemStyle}>
+                                <Typography style={ListTextStyle}>
+                                    Members
+                                </Typography>
+                            </ListItem>
+                            <ListItem sx={ListItemStyle}>
+                                <Typography style={ListTextStyle}>
+                                    Invites
+                                </Typography>
+                            </ListItem>
+                        </List>
 
                         <Divider
                             sx={{
@@ -53,7 +100,6 @@ const ServerSettings = ({isOpen, onClose}) => {
                                 height: ".1px",
                             }}
                         />
-                        
                     </Box>
                 </Box>
 
@@ -95,4 +141,4 @@ const ServerSettings = ({isOpen, onClose}) => {
     );
 };
 
-export default ServerSettings
+export default ServerSettings;
