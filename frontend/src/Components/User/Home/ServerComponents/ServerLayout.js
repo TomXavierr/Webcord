@@ -87,6 +87,14 @@ const ServerLayout = () => {
     };
 
     useEffect(() => {
+        const isServerSettingsOpen = localStorage.getItem("serverSettingsOpen");
+
+        if (isServerSettingsOpen === "true") {
+            setServerSettingsOpen(true);
+        }
+    }, []);
+
+    useEffect(() => {
         getServerDetails();
     }, [serverId]);
 
@@ -155,14 +163,23 @@ const ServerLayout = () => {
         setAnchorEl(null);
     };
 
-    const handleserverSettings = () => {
-        setServerSettingsOpen(true);
-        
-      };
-      
+    const [activeServerSettingsTab, setActiveServerSettingsTab] = useState(
+        localStorage.getItem("activeServerSettingsTab") || "Overview"
+    );
+
+    const handleServerSettings = () => {
+        setServerSettingsOpen(isServerSettingsOpen); 
+        localStorage.setItem("serverSettingsOpen", isServerSettingsOpen); 
+    };
+    
     const serverSettingsClose = () => {
         setServerSettingsOpen(false);
-        
+        localStorage.setItem("serverSettingsOpen", false);
+    };
+
+    const handleTabChange = (tab) => {
+        setActiveServerSettingsTab(tab);
+        localStorage.setItem("activeServerSettingsTab", tab);
     };
 
     return (
@@ -272,7 +289,7 @@ const ServerLayout = () => {
                                         }}
                                         // key={option}
                                         // selected={option === "Pyxis"}
-                                        onClick={handleserverSettings}
+                                        onClick={handleServerSettings}
                                     >
                                         <Typography
                                             pl={1}
@@ -287,9 +304,15 @@ const ServerLayout = () => {
                                             Server Settings
                                         </Typography>
                                         <SettingsIcon sx={{ height: "16px" }} />
-
                                     </MenuItem>
-                                    <ServerSettings isOpen={isServerSettingsOpen} onClose={() => setServerSettingsOpen(false)}/>
+                                    <ServerSettings
+                                        isOpen={isServerSettingsOpen}
+                                        onClose={serverSettingsClose}
+                                        activeServerSettingsTab={
+                                            activeServerSettingsTab
+                                        }
+                                        onTabChange={handleTabChange}
+                                    />
                                     <Divider />
                                     <MenuItem
                                         sx={{

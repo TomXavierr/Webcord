@@ -3,12 +3,16 @@ import React from "react";
 import HighlightOffIcon from "@mui/icons-material/HighlightOff";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import Roles from "./Roles";
+import Overview from "./Overview";
+import Invites from "./Invites";
+import Members from "./Members";
 
 const ListItemStyle = {
     ":hover": {
         backgroundColor: "rgba(255, 255, 255, 0.05)",
-    }
-}
+    },
+};
 
 const ListTextStyle = {
     paddingLeft: "6px",
@@ -29,6 +33,26 @@ const ServerSettings = ({
 
     const dispatch = useDispatch();
     const navigate = useNavigate();
+
+    let selectedComponent;
+
+    switch (activeServerSettingsTab) {
+        case "Overview":
+            selectedComponent = <Overview />;
+            break;
+        case "Roles":
+            selectedComponent = <Roles />;
+            break;
+        case "Members":
+            selectedComponent = <Members />;
+            break;
+        case "Invites":
+            selectedComponent = <Invites />;
+            break;
+        default:
+            selectedComponent = <Overview />;
+            break;
+    }
 
     return (
         <Modal open={isOpen} onClose={onClose}>
@@ -71,22 +95,34 @@ const ServerSettings = ({
                             SERVER SETTINGS
                         </Typography>
                         <List>
-                            <ListItem sx={ListItemStyle}>
+                            <ListItem
+                                sx={ListItemStyle}
+                                onClick={() => handleMenuItemClick("Overview")}
+                            >
                                 <Typography style={ListTextStyle}>
                                     Overview
                                 </Typography>
                             </ListItem>
-                            <ListItem sx={ListItemStyle}>
+                            <ListItem
+                                sx={ListItemStyle}
+                                onClick={() => handleMenuItemClick("Roles")}
+                            >
                                 <Typography style={ListTextStyle}>
                                     Roles
                                 </Typography>
                             </ListItem>
-                            <ListItem sx={ListItemStyle}>
+                            <ListItem
+                                sx={ListItemStyle}
+                                onClick={() => handleMenuItemClick("Members")}
+                            >
                                 <Typography style={ListTextStyle}>
                                     Members
                                 </Typography>
                             </ListItem>
-                            <ListItem sx={ListItemStyle}>
+                            <ListItem
+                                sx={ListItemStyle}
+                                onClick={() => handleMenuItemClick("Invites")}
+                            >
                                 <Typography style={ListTextStyle}>
                                     Invites
                                 </Typography>
@@ -112,9 +148,7 @@ const ServerSettings = ({
                         paddingTop: "36px",
                     }}
                 >
-                    {/* {activeTab === "My Profile" && <MyProfile />}
-                    {activeTab === "Security" && <LoginAndSecurity />}
-                    {activeTab === "Activity" && <Activity />} */}
+                    {selectedComponent}
                 </Box>
                 <Box
                     sx={{
