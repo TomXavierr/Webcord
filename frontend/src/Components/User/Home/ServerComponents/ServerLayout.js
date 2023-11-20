@@ -54,7 +54,7 @@ const ServerLayout = () => {
     const user = useSelector((state) => state.auth.user);
     const [anchorEl, setAnchorEl] = React.useState(null);
     const open = Boolean(anchorEl);
-    const [isServerSettingsOpen, setServerSettingsOpen] = useState(false);
+    // const [isServerSettingsOpen, setServerSettingsOpen] = useState(false);
 
     const navigate = useNavigate();
 
@@ -86,10 +86,15 @@ const ServerLayout = () => {
         }
     };
 
-    useEffect(() => {
-        const isServerSettingsOpen = localStorage.getItem("serverSettingsOpen");
+    const [isServerSettingsOpen, setServerSettingsOpen] = useState(
+        localStorage.getItem("isServerSettingsOpen") === "true" || false
+    );
 
-        if (isServerSettingsOpen === "true") {
+    useEffect(() => {
+        const storedValue = localStorage.getItem("isServerSettingsOpen");
+        console.log("Value from localStorage:", storedValue);
+
+        if (storedValue === "true") {
             setServerSettingsOpen(true);
         }
     }, []);
@@ -168,13 +173,14 @@ const ServerLayout = () => {
     );
 
     const handleServerSettings = () => {
-        setServerSettingsOpen(isServerSettingsOpen); 
-        localStorage.setItem("serverSettingsOpen", isServerSettingsOpen); 
+        setServerSettingsOpen(true);
+        localStorage.setItem("isServerSettingsOpen", "true");
     };
-    
+
     const serverSettingsClose = () => {
         setServerSettingsOpen(false);
-        localStorage.setItem("serverSettingsOpen", false);
+        localStorage.removeItem("activeServerSettingsTab");
+        localStorage.setItem("isServerSettingsOpen", "false");
     };
 
     const handleTabChange = (tab) => {
@@ -305,50 +311,58 @@ const ServerLayout = () => {
                                         </Typography>
                                         <SettingsIcon sx={{ height: "16px" }} />
                                     </MenuItem>
-                                    <ServerSettings
-                                        isOpen={isServerSettingsOpen}
-                                        onClose={serverSettingsClose}
-                                        activeServerSettingsTab={
-                                            activeServerSettingsTab
-                                        }
-                                        onTabChange={handleTabChange}
-                                    />
-                                    <Divider />
-                                    <MenuItem
-                                        sx={{
-                                            color: "#C72D2D",
-                                            display: "flex",
-                                            justifyContent: "space-between",
-                                            paddingInline: "0px",
-                                            marginInline: "6px",
-                                            borderRadius: "3px",
-                                            ":hover": {
-                                                color: "white",
-                                                backgroundColor: "#C72D2D",
-                                            },
-                                        }}
-                                        // key={option}
-                                        // selected={option === "Pyxis"}
-                                        // onClick={handleClose}
-                                    >
-                                        <Typography
-                                            pl={1}
-                                            style={{
-                                                fontSize: "12px",
-                                                fontWeight: "600",
-                                                letterSpacing: "1.5px",
-                                                fontFamily:
-                                                    "Noto Sans, sans-serif",
-                                            }}
-                                        >
-                                            leave server
-                                        </Typography>
-                                        <ArrowCircleLeftIcon
-                                            sx={{ height: "16px" }}
-                                        />
-                                    </MenuItem>
+
+                                    {user.id != serverData.owner && (
+                                        <>
+                                            <Divider />
+                                            <MenuItem
+                                                sx={{
+                                                    color: "#C72D2D",
+                                                    display: "flex",
+                                                    justifyContent:
+                                                        "space-between",
+                                                    paddingInline: "0px",
+                                                    marginInline: "6px",
+                                                    borderRadius: "3px",
+                                                    ":hover": {
+                                                        color: "white",
+                                                        backgroundColor:
+                                                            "#C72D2D",
+                                                    },
+                                                }}
+                                                // key={option}
+                                                // selected={option === "Pyxis"}
+                                                // onClick={handleClose}
+                                            >
+                                                <Typography
+                                                    pl={1}
+                                                    style={{
+                                                        fontSize: "12px",
+                                                        fontWeight: "600",
+                                                        letterSpacing: "1.5px",
+                                                        fontFamily:
+                                                            "Noto Sans, sans-serif",
+                                                    }}
+                                                >
+                                                    leave server
+                                                </Typography>
+                                                <ArrowCircleLeftIcon
+                                                    sx={{ height: "16px" }}
+                                                />
+                                            </MenuItem>
+                                        </>
+                                    )}
                                 </Menu>
                             </Box>
+                            <ServerSettings
+                                isOpen={isServerSettingsOpen}
+                                onClose={serverSettingsClose}
+                                activeServerSettingsTab={
+                                    activeServerSettingsTab
+                                }
+                                onTabChange={handleTabChange}
+                                data={serverData}
+                            />
                             {selectedChannel != null && (
                                 <Typography
                                     style={{

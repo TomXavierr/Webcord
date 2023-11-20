@@ -26,10 +26,13 @@ const ServerSettings = ({
     onClose,
     activeServerSettingsTab,
     onTabChange,
+    data
 }) => {
     const handleMenuItemClick = (menuItem) => {
         onTabChange(menuItem);
     };
+
+    console.log("data" , data);
 
     const dispatch = useDispatch();
     const navigate = useNavigate();
@@ -38,19 +41,19 @@ const ServerSettings = ({
 
     switch (activeServerSettingsTab) {
         case "Overview":
-            selectedComponent = <Overview />;
+            selectedComponent = <Overview data={data}/>;
             break;
         case "Roles":
-            selectedComponent = <Roles />;
+            selectedComponent = <Roles data={data}/>;
             break;
         case "Members":
-            selectedComponent = <Members />;
+            selectedComponent = <Members data={data}/>;
             break;
         case "Invites":
-            selectedComponent = <Invites />;
+            selectedComponent = <Invites data={data} />;
             break;
         default:
-            selectedComponent = <Overview />;
+            selectedComponent = <Overview data={data}/>;
             break;
     }
 

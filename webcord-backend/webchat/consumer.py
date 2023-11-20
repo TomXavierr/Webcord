@@ -37,7 +37,6 @@ class WebChatConsumer(JsonWebsocketConsumer):
 
         sender = get_user_model().objects.get(id=user)
 
-    
 
         conversation, created = Conversation.objects.get_or_create(channel_id=channel_id)
 

@@ -39,6 +39,8 @@ const ChatWindow = (channel) => {
         ? `ws://127.0.0.1:8000/${serverId}/${channelId}`
         : null;
 
+
+        
     const fetchMessages = async (channelId) => {
         const token = localStorage.getItem("access");
         const config = {
