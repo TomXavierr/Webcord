@@ -192,7 +192,7 @@ const ChatWindow = (channel) => {
                                         <Typography
                                             variant="body2"
                                             sx={{
-                                                color: "#999999",
+                                                color: "#B4E7F8",
                                                 textAlign: "center",
                                                 width: "100%",
                                             }}
@@ -224,7 +224,7 @@ const ChatWindow = (channel) => {
                                                 <Typography
                                                     component="span"
                                                     variant="caption"
-                                                    sx={{ color: "#999999" }}
+                                                    sx={{ color: "#B4E7F8" }}
                                                 >
                                                     {" "}
                                                     {formatTimeStamp(

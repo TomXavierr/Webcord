@@ -32,7 +32,6 @@ const ServerSettings = ({
         onTabChange(menuItem);
     };
 
-    console.log("data" , data);
 
     const dispatch = useDispatch();
     const navigate = useNavigate();

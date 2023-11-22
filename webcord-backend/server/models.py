@@ -4,6 +4,7 @@ from django.shortcuts import get_object_or_404
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 from django.utils.crypto import get_random_string
+from django.core.exceptions import ValidationError
 
 
 def server_icon_upload_path(instance, filename):
@@ -52,6 +53,14 @@ class Channel(models.Model):
 
     def save(self, *args, **kwargs):
         self.name = self.name.lower()
+
+        existing_channel = Channel.objects.filter(
+            server=self.server, name=self.name).exclude(id=self.id)
+
+        if existing_channel.exists():
+            raise ValidationError(
+                'A channel with the same name already exists in this server.')
+
         super(Channel, self).save(*args, **kwargs)
 
     def __str__(self):
@@ -98,9 +107,9 @@ class Invitation(models.Model):
         if not self.token:
             self.token = get_random_string(length=50)
         super().save(*args, **kwargs)
-    
+
     def get_join_url(self):
-        return f'http://yourdomain.com/join/{self.token}/' 
+        return f'http://yourdomain.com/join/{self.token}/'
 
 
 @receiver(post_save, sender=Server)

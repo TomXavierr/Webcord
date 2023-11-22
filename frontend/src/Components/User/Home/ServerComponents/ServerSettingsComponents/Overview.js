@@ -5,7 +5,9 @@ import {
     Button,
     IconButton,
     Input,
+    InputBase,
     Stack,
+    Tooltip,
     Typography,
 } from "@mui/material";
 import AddPhotoAlternateIcon from "@mui/icons-material/AddPhotoAlternate";
@@ -118,7 +120,6 @@ const Overview = ({ data }) => {
             <Box
                 sx={{
                     display: "flex",
-                    backgroundColor: "#031D25",
                     marginTop: "12px",
                     position: "relative",
                 }}
@@ -126,11 +127,13 @@ const Overview = ({ data }) => {
                 <Box
                     sx={{
                         width: "50%",
-                        height: "150px",
+                        height: "100px",
                         display: "flex",
-                        padding: "10px",
+                        paddingX: "10px",
+                        // alignItems: "center",
                     }}
                 >
+                    <Tooltip title="Update icon" followCursor>
                     <IconButton onClick={handleIconClick}>
                         <Badge
                             sx={{
@@ -139,7 +142,7 @@ const Overview = ({ data }) => {
                                     backgroundColor: "white",
                                     width: 24,
                                     height: 24,
-                                    borderRadius: 12
+                                    borderRadius: 12,
                                 },
                             }}
                             overlap="circular"
@@ -168,25 +171,44 @@ const Overview = ({ data }) => {
                             />
                         </Badge>
                     </IconButton>
+                    </Tooltip>
+                    <Typography
+                        sx={{
+                            // fontFamily: "Sofia Sans, sans-serif ",
+                            fontWeight: 400,
+                            letterSpacing: "1.5px",
+                            fontSize: "10px",
+                            color: "white",
+                            paddingInline: "1px"
+                        }}
+                        mb={2}
+                    >
+                        We recommend to always set an icon so that users can
+                        identify your server easily.
+                    </Typography>
                 </Box>
                 <Box
                     sx={{
                         width: "50%",
+                        paddingX: "10px",
                     }}
                 >
                     <Typography
                         style={{
                             fontFamily: "Noto Sans,sans-serif",
-                            fontSize: "14px",
-                            fontWeight: 600,
+                            fontSize: "12px",
+                            fontWeight: 400,
                             color: "#EBF2FA",
+                            opacity: "80%",
                             letterSpacing: ".5px",
-                            marginBottom: "12px",
+                            marginBottom: "8px",
+                            paddingX: "12px",
                         }}
                     >
-                        Server Name
+                        SERVER NAME
                     </Typography>
-                    <Input
+                    <InputBase
+                    
                         type="text"
                         value={serverName}
                         onChange={handleServerNameChange}
@@ -195,7 +217,7 @@ const Overview = ({ data }) => {
                             backgroundColor: "#000000",
                             fontSize: "12px",
                             borderRadius: "3px",
-                            paddingLeft: "5px",
+                            paddingX: "12px",
                             height: "32px",
                         }}
                     />
@@ -209,6 +231,10 @@ const Overview = ({ data }) => {
                             fontSize: "14px",
                             textTransform: "none",
                             marginTop: "12px",
+                            transition: "background-color 0.3s ease",
+                            ":hover": {
+                                backgroundColor: "#86ebe9",
+                            }
                         }}
                     >
                         Update Server

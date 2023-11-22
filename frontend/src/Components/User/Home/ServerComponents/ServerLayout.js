@@ -54,7 +54,6 @@ const ServerLayout = () => {
     const user = useSelector((state) => state.auth.user);
     const [anchorEl, setAnchorEl] = React.useState(null);
     const open = Boolean(anchorEl);
-    // const [isServerSettingsOpen, setServerSettingsOpen] = useState(false);
 
     const navigate = useNavigate();
 
@@ -74,7 +73,6 @@ const ServerLayout = () => {
             );
 
             if (response.status === 200) {
-                console.log(response.data);
                 setServerData(response.data);
             } else {
                 console.error("Failed to fetch server details");
@@ -92,7 +90,6 @@ const ServerLayout = () => {
 
     useEffect(() => {
         const storedValue = localStorage.getItem("isServerSettingsOpen");
-        console.log("Value from localStorage:", storedValue);
 
         if (storedValue === "true") {
             setServerSettingsOpen(true);
@@ -293,8 +290,6 @@ const ServerLayout = () => {
                                                 backgroundColor: "#44CFCB",
                                             },
                                         }}
-                                        // key={option}
-                                        // selected={option === "Pyxis"}
                                         onClick={handleServerSettings}
                                     >
                                         <Typography

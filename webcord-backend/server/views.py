@@ -5,6 +5,7 @@ from django.shortcuts import get_object_or_404
 from rest_framework.permissions import IsAuthenticated 
 from rest_framework.exceptions import PermissionDenied
 from rest_framework import serializers
+from django.core.exceptions import ValidationError
 
 from .models import Server, Channel, Role, Invitation
 from .serializers import ServerDetailSerializer, ChannelSerializer, RoleSerializer, ServerSerializer, ServerUpdateSerializer, InvitationSerializer
@@ -59,7 +60,10 @@ class ChannelCreateAPIView(generics.CreateAPIView):
         if server.owner != self.request.user:
             raise PermissionDenied("You are not the owner of this server.")
 
-        serializer.save(server=server)
+        try:
+            serializer.save(server=server)
+        except ValidationError as e:
+            return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)
 
 
 class ChannelUpdateAPIView(generics.UpdateAPIView):
@@ -72,6 +76,18 @@ class ChannelDeleteAPIView(generics.DestroyAPIView):
     queryset = Channel.objects.all()
     serializer_class = ChannelSerializer
     permission_classes = [IsAuthenticated]
+
+    def destroy(self, request, *args, **kwargs):
+        channel_id = kwargs.get('pk')
+        channel = get_object_or_404(Channel, id=channel_id)
+        server = channel.server
+
+        if request.user == server.owner:
+            channel.delete()
+            return Response(status=status.HTTP_204_NO_CONTENT)
+        else:
+            return Response({"detail": "You do not have permission to delete this channel."},
+                            status=status.HTTP_403_FORBIDDEN)
 
 
 # Role API Views
