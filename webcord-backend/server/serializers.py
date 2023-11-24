@@ -2,7 +2,7 @@ from accounts.models import UserAccount
 from rest_framework import serializers
 
 
-from .models import Channel, Role, Server, ServerMember, Invitation
+from .models import Channel, Role, Server, ServerMember
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -67,13 +67,3 @@ class ServerUpdateSerializer(serializers.ModelSerializer):
         model = Server
         fields = '__all__'
 
-
-class InvitationSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Invitation
-        fields = '__all__'
-
-    def create(self, validated_data):
-        # Set the sender based on the current user
-        validated_data['sender'] = self.context['request'].user
-        return super().create(validated_data)

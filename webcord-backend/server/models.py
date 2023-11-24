@@ -90,28 +90,6 @@ class Role(models.Model):
         return self.name
 
 
-class Invitation(models.Model):
-    sender = models.ForeignKey(
-        settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='sent_invitations'
-    )
-    server = models.ForeignKey(
-        'Server', on_delete=models.CASCADE, related_name='server_invitations'
-    )
-    created_at = models.DateTimeField(auto_now_add=True)
-    token = models.CharField(max_length=50, unique=True, blank=True, null=True)
-
-    def __str__(self):
-        return f'Invitation from {self.sender.username} to server {self.server.name}'
-
-    def save(self, *args, **kwargs):
-        if not self.token:
-            self.token = get_random_string(length=50)
-        super().save(*args, **kwargs)
-
-    def get_join_url(self):
-        return f'http://yourdomain.com/join/{self.token}/'
-
-
 @receiver(post_save, sender=Server)
 def create_server_member_and_role(sender, instance, created, **kwargs):
     if created:

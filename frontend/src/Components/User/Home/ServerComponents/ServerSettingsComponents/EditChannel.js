@@ -21,7 +21,6 @@ const ListTextStyle = {
 };
 
 const EditChannel = ({ isOpen, onClose }) => {
-    const dispatch = useDispatch();
     const selectedChannel = localStorage.getItem("selectedChannel");
 
     const [channelName, setChannelName] = useState("");
@@ -30,9 +29,12 @@ const EditChannel = ({ isOpen, onClose }) => {
 
     useEffect(() => {
         const parsedChannel = JSON.parse(selectedChannel);
-        setChannelName(parsedChannel.name || "");
-        setChannelTopic(parsedChannel.topic || "");
-        setChannelId(parsedChannel.id || "");
+        if (parsedChannel) {
+
+            setChannelName(parsedChannel.name || "");
+            setChannelTopic(parsedChannel.topic || "");
+            setChannelId(parsedChannel.id || "");
+        }
     }, [selectedChannel]);
 
     const accessToken = localStorage.getItem("access");

@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import ServerDetailAPIView, ServerCreateView, ServerUpdateAPIView, ServerDeleteAPIView, CreateInviteAPIView, AcceptInviteAPIView, ChannelCreateAPIView, ChannelUpdateAPIView, ChannelDeleteAPIView
+from .views import ServerDetailAPIView, ServerCreateView, ServerUpdateAPIView, ServerDeleteAPIView, ChannelCreateAPIView, ChannelUpdateAPIView, ChannelDeleteAPIView
 
 
 urlpatterns = [
@@ -11,11 +11,6 @@ urlpatterns = [
          ServerUpdateAPIView.as_view(), name='server-update'),
     path('servers/delete/<int:pk>/',
          ServerDeleteAPIView.as_view(), name='server-delete'),
-
-    path('servers/<int:server_id>/invites/',
-         CreateInviteAPIView.as_view(), name='create_invite'),
-    path('invites/<str:token>/accept/',
-         AcceptInviteAPIView.as_view(), name='accept_invite'),
 
     path('channels/create/',
          ChannelCreateAPIView.as_view(), name='channel-create'),
