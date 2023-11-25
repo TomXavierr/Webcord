@@ -19,8 +19,6 @@ class WebChatConsumer(JsonWebsocketConsumer):
 
     def connect(self):
         self.accept()
-        
-        
 
         self.channel_id = self.scope["url_route"]["kwargs"]["channelId"]
         # self.user = request.user
@@ -36,7 +34,6 @@ class WebChatConsumer(JsonWebsocketConsumer):
         user = content.get("userId")
 
         sender = get_user_model().objects.get(id=user)
-
 
         conversation, created = Conversation.objects.get_or_create(channel_id=channel_id)
 

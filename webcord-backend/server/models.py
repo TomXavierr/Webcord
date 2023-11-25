@@ -5,6 +5,7 @@ from django.db.models.signals import post_save
 from django.dispatch import receiver
 from django.utils.crypto import get_random_string
 from django.core.exceptions import ValidationError
+from django.utils import timezone
 
 
 def server_icon_upload_path(instance, filename):
@@ -89,6 +90,32 @@ class Role(models.Model):
     def __str__(self):
         return self.name
 
+
+class Invitation(models.Model):
+    sender = models.ForeignKey(
+        settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="invitations_sent")
+    receiver = models.ForeignKey(
+        settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="invitations_received")
+    server = models.ForeignKey(Server, on_delete=models.CASCADE, related_name="invitations")
+    token = models.CharField(max_length=20, unique=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    expires_at = models.DateTimeField()
+    is_accepted = models.BooleanField(default=False)
+
+    def __str__(self):
+        return f'Invitation from {self.sender.username} to {self.receiver.username} for server {self.server.name}'
+
+    def save(self, *args, **kwargs):
+        if not self.token:
+            # Generate a unique token for the invitation
+            self.token = get_random_string(length=20)
+
+        # Set an expiration date, e.g., one week from the current date
+        if not self.expires_at:
+            self.expires_at = timezone.now() + timezone.timedelta(days=7)
+
+        super().save(*args, **kwargs)
+    
 
 @receiver(post_save, sender=Server)
 def create_server_member_and_role(sender, instance, created, **kwargs):

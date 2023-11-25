@@ -26,7 +26,7 @@ const inputPropsStyle = {
 
 const ChatWindow = (channel) => {
     const [message, setMessage] = useState("");
-    const [messages, setMessages] = useState([]); // Define 'messages' state
+    const [messages, setMessages] = useState([]);
     const { serverId, channelId } = useParams();
     const [inputHeight, setInputHeight] = useState("24px");
     const userId = useSelector((state) => state.auth.user.id);
@@ -43,6 +43,7 @@ const ChatWindow = (channel) => {
         
     const fetchMessages = async (channelId) => {
         const token = localStorage.getItem("access");
+        
         const config = {
             headers: {
                 Authorization: `Bearer ${token}`,
@@ -106,6 +107,7 @@ const ChatWindow = (channel) => {
         if (e.key === "Enter") {
             e.preventDefault();
             if (message.trim() !== "") {
+
                 sendJsonMessage({ type: "message", message, userId });
                 setMessage("");
                 updateListHeight();
@@ -115,7 +117,7 @@ const ChatWindow = (channel) => {
 
     const handleSendClick = () => {
         if (message.trim() !== "") {
-       
+            console.log({ type: "message", message, userId });
             sendJsonMessage({ type: "message", message, userId });
             setMessage("");
             updateListHeight();
@@ -133,7 +135,7 @@ const ChatWindow = (channel) => {
             console.log("Error!");
         },
         onMessage: (msg) => {
-            // console.log(msg);
+            console.log(msg);
             const data = JSON.parse(msg.data);
             const newMessage = data.new_message;
             setMessages((prevMessages) => [...prevMessages, newMessage]);
