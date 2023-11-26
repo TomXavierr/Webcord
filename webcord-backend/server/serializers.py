@@ -2,7 +2,7 @@ from accounts.models import UserAccount
 from rest_framework import serializers
 
 
-from .models import Channel, Role, Server, ServerMember
+from .models import Channel, Role, Server, ServerMember, Invitation
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -67,3 +67,11 @@ class ServerUpdateSerializer(serializers.ModelSerializer):
         model = Server
         fields = '__all__'
 
+class InvitationSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Invitation
+        fields = '__all__'
+        extra_kwargs = {
+            'token': {'required': False},
+            'expires_at': {'required': False},
+        }

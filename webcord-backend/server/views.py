@@ -6,9 +6,10 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.exceptions import PermissionDenied
 from rest_framework import serializers
 from django.core.exceptions import ValidationError
+from django.core.exceptions import ObjectDoesNotExist
 
-from .models import Server, Channel, Role
-from .serializers import ServerDetailSerializer, ChannelSerializer, RoleSerializer, ServerSerializer, ServerUpdateSerializer
+from .models import Server, Channel, Role, Invitation, ServerMember
+from .serializers import ServerDetailSerializer, ChannelSerializer, RoleSerializer, ServerSerializer, ServerUpdateSerializer, InvitationSerializer
 
 
 class ServerDetailAPIView(generics.RetrieveAPIView):
@@ -46,6 +47,37 @@ class ServerDeleteAPIView(generics.DestroyAPIView):
         else:
             return Response({"detail": "You do not have permission to delete this server."},
                             status=status.HTTP_403_FORBIDDEN)
+
+
+class SendInvitationView(generics.CreateAPIView):
+    queryset = Invitation.objects.all()
+    serializer_class = InvitationSerializer
+    permission_classes = [IsAuthenticated]  
+
+    def perform_create(self, serializer):
+        serializer.save(sender=self.request.user)
+
+class AcceptInvitationView(APIView):
+    permission_classes = [IsAuthenticated]  
+
+    def post(self, request, token):
+        try:
+            invitation = Invitation.objects.get(token=token, receiver=request.user, is_accepted=False)
+            
+
+            server = invitation.server
+            server_member = ServerMember.objects.create(user=request.user, server=server)
+            if server_member:
+                invitation.is_accepted = True
+                invitation.save()
+
+            return Response({'message': 'Invitation accepted successfully.'})
+
+        except ObjectDoesNotExist:
+            return Response({'error': 'Invalid invitation token or invitation already accepted.'}, status=status.HTTP_404_NOT_FOUND)
+
+        except Exception as e:
+            return Response({'error': f'Error accepting invitation: {str(e)}'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 
 class ChannelCreateAPIView(generics.CreateAPIView):

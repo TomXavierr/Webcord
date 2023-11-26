@@ -107,7 +107,6 @@ class Invitation(models.Model):
 
     def save(self, *args, **kwargs):
         if not self.token:
-            # Generate a unique token for the invitation
             self.token = get_random_string(length=20)
 
         # Set an expiration date, e.g., one week from the current date
