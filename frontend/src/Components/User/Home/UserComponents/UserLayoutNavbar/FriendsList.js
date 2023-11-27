@@ -7,39 +7,9 @@ import { load_user } from "../../../../../Redux/actions/userauthaction";
 
 const FriendsList = () => {
 
-    // const [friendsList, setFriendsList] = useState([]);
-
     const friendsList = useSelector((state) => state.auth.user.friends)
     const dispatch = useDispatch();
 
-    // const fetchFriends = async () => {
-    //     try {
-    //         const token = localStorage.getItem("access");
-    //         const config = {
-    //             headers: {
-    //                 Authorization: `Bearer ${token}`,
-    //             },
-    //         };
-
-    //         const response = await axios.get(
-    //             `${process.env.REACT_APP_API_URL}/friends/friend-requests/friends_list/`,
-    //             config
-    //         );
-
-    //         if (response.status === 200) {
-    //             setFriendsList(response.data);
-    //             console.log(response.data);
-    //         } else {
-    //             console.error("Failed to fetch friends");
-    //         }
-    //     } catch (error) {
-    //         console.error("Error while fetching friends", error);
-    //     }
-    // };
-
-    // useEffect(() => {
-    //     fetchFriends();
-    // }, []); 
 
     const removeFriend = async (friendId) => {
         try {

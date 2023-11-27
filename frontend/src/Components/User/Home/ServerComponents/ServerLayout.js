@@ -6,6 +6,7 @@ import Drawer from "@mui/material/Drawer";
 import SettingsIcon from "@mui/icons-material/Settings";
 import axios from "axios";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import PersonAddAlt1Icon from "@mui/icons-material/PersonAddAlt1";
 import ClickAwayListener from "@mui/material/ClickAwayListener";
 
 import "./style.css";
@@ -32,7 +33,8 @@ import ServerChannelsDrawer from "./ServerChannelsDrawer";
 import MembersList from "./ServerLayoutComponents/MembersList";
 import ChatWindow from "./ServerLayoutComponents/ChatWindow";
 import ArrowCircleLeftIcon from "@mui/icons-material/ArrowCircleLeft";
-import ServerSettings from "./ServerSettingsComponents/ServerSettings";
+import ServerSettings from "./ServerMenuComponents/ServerSettings";
+import InviteModal from "./ServerMenuComponents/InviteModal";
 
 const drawerWidth = 60;
 const appBarHeight = 36;
@@ -52,7 +54,9 @@ const ServerLayout = () => {
     const [selectedChannel, setSelectedChannel] = useState(null);
     const [showMembers, setShowMembers] = useState(true);
     const user = useSelector((state) => state.auth.user);
-    const [anchorEl, setAnchorEl] = React.useState(null);
+    const [anchorEl, setAnchorEl] = useState(null);
+    const [isInviteModalOpen, setInviteModalOpen] = useState(false);
+
     const open = Boolean(anchorEl);
 
     const navigate = useNavigate();
@@ -164,6 +168,15 @@ const ServerLayout = () => {
     const handleClose = () => {
         setAnchorEl(null);
     };
+
+    const handleInviteModal = () => {
+    
+        setInviteModalOpen(true);
+    };
+
+    const inviteModalClose = () => {
+        setInviteModalOpen(false)
+    }
 
     const [activeServerSettingsTab, setActiveServerSettingsTab] = useState(
         localStorage.getItem("activeServerSettingsTab") || "Overview"
@@ -306,6 +319,37 @@ const ServerLayout = () => {
                                         </Typography>
                                         <SettingsIcon sx={{ height: "16px" }} />
                                     </MenuItem>
+                                    <MenuItem
+                                        sx={{
+                                            color: "#999999",
+                                            display: "flex",
+                                            justifyContent: "space-between",
+                                            paddingInline: "0px",
+                                            marginInline: "6px",
+                                            borderRadius: "3px",
+                                            ":hover": {
+                                                color: "white",
+                                                backgroundColor: "#44CFCB",
+                                            },
+                                        }}
+                                        onClick={handleInviteModal}
+                                    >
+                                        <Typography
+                                            pl={1}
+                                            style={{
+                                                fontSize: "12px",
+                                                fontWeight: "600",
+                                                letterSpacing: "1.5px",
+                                                fontFamily:
+                                                    "Noto Sans, sans-serif",
+                                            }}
+                                        >
+                                            Invite friends
+                                        </Typography>
+                                        <PersonAddAlt1Icon
+                                            sx={{ height: "16px" }}
+                                        />
+                                    </MenuItem>
 
                                     {user.id != serverData.owner && (
                                         <>
@@ -325,9 +369,6 @@ const ServerLayout = () => {
                                                             "#C72D2D",
                                                     },
                                                 }}
-                                                // key={option}
-                                                // selected={option === "Pyxis"}
-                                                // onClick={handleClose}
                                             >
                                                 <Typography
                                                     pl={1}
@@ -349,6 +390,20 @@ const ServerLayout = () => {
                                     )}
                                 </Menu>
                             </Box>
+                            {selectedChannel != null && (
+                                <Typography
+                                style={{
+                                    fontSize: "16px",
+                                    fontFamily: "Sofia Sans,sans-serif ",
+                                    color: "#EBF2FA",
+                                }}
+                                pl={2}
+                                >
+                                    {selectedChannel.name}
+                                </Typography>
+                            )}
+                        </Toolbar>
+                    </AppBar>
                             <ServerSettings
                                 isOpen={isServerSettingsOpen}
                                 onClose={serverSettingsClose}
@@ -358,20 +413,11 @@ const ServerLayout = () => {
                                 onTabChange={handleTabChange}
                                 data={serverData}
                             />
-                            {selectedChannel != null && (
-                                <Typography
-                                    style={{
-                                        fontSize: "16px",
-                                        fontFamily: "Sofia Sans,sans-serif ",
-                                        color: "#EBF2FA",
-                                    }}
-                                    pl={2}
-                                >
-                                    {selectedChannel.name}
-                                </Typography>
-                            )}
-                        </Toolbar>
-                    </AppBar>
+                            <InviteModal
+                                isOpen={isInviteModalOpen}
+                                onClose={inviteModalClose}
+                                // serverId={serverId}
+                            />
 
                     <Box
                         sx={{

@@ -126,6 +126,7 @@ def create_server_member_and_role(sender, instance, created, **kwargs):
             )
             server_member = ServerMember.objects.create(
                 user=instance.owner, server=instance)
+
             server_member.role.add(member_role)
 
             default_channel = Channel.objects.create(
@@ -134,3 +135,18 @@ def create_server_member_and_role(sender, instance, created, **kwargs):
             )
         except Exception as e:
             print(f"Error creating 'member' role: {e}")
+
+@receiver(post_save, sender=ServerMember)
+def assign_member_role(sender, instance, created, **kwargs):
+    if created:
+        try:
+            # Get or create the 'member' role for the server
+            member_role, created = Role.objects.get_or_create(
+                name="member",
+                server=instance.server
+            )
+
+            # Assign the 'member' role to the ServerMember instance
+            instance.role.add(member_role)
+        except Exception as e:
+            print(f"Error assigning 'member' role: {e}")

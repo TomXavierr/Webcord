@@ -16,26 +16,24 @@ import AddIcon from "@mui/icons-material/Add";
 import SettingsIcon from "@mui/icons-material/Settings";
 import ChannelCreateModal from "./ServerLayoutComponents/ChannelCreateModal";
 import { useSelector } from "react-redux";
-import EditChannel from "./ServerSettingsComponents/EditChannel";
+import EditChannel from "./ServerMenuComponents/EditChannel";
 
 const ServerChannelsDrawer = ({ serverData, onChannelSelect }) => {
-    const [isChannelCreateModalOpen, setChannelCreateModalOpen] = useState(false);
+    const [isChannelCreateModalOpen, setChannelCreateModalOpen] =
+        useState(false);
     const userId = useSelector((state) => state.auth.user.id);
-
 
     const [isEditChannelModalOpen, setEditChannelModalOpen] = useState(
         localStorage.getItem("isEditChannelModalOpen") === "true" || false
     );
 
     const handleOpenEditChannelModal = (channel) => {
-
         setEditChannelModalOpen(true);
     };
 
     useEffect(() => {
         localStorage.setItem("isEditChannelModalOpen", isEditChannelModalOpen);
-      }, [isEditChannelModalOpen]);
-    
+    }, [isEditChannelModalOpen]);
 
     return (
         <>
@@ -152,7 +150,6 @@ const ServerChannelsDrawer = ({ serverData, onChannelSelect }) => {
                         <ChannelCreateModal
                             isOpen={isChannelCreateModalOpen}
                             onCancel={() => setChannelCreateModalOpen(false)}
-                            
                         />
                     </Box>
                 </>
@@ -162,7 +159,6 @@ const ServerChannelsDrawer = ({ serverData, onChannelSelect }) => {
                 onClose={() => {
                     setEditChannelModalOpen(false);
                 }}
-               
             />
         </>
     );
