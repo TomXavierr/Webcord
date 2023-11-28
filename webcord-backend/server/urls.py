@@ -1,19 +1,23 @@
 from django.urls import path
-from .views import ServerDetailAPIView, ServerCreateView, ServerUpdateAPIView, ServerDeleteAPIView, ChannelCreateAPIView, ChannelUpdateAPIView, ChannelDeleteAPIView, SendInvitationView, AcceptInvitationView
+from .views import ServerDetailAPIView, ServerCreateView, ServerUpdateAPIView, ServerDeleteAPIView, ChannelCreateAPIView, ChannelUpdateAPIView, ChannelDeleteAPIView, SendInvitationView, AcceptInvitationView, ReceivedInvitationsView
 
 
 urlpatterns = [
-     path('server-details/<int:pk>/',
-         ServerDetailAPIView.as_view(), name='server-detail'),
+    path('server-details/<int:pk>/',
+        ServerDetailAPIView.as_view(), name='server-detail'),
 
-     path('servers/create/', ServerCreateView.as_view(), name='server-create'),
-     path('servers/update/<int:pk>/',
-         ServerUpdateAPIView.as_view(), name='server-update'),
-     path('servers/delete/<int:pk>/',
-         ServerDeleteAPIView.as_view(), name='server-delete'),
+    path('servers/create/', ServerCreateView.as_view(), name='server-create'),
+    path('servers/update/<int:pk>/',
+        ServerUpdateAPIView.as_view(), name='server-update'),
+    path('servers/delete/<int:pk>/',
+        ServerDeleteAPIView.as_view(), name='server-delete'),
 
-     path('send-invitation/', SendInvitationView.as_view(), name='send-invitation'),
-     path('accept-invitation/<str:token>/', AcceptInvitationView.as_view(), name='accept-invitation'),
+    path('invitations/received/', 
+        ReceivedInvitationsView.as_view(), name='received-invitations'),
+    path('send-invitation/', 
+        SendInvitationView.as_view(), name='send-invitation'),
+    path('accept-invitation/<str:token>/', 
+        AcceptInvitationView.as_view(), name='accept-invitation'),
 
 
      path('channels/create/',

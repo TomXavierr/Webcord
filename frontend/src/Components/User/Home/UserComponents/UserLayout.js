@@ -12,6 +12,7 @@ import ChatListDrawer from "./ChatListDrawer";
 import FriendsList from "./UserLayoutNavbar/FriendsList";
 import AddFriend from "./UserLayoutNavbar/AddFriend";
 import FriendRequests from "./UserLayoutNavbar/FriendRequests";
+import Invites from "./UserLayoutNavbar/Invites";
 
 const drawerWidth = 60;
 
@@ -135,6 +136,20 @@ const UserLayout = () => {
                     >
                         <Typography sx={{ fontSize: "14px" }}>
                             Requests
+                        </Typography>
+                    </Box>
+                    <Box
+                        onClick={() => handleTabChange("invites")}
+                        sx={{
+                            ...tabstyle,
+                            backgroundColor:
+                                activeTab === "invites"
+                                    ? "#0A4C5C"
+                                    : "transparent",
+                        }}
+                    >
+                        <Typography sx={{ fontSize: "14px" }}>
+                            Invites
                         </Typography>
                     </Box>
                     <Button
@@ -264,6 +279,8 @@ const UserLayout = () => {
                     {activeTab === "all" && <FriendsList />}
                     {activeTab === "addFriend" && <AddFriend />}
                     {activeTab === "requests" && <FriendRequests />}
+                    {activeTab === "invites" && <Invites />}
+                    
                 </Box>
             </Box>
         </Box>

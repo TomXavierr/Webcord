@@ -10,14 +10,10 @@ class UserSerializer(serializers.ModelSerializer):
         model = UserAccount
         fields = ['id', 'username', 'display_name', 'avatar']
 
-    # def to_representation(self, instance):
-    #     data = super().to_representation(instance)
-    #     # Remove the base URL prefix from the avatar URL
-    #     if 'avatar' in data and data['avatar']:
-    #         data['avatar'] = data['avatar'].replace(
-    #             "http://127.0.0.1:8000", "")
-    #     return data
-
+class ServerProfileSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Server
+        fields = ['id','name','icon']
 
 class ChannelSerializer(serializers.ModelSerializer):
     class Meta:
@@ -75,3 +71,11 @@ class InvitationSerializer(serializers.ModelSerializer):
             'token': {'required': False},
             'expires_at': {'required': False},
         }
+
+class InvitationListSerializer(serializers.ModelSerializer):
+    server = ServerProfileSerializer()
+    sender = UserSerializer()
+
+    class Meta:
+        model = Invitation
+        fields = ('id', 'token', 'created_at', 'expires_at', 'is_accepted', 'server', 'sender')

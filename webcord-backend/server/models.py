@@ -140,13 +140,13 @@ def create_server_member_and_role(sender, instance, created, **kwargs):
 def assign_member_role(sender, instance, created, **kwargs):
     if created:
         try:
-            # Get or create the 'member' role for the server
+            """Get or create the 'member' role for the server"""
             member_role, created = Role.objects.get_or_create(
                 name="member",
                 server=instance.server
             )
 
-            # Assign the 'member' role to the ServerMember instance
+            """Assign the 'member' role to the ServerMember instance"""
             instance.role.add(member_role)
         except Exception as e:
             print(f"Error assigning 'member' role: {e}")

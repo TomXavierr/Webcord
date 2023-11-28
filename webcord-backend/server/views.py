@@ -9,7 +9,7 @@ from django.core.exceptions import ValidationError
 from django.core.exceptions import ObjectDoesNotExist
 
 from .models import Server, Channel, Role, Invitation, ServerMember
-from .serializers import ServerDetailSerializer, ChannelSerializer, RoleSerializer, ServerSerializer, ServerUpdateSerializer, InvitationSerializer
+from .serializers import ServerDetailSerializer, ChannelSerializer, RoleSerializer, ServerSerializer, ServerUpdateSerializer, InvitationSerializer, InvitationListSerializer
 
 
 class ServerDetailAPIView(generics.RetrieveAPIView):
@@ -49,6 +49,15 @@ class ServerDeleteAPIView(generics.DestroyAPIView):
                             status=status.HTTP_403_FORBIDDEN)
 
 
+class ReceivedInvitationsView(generics.ListAPIView):
+    serializer_class = InvitationListSerializer
+    permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        user = self.request.user
+        return Invitation.objects.filter(receiver=user).select_related('server', 'sender')
+
+
 class SendInvitationView(generics.CreateAPIView):
     queryset = Invitation.objects.all()
     serializer_class = InvitationSerializer
@@ -78,6 +87,9 @@ class AcceptInvitationView(APIView):
 
         except Exception as e:
             return Response({'error': f'Error accepting invitation: {str(e)}'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+
+
 
 
 class ChannelCreateAPIView(generics.CreateAPIView):
