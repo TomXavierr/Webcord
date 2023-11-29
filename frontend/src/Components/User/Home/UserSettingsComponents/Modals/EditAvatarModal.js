@@ -91,10 +91,12 @@ const EditAvatarModal = ({ isOpen, onCancel, onSave }) => {
             >
                 <Box width="400px" p={4} bgcolor="#122C34" borderRadius={2}>
                     <Box
-                        display="flex"
-                        justifyContent="space-between"
-                        alignItems="center"
-                        mb={2}
+                        sx={{
+                            display: "flex",
+                            justifyContent: "space-between",
+                            alignItems: "center",
+                        }}
+                        
                     >
                         <Typography
                             variant="h4"
@@ -108,11 +110,12 @@ const EditAvatarModal = ({ isOpen, onCancel, onSave }) => {
                         </IconButton>
                     </Box>
 
-                    {/* Centered Image Preview */}
                     <Box
-                        display="flex"
-                        justifyContent="center"
-                        alignItems="center"
+                        sx={{
+                            display: "flex",
+                            justifyContent: "center",
+                            alignItems: "center",
+                        }}
                     >
                         {previewUrl !== null && (
                             <img
@@ -153,9 +156,9 @@ const EditAvatarModal = ({ isOpen, onCancel, onSave }) => {
                                     borderRadius: "4px",
                                     height: "24px",
                                     color: "#000000",
-                                    fontSize: "14px",
+                                    fontSize: "12px",
                                     textTransform: "none",
-                                    marginTop: "12px",
+                            
                                 }}
                             >
                                 Choose Avatar
@@ -163,10 +166,9 @@ const EditAvatarModal = ({ isOpen, onCancel, onSave }) => {
                         </label>
 
                         <DialogActions
-                            display="flex"
-                            justifyContent="space-between"
-                            width="100%"
-                            marginTop="12px"
+                            sx={{
+                                display: "flex",
+                            }}
                         >
                             <Button onClick={handleClose} color="primary">
                                 Cancel

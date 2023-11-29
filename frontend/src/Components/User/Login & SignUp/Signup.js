@@ -242,11 +242,7 @@ const Signup = ({ signup: createUser, signupError, isAccountCreated }) => {
                     >
                         Continue
                     </LoadingButton>
-                    {/* {signupError && (
-                        <Typography color="error" style={{ fontSize: "12px" }}>
-                            {signupError}
-                        </Typography>
-                    )} */}
+                
                     {isAccountCreated ? (
                         <Typography
                             style={{ fontSize: "12px", color: "#00FF00" }}

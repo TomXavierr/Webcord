@@ -13,13 +13,11 @@ import { connect } from "react-redux";
 import { useLocation, useNavigate } from "react-router-dom";
 import {
     login,
-    googleAuthenticate,
 } from "../../../Redux/actions/userauthaction";
-import axios from "axios";
 import LoadingButton from "@mui/lab/LoadingButton";
 
 const inputPropsStyle = {
-    color: "white", // Set the text color to white
+    color: "white", 
     backgroundColor: "#000000",
     fontSize: "12px",
 };
@@ -117,18 +115,7 @@ const Login = ({
         }
     };
 
-    const ContinueWithGoogle = async () => {
-        try {
-            const res = await axios.get(
-                `${process.env.REACT_APP_API_URL}/auth/o/google-oauth2/?redirect_uri=http://localhost:3000/login`
-            );
-            console.log(res);
-            window.location.replace(res.data.authorization_url);
-        } catch (err) {
-            console.log(err);
-        }
-    };
-
+ 
     return (
         <div
             style={{
@@ -192,26 +179,7 @@ const Login = ({
                         Login
                     </LoadingButton>
                 </form>
-                <Button
-                    type="submit"
-                    variant="contained"
-                    onClick={ContinueWithGoogle}
-                    style={{
-                        backgroundColor: "#ffffff",
-                        color: "#000000",
-                        display: "flex",
-                        alignItems: "center",
-                    }}
-                    fullWidth
-                >
-                    <img
-                        src="/GoogleIcon.svg" // Make sure to provide the correct path
-                        alt="Google Icon"
-                        width="24px"
-                        style={{ marginRight: "8px" }}
-                    />
-                    Continue with Google
-                </Button>
+               
                 {(error || localError) && (
                     <Typography color="error" style={{ fontSize: "12px" }}>
                         {error ? error.detail : localError.detail}
@@ -236,4 +204,4 @@ const mapStateToProps = (state) => ({
     isAuthenticated: state.auth.isAuthenticated,
 });
 
-export default connect(mapStateToProps, { login, googleAuthenticate })(Login);
+export default connect(mapStateToProps, { login })(Login);

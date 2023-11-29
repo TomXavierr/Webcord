@@ -35,6 +35,11 @@ const ServerChannelsDrawer = ({ serverData, onChannelSelect }) => {
         localStorage.setItem("isEditChannelModalOpen", isEditChannelModalOpen);
     }, [isEditChannelModalOpen]);
 
+    const onChannelUpdate = () => {
+        onChannelSelect("members")
+        localStorage.setItem("isEditChannelModalOpen", "false")
+        window.location.reload();
+    }
     return (
         <>
             <Box sx={{ height: "36px", padding: "10px" }}>
@@ -159,6 +164,8 @@ const ServerChannelsDrawer = ({ serverData, onChannelSelect }) => {
                 onClose={() => {
                     setEditChannelModalOpen(false);
                 }}
+                
+                onChannelUpdate ={onChannelUpdate}
             />
         </>
     );

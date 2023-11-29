@@ -100,10 +100,7 @@ const ServerLayout = () => {
         }
     }, []);
 
-    useEffect(() => {
-        getServerDetails();
-    }, [serverId]);
-
+   
     useEffect(() => {
         const channelJSON = localStorage.getItem("selectedChannel");
 
@@ -197,6 +194,12 @@ const ServerLayout = () => {
         setActiveServerSettingsTab(tab);
         localStorage.setItem("activeServerSettingsTab", tab);
     };
+
+
+    useEffect(() => {
+        getServerDetails();
+    }, [serverId]);
+
 
     return (
         <Box
@@ -352,7 +355,7 @@ const ServerLayout = () => {
                                     </MenuItem>
 
                                     {user.id != serverData.owner && (
-                                        <>
+                                        <div>
                                             <Divider />
                                             <MenuItem
                                                 sx={{
@@ -386,7 +389,7 @@ const ServerLayout = () => {
                                                     sx={{ height: "16px" }}
                                                 />
                                             </MenuItem>
-                                        </>
+                                        </div>
                                     )}
                                 </Menu>
                             </Box>
@@ -412,11 +415,11 @@ const ServerLayout = () => {
                                 }
                                 onTabChange={handleTabChange}
                                 data={serverData}
+
                             />
                             <InviteModal
                                 isOpen={isInviteModalOpen}
                                 onClose={inviteModalClose}
-                                // serverId={serverId}
                             />
 
                     <Box

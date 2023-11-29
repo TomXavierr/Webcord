@@ -14,9 +14,9 @@ import {
 } from "@mui/material";
 import React, { useState } from "react";
 import AddPhotoAlternateIcon from "@mui/icons-material/AddPhotoAlternate";
-import { createServer } from "./Utilities/ServerAPIs";
 import { useDispatch, useSelector } from "react-redux";
-import { load_user } from "../../../Redux/actions/userauthaction";
+import { checkAuthenticated, load_user } from "../../../Redux/actions/userauthaction";
+import axios from "axios";
 
 const inputPropsStyle = {
     color: "white",
@@ -24,7 +24,7 @@ const inputPropsStyle = {
     fontSize: "12px",
     borderRadius: "3px",
     paddingLeft: "5px",
-    height: "32px"
+    height: "32px",
 };
 
 const LabelStyle = {
@@ -39,10 +39,10 @@ const LabelStyle = {
 };
 
 const CreateServerModal = ({ isOpen, onCancel }) => {
-    const dispatch = useDispatch()
     const [serverName, setServerName] = useState("");
     const [iconFile, setIconFile] = useState(null);
     const userId = useSelector((state) => state.auth.user.id);
+    const dispatch = useDispatch();
 
     const handleFileChange = (event) => {
         const file = event.target.files[0];
@@ -55,13 +55,33 @@ const CreateServerModal = ({ isOpen, onCancel }) => {
         onCancel();
     };
 
+
     const handleCreateServer = async () => {
         try {
-            const responseData = await createServer(serverName, iconFile, userId);
-            console.log("Server created:", responseData);
+            const accessToken = localStorage.getItem("access");
+
+            const formData = new FormData();
+            formData.append("name", serverName);
+            formData.append("owner", userId); // Add owner field
+            if (iconFile) {
+                formData.append("icon", iconFile);
+            }
+
+            const response = await axios.post(
+                `${process.env.REACT_APP_API_URL}/server/servers/create/`,
+                formData,
+                {
+                    headers: {
+                        Authorization: `Bearer ${accessToken}`,
+                        "Content-Type": "multipart/form-data",
+                    },
+                }
+            );
+
+            dispatch(load_user());
+            
 
             handleClose();
-            dispatch(load_user());
         } catch (error) {
             console.error("Error creating server:", error.message);
         }
@@ -96,13 +116,16 @@ const CreateServerModal = ({ isOpen, onCancel }) => {
                         >
                             Create a New Server
                         </Typography>
-                        <Typography  sx={{
+                        <Typography
+                            sx={{
                                 // fontFamily: "Sofia Sans, sans-serif ",
                                 fontWeight: 400,
                                 letterSpacing: "1.5px",
                                 fontSize: "10px",
                                 color: "#020F12",
-                            }} mb={2}>
+                            }}
+                            mb={2}
+                        >
                             Give your new server a personality with a name and
                             an icon. You can alway change it later.
                         </Typography>

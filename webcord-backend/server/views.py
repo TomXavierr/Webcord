@@ -55,7 +55,7 @@ class ReceivedInvitationsView(generics.ListAPIView):
 
     def get_queryset(self):
         user = self.request.user
-        return Invitation.objects.filter(receiver=user).select_related('server', 'sender')
+        return Invitation.objects.filter(receiver=user, is_accepted=False).select_related('server', 'sender')
 
 
 class SendInvitationView(generics.CreateAPIView):
@@ -73,7 +73,6 @@ class AcceptInvitationView(APIView):
         try:
             invitation = Invitation.objects.get(token=token, receiver=request.user, is_accepted=False)
             
-
             server = invitation.server
             server_member = ServerMember.objects.create(user=request.user, server=server)
             if server_member:

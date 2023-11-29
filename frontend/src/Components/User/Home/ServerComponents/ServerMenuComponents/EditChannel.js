@@ -20,7 +20,7 @@ const ListTextStyle = {
     color: "#EBF2FA",
 };
 
-const EditChannel = ({ isOpen, onClose }) => {
+const EditChannel = ({ isOpen, onClose, onChannelUpdate }) => {
     const selectedChannel = localStorage.getItem("selectedChannel");
 
     const [channelName, setChannelName] = useState("");
@@ -30,7 +30,6 @@ const EditChannel = ({ isOpen, onClose }) => {
     useEffect(() => {
         const parsedChannel = JSON.parse(selectedChannel);
         if (parsedChannel) {
-
             setChannelName(parsedChannel.name || "");
             setChannelTopic(parsedChannel.topic || "");
             setChannelId(parsedChannel.id || "");
@@ -49,7 +48,7 @@ const EditChannel = ({ isOpen, onClose }) => {
 
     const handleDeleteChannel = () => {
         const deleteEndpoint = `${process.env.REACT_APP_API_URL}/server/channels/delete/${channelId}/`;
-    
+
         axios
             .delete(deleteEndpoint, {
                 headers: {
@@ -58,10 +57,10 @@ const EditChannel = ({ isOpen, onClose }) => {
                 },
             })
             .then((response) => {
-                console.log(response.data); 
+                console.log(response.data);
+                localStorage.removeItem("selectedChannel");
+                onChannelUpdate();
                 onClose();
-                
-                
             })
             .catch((error) => {
                 console.error("Error deleting channel:", error);
@@ -82,7 +81,8 @@ const EditChannel = ({ isOpen, onClose }) => {
                     }
                 )
                 .then((response) => {
-                    console.log(response.data); // Log the response data
+                    console.log(response.data);
+                    // window.location.reload();
                 })
                 .catch((error) => {
                     // Handle errors
@@ -94,7 +94,7 @@ const EditChannel = ({ isOpen, onClose }) => {
             axios
                 .patch(
                     updateEndpoint,
-                    { name: channelTopic },
+                    { topic: channelTopic },
                     {
                         headers: {
                             Authorization: `Bearer ${accessToken}`,
