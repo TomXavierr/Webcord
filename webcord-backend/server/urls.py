@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import ServerDetailAPIView, ServerCreateView, ServerUpdateAPIView, ServerDeleteAPIView, ChannelCreateAPIView, ChannelUpdateAPIView, ChannelDeleteAPIView, SendInvitationView, AcceptInvitationView, ReceivedInvitationsView
+from .views import ServerDetailAPIView, ServerCreateView, ServerUpdateAPIView, ServerDeleteAPIView, ChannelCreateAPIView, ChannelUpdateAPIView, ChannelDeleteAPIView, SendInvitationView, AcceptInvitationView, ReceivedInvitationsView, LeaveServerView
 
 
 urlpatterns = [
@@ -18,6 +18,8 @@ urlpatterns = [
         SendInvitationView.as_view(), name='send-invitation'),
     path('accept-invitation/<str:token>/', 
         AcceptInvitationView.as_view(), name='accept-invitation'),
+    path('<int:server_id>/leave/',
+     LeaveServerView.as_view(), name='leave-server'),
 
 
      path('channels/create/',

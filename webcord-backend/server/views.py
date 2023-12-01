@@ -2,7 +2,7 @@ from rest_framework import generics, status
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from django.shortcuts import get_object_or_404
-from rest_framework.permissions import IsAuthenticated 
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.exceptions import PermissionDenied
 from rest_framework import serializers
 from django.core.exceptions import ValidationError
@@ -61,23 +61,28 @@ class ReceivedInvitationsView(generics.ListAPIView):
 class SendInvitationView(generics.CreateAPIView):
     queryset = Invitation.objects.all()
     serializer_class = InvitationSerializer
-    permission_classes = [IsAuthenticated]  
+    permission_classes = [IsAuthenticated]
 
     def perform_create(self, serializer):
-        serializer.save(sender=self.request.user)
+        sender = self.request.user
+        serializer.save(sender=sender)
+        
+    
 
 class AcceptInvitationView(APIView):
-    permission_classes = [IsAuthenticated]  
+    permission_classes = [IsAuthenticated]
 
     def post(self, request, token):
         try:
-            invitation = Invitation.objects.get(token=token, receiver=request.user, is_accepted=False)
-            
+            invitation = Invitation.objects.get(
+                token=token, receiver=request.user, is_accepted=False)
+
             server = invitation.server
-            server_member = ServerMember.objects.create(user=request.user, server=server)
+            server_member = ServerMember.objects.create(
+                user=request.user, server=server)
             if server_member:
                 invitation.is_accepted = True
-                invitation.save()
+                invitation.delete()
 
             return Response({'message': 'Invitation accepted successfully.'})
 
@@ -88,9 +93,21 @@ class AcceptInvitationView(APIView):
             return Response({'error': f'Error accepting invitation: {str(e)}'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 
+class LeaveServerView(APIView):
+    permission_classes = [IsAuthenticated]
 
+    def post(self, request, server_id):
+        server = get_object_or_404(Server, id=server_id)
+        server_member = get_object_or_404(ServerMember, user=request.user, server=server)
 
+        if server.owner == request.user:
+            return Response({'detail': 'Server owner cannot leave the server.'}, status=status.HTTP_400_BAD_REQUEST)
 
+        server_member.delete()
+
+        return Response({'detail': 'You have left the server successfully.'}, status=status.HTTP_200_OK)
+
+        
 class ChannelCreateAPIView(generics.CreateAPIView):
     serializer_class = ChannelSerializer
     permission_classes = [IsAuthenticated]
@@ -149,4 +166,3 @@ class RoleDeleteAPIView(generics.DestroyAPIView):
     queryset = Role.objects.all()
     serializer_class = RoleSerializer
     permission_classes = [IsAuthenticated]
-

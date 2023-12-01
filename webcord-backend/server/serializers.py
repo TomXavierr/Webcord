@@ -72,6 +72,24 @@ class InvitationSerializer(serializers.ModelSerializer):
             'expires_at': {'required': False},
         }
 
+    def validate(self, data):
+        sender = self.context['request'].user
+        receiver = data.get('receiver')
+        server = data.get('server')
+
+       
+        existing_invitation = Invitation.objects.filter(
+            sender=sender,
+            receiver=receiver,
+            server=server,
+            is_accepted=False
+        ).first()
+
+        if existing_invitation:
+            raise serializers.ValidationError("Invitation already exists for this friend and server.")
+
+        return data
+
 class InvitationListSerializer(serializers.ModelSerializer):
     server = ServerProfileSerializer()
     sender = UserSerializer()

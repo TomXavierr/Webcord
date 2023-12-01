@@ -26,7 +26,7 @@ import {
     Popper,
     Stack,
 } from "@mui/material";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import UserSettings from "../UserSettings";
 import { useNavigate, useParams } from "react-router-dom";
 import ServerChannelsDrawer from "./ServerChannelsDrawer";
@@ -35,6 +35,7 @@ import ChatWindow from "./ServerLayoutComponents/ChatWindow";
 import ArrowCircleLeftIcon from "@mui/icons-material/ArrowCircleLeft";
 import ServerSettings from "./ServerMenuComponents/ServerSettings";
 import InviteModal from "./ServerMenuComponents/InviteModal";
+import { load_user } from "../../../../Redux/actions/userauthaction";
 
 const drawerWidth = 60;
 const appBarHeight = 36;
@@ -56,7 +57,7 @@ const ServerLayout = () => {
     const user = useSelector((state) => state.auth.user);
     const [anchorEl, setAnchorEl] = useState(null);
     const [isInviteModalOpen, setInviteModalOpen] = useState(false);
-
+    const dispatch = useDispatch();
     const open = Boolean(anchorEl);
 
     const navigate = useNavigate();
@@ -194,6 +195,31 @@ const ServerLayout = () => {
         setActiveServerSettingsTab(tab);
         localStorage.setItem("activeServerSettingsTab", tab);
     };
+
+    const handleLeaveServer = async () => {
+        try {
+            const token = localStorage.getItem("access");
+            const config = {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
+            };
+            const response = await axios.post(
+                `${process.env.REACT_APP_API_URL}/server/${serverId}/leave/`,
+                {},
+                config
+            );
+            if (response.status === 200) {
+                console.log(response.detail);
+                dispatch(load_user());
+                navigate(`/channels/@me`);
+            } else {
+                console.error("Failed to fetch friend requests");
+            }
+        } catch (error) {
+            console.error("Error while leaving server", error);
+        }
+    }
 
 
     useEffect(() => {
@@ -372,6 +398,7 @@ const ServerLayout = () => {
                                                             "#C72D2D",
                                                     },
                                                 }}
+                                                onClick={handleLeaveServer}
                                             >
                                                 <Typography
                                                     pl={1}

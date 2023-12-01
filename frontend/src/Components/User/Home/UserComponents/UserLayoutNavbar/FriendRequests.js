@@ -84,7 +84,7 @@ const FriendRequests = () => {
             if (response.status === 200) {
                 setFriendRequests(response.data);
             } else {
-                console.error("Failed to fetch friend requests");
+                console.log("Failed to fetch friend requests");
             }
         } catch (error) {
             console.error("Error while fetching friend requests", error);
