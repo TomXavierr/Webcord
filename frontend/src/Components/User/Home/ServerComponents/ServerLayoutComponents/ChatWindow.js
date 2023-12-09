@@ -142,6 +142,14 @@ const ChatWindow = (channel) => {
         },
     });
 
+    const constructAvatarUrl = (avatarPath) => {
+        if (avatarPath.startsWith("http")) {
+            return avatarPath; // If it has a base URL, return it as is
+        }
+    
+        return `${process.env.REACT_APP_API_URL}${avatarPath}`;
+    };
+
     function formatDate(timestamp) {
         const date = new Date(Date.parse(timestamp));
         const options = { day: "numeric", month: "long", year: "numeric" };
@@ -206,8 +214,8 @@ const ChatWindow = (channel) => {
                                 <ListItem alignItems="flex-start">
                                     <ListItemAvatar>
                                         <Avatar
-                                            alt={msg.sender.display_name}
-                                            src={`${msg.sender.avatar}`}
+                                             alt={msg.sender.display_name}
+                                             src={constructAvatarUrl(msg.sender.avatar)} 
                                         />
                                     </ListItemAvatar>
                                     <ListItemText

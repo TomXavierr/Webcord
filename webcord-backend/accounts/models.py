@@ -8,6 +8,7 @@ from django.shortcuts import get_object_or_404
 def avatar_upload_path(instance, filename):
     return f"user/{instance.id}/avatar/{filename}"
 
+
 def banner_upload_path(instance, filename):
     return f"user/{instance.id}/banner/{filename}"
 
@@ -48,8 +49,10 @@ class UserAccount(AbstractBaseUser, PermissionsMixin):
     username = models.CharField(max_length=255, unique=True)
     display_name = models.CharField(max_length=255)
     registration_date = models.DateField(auto_now_add=True)
-    avatar = models.ImageField(upload_to=avatar_upload_path, blank=True, null=True)
-    banner = models.ImageField(upload_to=banner_upload_path, blank=True, null=True)
+    avatar = models.ImageField(
+        upload_to=avatar_upload_path, blank=True, null=True)
+    banner = models.ImageField(
+        upload_to=banner_upload_path, blank=True, null=True)
     status = models.TextField(blank=True)
     about = models.TextField(blank=True)
     phone = models.CharField(max_length=15, blank=True)
@@ -90,5 +93,3 @@ class UserAccount(AbstractBaseUser, PermissionsMixin):
             if existing.banner and existing.banner != self.banner:
                 existing.banner.delete(save=False)
         super().save(*args, **kwargs)
-
-
