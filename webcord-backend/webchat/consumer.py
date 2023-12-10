@@ -61,3 +61,16 @@ class WebChatConsumer(JsonWebsocketConsumer):
     def disconnect(self, close_code):
         async_to_sync(self.channel_layer.group_discard)(self.channel_id, self.channel_name)
         super().disconnect(close_code)
+
+
+class DirectMessageConsumer(JsonWebsocketConsumer):
+ 
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.reciever_id = None
+        self.sender_id = None
+
+    def connect(self):
+        self.accept()
+        self
+    
