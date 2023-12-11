@@ -1,6 +1,6 @@
 # serializers.py
 from rest_framework import serializers
-from .models import Conversation, Message
+from .models import Conversation, Message, DirectMessage
 from server.serializers import UserSerializer
 
 
@@ -16,4 +16,11 @@ class ConversationSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Conversation
+        fields = '__all__'
+
+
+class DirectMessageSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = DirectMessage
         fields = '__all__'
