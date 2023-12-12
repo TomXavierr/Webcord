@@ -20,3 +20,9 @@ class DirectMessage(models.Model):
     message = models.TextField()
     timestamp = models.DateTimeField(auto_now_add=True)
     is_read = models.BooleanField(default=False)
+
+    def __str__(self):
+        return self.sender.display_name
+
+    def last_30_messages(self):
+        return DirectMessage.objects.order_by('-timestamp').all()[:30]
