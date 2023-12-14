@@ -63,14 +63,14 @@ class WebChatConsumer(JsonWebsocketConsumer):
         super().disconnect(close_code)
 
 
-class DirectMessageConsumer(JsonWebsocketConsumer):
+# class DirectMessageConsumer(JsonWebsocketConsumer):
  
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.reciever_id = None
-        self.sender_id = None
+#     def __init__(self, *args, **kwargs):
+#         super().__init__(*args, **kwargs)
+#         self.reciever_id = None
+#         self.sender_id = None
 
-    def connect(self):
-        self.accept()
-        self
+#     def connect(self):
+#         self.accept()
+#         self
     

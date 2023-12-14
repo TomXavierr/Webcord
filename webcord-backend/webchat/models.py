@@ -15,8 +15,8 @@ class Message(models.Model) :
 
 
 class DirectMessage(models.Model):
-    sender = models.ForeignKey(get_user_model(), on_delete=models.CASCADE, related_name="sender")
-    reciever = models.ForeignKey(get_user_model(), on_delete=models.CASCADE, related_name="reciever")
+    sender = models.ForeignKey(get_user_model(), on_delete=models.CASCADE, related_name="message_sender")
+    reciever = models.ForeignKey(get_user_model(), on_delete=models.CASCADE, related_name="message_reciever")
     message = models.TextField()
     timestamp = models.DateTimeField(auto_now_add=True)
     is_read = models.BooleanField(default=False)
