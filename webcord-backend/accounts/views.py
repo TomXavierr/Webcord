@@ -5,7 +5,6 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework_simplejwt.views import TokenObtainPairView
-# from servers_api.utils import get_user_servers
 from server.models import Server
 
 from .serializers import (ChangePasswordSerializer, UserSerializer,
