@@ -4,6 +4,7 @@ import { useSelector } from "react-redux";
 import ChangePasswordModal from "./Modals/ChangePasswordModal";
 import EditPhoneModal from "./Modals/EditPhoneModal";
 import EditAvatarModal from "./Modals/EditAvatarModal";
+import EditDpNameModal from "./Modals/EditDpNameModal";
 
 const headingStyles = {
     fontSize: "10px",
@@ -42,23 +43,27 @@ const MyProfile = () => {
     const [isPasswordModalOpen, setIsPasswordModalOpen] = useState(false);
     const [isPhoneModalOpen, setIsPhoneModalOpen] = useState(false);
     const [isEditAvatarModalOpen, setEditAvatarModalOpen] = useState(false);
-    
- 
+    const [isEditDpNameModalOpen, setEditDpNameModalOpen] = useState(false);
+
     const handleEditPhoneClick = () => {
         setIsPhoneModalOpen(true);
     };
 
-    // const handleEditPhoneClick = () => {
-    //     setIsPhoneModalOpen(true);
-    // };
+    const handleEditDpNameClick = () => {
+        setEditDpNameModalOpen(true);
+    };
 
-    
     const handlePhoneChange = (newPhone) => {
         const updatedUser = { ...user, phone: newPhone };
         setUser(updatedUser);
         setIsPhoneModalOpen(false);
     };
 
+    const handleDpNameChange = (newDisplayName) => {
+        const updatedUser = { ...user, display_name: newDisplayName };
+        setUser(updatedUser);
+        setEditDpNameModalOpen(false);
+    };
 
     return (
         <Box
@@ -108,8 +113,7 @@ const MyProfile = () => {
                         width: "48px",
                     }}
                     src={`${process.env.REACT_APP_API_URL}${user.avatar}`}
-                >                 
-                </Avatar>
+                ></Avatar>
                 <Box
                     sx={{
                         marginLeft: "72px",
@@ -155,8 +159,6 @@ const MyProfile = () => {
                         onSave={(image) => {
                             console.log("Selected image URL:", image);
                             setEditAvatarModalOpen(false);
-                            
-                            
                         }}
                     />
                 </Box>
@@ -199,7 +201,10 @@ const MyProfile = () => {
                                 {user.display_name}
                             </Typography>
                         </Box>
-                        <Button sx={editButtonStyle}>
+                        <Button
+                            sx={editButtonStyle}
+                            onClick={handleEditDpNameClick}
+                        >
                             <Typography
                                 style={{
                                     fontSize: "12px",
@@ -207,6 +212,19 @@ const MyProfile = () => {
                             >
                                 Edit
                             </Typography>
+                            <EditDpNameModal
+                                isOpen={isEditDpNameModalOpen}
+                                onCancel={() => setEditDpNameModalOpen(false)}
+                                value={user.display_name}
+                                onChange={(newDisplayName) => {
+                                    console.log(
+                                        "New display name:",
+                                        newDisplayName
+                                    );
+                                    setEditDpNameModalOpen(false);
+                                }}
+                                onSave={handleDpNameChange}
+                            />
                         </Button>
                     </Box>
                     <Box sx={boxStyles}>
@@ -305,7 +323,6 @@ const MyProfile = () => {
                     <ChangePasswordModal
                         isOpen={isPasswordModalOpen}
                         onCancel={() => setIsPasswordModalOpen(false)}
-                    
                     />
                 </Button>
             </Stack>

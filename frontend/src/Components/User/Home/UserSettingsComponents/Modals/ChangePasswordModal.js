@@ -113,13 +113,11 @@ const ChangePasswordModal = ({ isOpen, onCancel }) => {
     const handleChange = (event) => {
         const { name, value } = event.target;
 
-        // Update password data
         setPasswordData({
             ...passwordData,
             [name]: value,
         });
 
-        // Validate password with regex
         if (name === "newPassword" || name === "confirmPassword") {
             const regex =
                 /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&*]).{8,}$/;

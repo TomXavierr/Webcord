@@ -46,6 +46,7 @@ class UserDetailView(APIView):
             {
                 'id': friend.id,
                 'username': friend.username,
+                
                 'display_name': friend.display_name,
                 'avatar':  friend.avatar.url if friend.avatar else ''
             }

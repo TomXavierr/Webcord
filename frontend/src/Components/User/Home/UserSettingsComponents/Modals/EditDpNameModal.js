@@ -27,50 +27,57 @@ const LabelStyle = {
     },
 };
 
-const EditPhoneModal = ({ isOpen, onCancel, value, onChange, onSave }) => {
-    const [newPhoneNumber, setNewPhoneNumber] = useState(value);
+const EditDpNameModal = ({ isOpen, onCancel, value, onChange, onSave }) => {
+    const [newDisplayName, setNewDisplayName] = useState(value);
     const [errors, setErrors] = useState({});
 
     const handleSubmit = async (event) => {
         event.preventDefault();
 
         try {
-            const token = localStorage.getItem("access");
-            const config = {
-                headers: {
-                    Authorization: `Bearer ${token}`,
-                },
-            };
+            if (Object.keys(errors).length === 0) {
+                const token = localStorage.getItem("access");
+                const config = {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                    },
+                };
 
-            const response = await axios.put(
-                `${process.env.REACT_APP_API_URL}/account/update/`,
-                {
-                    phone: newPhoneNumber,
-                },
-                config
-            );
+                const response = await axios.put(
+                    `${process.env.REACT_APP_API_URL}/account/update/`,
+                    {
+                        display_name: newDisplayName,
+                    },
+                    config
+                );
 
-            console.log("Phone number updated successfully:", response.data);
-            onSave(newPhoneNumber);
+                console.log(
+                    "Display name updated successfully:",
+                    response.data
+                );
+                onSave(newDisplayName);
 
-            onCancel();
+                onCancel();
+            } else {
+                console.error("Cannot submit. Display name is invalid.");
+            }
         } catch (error) {
-            console.error("Failed to update phone number:", error);
+            console.error("Failed to update Display Name:", error);
         }
     };
 
     const handleChange = (event) => {
         const { name, value } = event.target;
 
-        setNewPhoneNumber(value);
+        setNewDisplayName(value);
 
-        const regex = /^\d{10}$/;
-        const isValid = regex.test(value);
+        const isValidLength = /^.{1,23}$/;
+        const isValid = isValidLength.test(value);
 
         if (!isValid) {
             setErrors({
                 ...errors,
-                [name]: "Invalid phone number",
+                [name]: "Display name too long",
             });
         } else {
             setErrors({
@@ -103,23 +110,23 @@ const EditPhoneModal = ({ isOpen, onCancel, value, onChange, onSave }) => {
                             fontSize: "24px",
                         }}
                     >
-                        Edit Phone Number
+                        Edit Display Name
                     </Typography>
                     <form onSubmit={handleSubmit}>
                         <FormControl fullWidth margin="normal">
                             <FormLabel sx={LabelStyle}>
-                                New Phone Number
+                                New Display Name
                             </FormLabel>
                             <Input
-                                name="newPhoneNumber"
+                                name="newDisplayName"
                                 type="text"
-                                value={newPhoneNumber}
+                                value={newDisplayName}
                                 onChange={handleChange}
                                 sx={inputPropsStyle}
                             />
-                            {errors.newPhoneNumber && (
+                            {errors.newDisplayName && (
                                 <Typography color="error" fontSize="12px">
-                                    {errors.newPhoneNumber}
+                                    {errors.newDisplayName}
                                 </Typography>
                             )}
                         </FormControl>
@@ -139,4 +146,4 @@ const EditPhoneModal = ({ isOpen, onCancel, value, onChange, onSave }) => {
     );
 };
 
-export default EditPhoneModal;
+export default EditDpNameModal;
