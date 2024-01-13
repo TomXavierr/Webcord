@@ -28,7 +28,7 @@ const LabelStyle = {
 };
 
 const EditEmailModal = ({ isOpen, onCancel, value, onChange, onSave }) => {
-    const [newDisplayName, setNewDisplayName] = useState(value);
+    const [newEmail, setNewEmail] = useState(value);
     const [errors, setErrors] = useState({});
 
     const handleSubmit = async (event) => {
@@ -46,7 +46,7 @@ const EditEmailModal = ({ isOpen, onCancel, value, onChange, onSave }) => {
                 const response = await axios.put(
                     `${process.env.REACT_APP_API_URL}/account/update/`,
                     {
-                        display_name: newDisplayName,
+                        email: newEmail,
                     },
                     config
                 );
@@ -55,7 +55,7 @@ const EditEmailModal = ({ isOpen, onCancel, value, onChange, onSave }) => {
                     "Display name updated successfully:",
                     response.data
                 );
-                onSave(newDisplayName);
+                onSave(newEmail);
 
                 onCancel();
             } else {
@@ -67,24 +67,24 @@ const EditEmailModal = ({ isOpen, onCancel, value, onChange, onSave }) => {
     };
 
     const handleChange = (event) => {
-        const { name, value } = event.target;
+        const { email, value } = event.target;
 
-        setNewDisplayName(value);
+        setNewEmail(value);
 
-        const isValidLength = /^.{1,23}$/;
-        const isValid = isValidLength.test(value);
+        // const isValidLength = /^.{1,23}$/;
+        // const isValid = isValidLength.test(value);
 
-        if (!isValid) {
-            setErrors({
-                ...errors,
-                [name]: "Display name too long",
-            });
-        } else {
-            setErrors({
-                ...errors,
-                [name]: "",
-            });
-        }
+        // if (!isValid) {
+        //     setErrors({
+        //         ...errors,
+        //         [email]: "Display name too long",
+        //     });
+        // } else {
+        //     setErrors({
+        //         ...errors,
+        //         [email]: "",
+        //     });
+        // }
     };
 
     const handleClose = (event) => {
@@ -110,23 +110,23 @@ const EditEmailModal = ({ isOpen, onCancel, value, onChange, onSave }) => {
                             fontSize: "24px",
                         }}
                     >
-                        Edit Display Name
+                        Edit Email
                     </Typography>
                     <form onSubmit={handleSubmit}>
                         <FormControl fullWidth margin="normal">
                             <FormLabel sx={LabelStyle}>
-                                New Display Name
+                                New Email
                             </FormLabel>
                             <Input
-                                name="newDisplayName"
-                                type="text"
-                                value={newDisplayName}
+                                name="newEmail"
+                                type="email"
+                                value={newEmail}
                                 onChange={handleChange}
                                 sx={inputPropsStyle}
                             />
-                            {errors.newDisplayName && (
+                            {errors.newEmail && (
                                 <Typography color="error" fontSize="12px">
-                                    {errors.newDisplayName}
+                                    {errors.newEmail}
                                 </Typography>
                             )}
                         </FormControl>
