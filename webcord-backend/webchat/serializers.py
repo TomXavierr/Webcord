@@ -19,8 +19,3 @@ class ConversationSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
-class DirectMessageSerializer(serializers.ModelSerializer):
-
-    class Meta:
-        model = DirectMessage
-        fields = '__all__'
