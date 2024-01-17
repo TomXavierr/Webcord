@@ -35,32 +35,25 @@ const EditDpNameModal = ({ isOpen, onCancel, value, onChange, onSave }) => {
         event.preventDefault();
 
         try {
-            if (Object.keys(errors).length === 0) {
-                const token = localStorage.getItem("access");
-                const config = {
-                    headers: {
-                        Authorization: `Bearer ${token}`,
-                    },
-                };
+            const token = localStorage.getItem("access");
+            const config = {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
+            };
 
-                const response = await axios.put(
-                    `${process.env.REACT_APP_API_URL}/account/update/`,
-                    {
-                        display_name: newDisplayName,
-                    },
-                    config
-                );
+            const response = await axios.put(
+                `${process.env.REACT_APP_API_URL}/account/update/`,
+                {
+                    display_name: newDisplayName,
+                },
+                config
+            );
 
-                console.log(
-                    "Display name updated successfully:",
-                    response.data
-                );
-                onSave(newDisplayName);
+            console.log("Display name updated successfully:", response.data);
+            onSave(newDisplayName);
 
-                onCancel();
-            } else {
-                console.error("Cannot submit. Display name is invalid.");
-            }
+            onCancel();
         } catch (error) {
             console.error("Failed to update Display Name:", error);
         }

@@ -10,14 +10,14 @@ os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'webcord.settings')
 django_application = get_asgi_application()
 
 from . import urls  # noqa isort:skip
-from webchat.middleware import TokenAuthMiddleware # noqa isort:skip
+# from webchat.middleware import TokenAuthMiddleware # noqa isort:skip
 
 application = ProtocolTypeRouter(
     {
         "http": get_asgi_application(),
-        "websocket": TokenAuthMiddleware(
+        "websocket": 
             URLRouter(urls.websocket_urlpatterns)
-        )
+        
     }
 )
 
