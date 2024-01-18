@@ -35,30 +35,26 @@ const EditEmailModal = ({ isOpen, onCancel, value, onChange, onSave }) => {
         event.preventDefault();
 
         try {
-            if (Object.keys(errors).length === 0) {
-                const token = localStorage.getItem("access");
-                const config = {
-                    headers: {
-                        Authorization: `Bearer ${token}`,
-                    },
-                };
+            const token = localStorage.getItem("access");
+            const config = {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
+            };
 
-                const response = await axios.put(
-                    `${process.env.REACT_APP_API_URL}/account/update/`,
-                    {
-                        email: newEmail,
-                    },
-                    config
-                );
+            const response = await axios.put(
+                `${process.env.REACT_APP_API_URL}/account/update/`,
+                {
+                    email: newEmail,
+                },
+                config
+            );
 
-                console.log(
-                    "Display name updated successfully:",
-                    response.data
-                );
-                onSave(newEmail);
+            console.log("Display name updated successfully:", response.data);
+            onSave(newEmail);
 
-                onCancel();
-            } else {
+            onCancel();
+            {
                 console.error("Cannot submit. Display name is invalid.");
             }
         } catch (error) {
@@ -114,9 +110,7 @@ const EditEmailModal = ({ isOpen, onCancel, value, onChange, onSave }) => {
                     </Typography>
                     <form onSubmit={handleSubmit}>
                         <FormControl fullWidth margin="normal">
-                            <FormLabel sx={LabelStyle}>
-                                New Email
-                            </FormLabel>
+                            <FormLabel sx={LabelStyle}>New Email</FormLabel>
                             <Input
                                 name="newEmail"
                                 type="email"
