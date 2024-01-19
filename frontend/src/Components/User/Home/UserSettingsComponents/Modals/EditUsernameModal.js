@@ -28,7 +28,7 @@ const LabelStyle = {
 };
 
 const EditUserameModal = ({ isOpen, onCancel, value, onChange, onSave }) => {
-    const [newDisplayName, setNewDisplayName] = useState(value);
+    const [newUsername, setNewUsername] = useState(value);
     const [errors, setErrors] = useState({});
 
     const handleSubmit = async (event) => {
@@ -46,13 +46,13 @@ const EditUserameModal = ({ isOpen, onCancel, value, onChange, onSave }) => {
                 const response = await axios.put(
                     `${process.env.REACT_APP_API_URL}/account/update/`,
                     {
-                        display_name: newDisplayName,
+                        username: newUsername,
                     },
                     config
                 );
 
                 console.log(
-                    "Display name updated successfully:",
+                    "usernameupdated successfully:",
                     response.data
                 );
                 onSave(newDisplayName);
@@ -69,7 +69,7 @@ const EditUserameModal = ({ isOpen, onCancel, value, onChange, onSave }) => {
     const handleChange = (event) => {
         const { name, value } = event.target;
 
-        setNewDisplayName(value);
+        setUsername(value);
 
         const isValidLength = /^.{1,23}$/;
         const isValid = isValidLength.test(value);
@@ -77,7 +77,7 @@ const EditUserameModal = ({ isOpen, onCancel, value, onChange, onSave }) => {
         if (!isValid) {
             setErrors({
                 ...errors,
-                [name]: "Display name too long",
+                [name]: "Username too long",
             });
         } else {
             setErrors({
@@ -118,15 +118,15 @@ const EditUserameModal = ({ isOpen, onCancel, value, onChange, onSave }) => {
                                 New Display Name
                             </FormLabel>
                             <Input
-                                name="newDisplayName"
+                                name="newUsername"
                                 type="text"
-                                value={newDisplayName}
+                                value={newUsername}
                                 onChange={handleChange}
                                 sx={inputPropsStyle}
                             />
                             {errors.newDisplayName && (
                                 <Typography color="error" fontSize="12px">
-                                    {errors.newDisplayName}
+                                    {errors.newUsername}
                                 </Typography>
                             )}
                         </FormControl>
