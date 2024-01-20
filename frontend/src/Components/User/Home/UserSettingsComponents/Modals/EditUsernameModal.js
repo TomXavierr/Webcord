@@ -110,12 +110,12 @@ const EditUserameModal = ({ isOpen, onCancel, value, onChange, onSave }) => {
                             fontSize: "24px",
                         }}
                     >
-                        Edit Display Name
+                        Edit Username
                     </Typography>
                     <form onSubmit={handleSubmit}>
                         <FormControl fullWidth margin="normal">
                             <FormLabel sx={LabelStyle}>
-                                New Display Name
+                                New Username
                             </FormLabel>
                             <Input
                                 name="newUsername"
