@@ -5,6 +5,7 @@ import ChangePasswordModal from "./Modals/ChangePasswordModal";
 import EditPhoneModal from "./Modals/EditPhoneModal";
 import EditAvatarModal from "./Modals/EditAvatarModal";
 import EditDpNameModal from "./Modals/EditDpNameModal";
+import EditUserameModal from "./Modals/EditUsernameModal";
 
 const headingStyles = {
     fontSize: "10px",
@@ -44,6 +45,7 @@ const MyProfile = () => {
     const [isPhoneModalOpen, setIsPhoneModalOpen] = useState(false);
     const [isEditAvatarModalOpen, setEditAvatarModalOpen] = useState(false);
     const [isEditDpNameModalOpen, setEditDpNameModalOpen] = useState(false);
+    const [isEditUsernameModalOpen, setEditUsernameModalOpen] = useState(false);
 
     const handleEditPhoneClick = () => {
         setIsPhoneModalOpen(true);
@@ -51,6 +53,10 @@ const MyProfile = () => {
 
     const handleEditDpNameClick = () => {
         setEditDpNameModalOpen(true);
+    };
+    
+    const handleEditUsernameClick = () => {
+        setEditUsernameModalOpen(true);
     };
 
     const handlePhoneChange = (newPhone) => {
@@ -63,6 +69,12 @@ const MyProfile = () => {
         const updatedUser = { ...user, display_name: newDisplayName };
         setUser(updatedUser);
         setEditDpNameModalOpen(false);
+    };
+
+    const handleUsernameChange = (newUsername) => {
+        const updatedUser = { ...user, username: newUsername };
+        setUser(updatedUser);
+        setEditUsernameModalOpen(false);
     };
 
     return (
@@ -182,7 +194,10 @@ const MyProfile = () => {
                                 {user.username}
                             </Typography>
                         </Box>
-                        <Button sx={editButtonStyle}>
+                        <Button 
+                        sx={editButtonStyle}
+                        onClick={handleEditUsernameClick}
+                        >
                             <Typography
                                 style={{
                                     fontSize: "12px",
@@ -190,6 +205,19 @@ const MyProfile = () => {
                             >
                                 Edit
                             </Typography>
+                            <EditUserameModal 
+                                isOpen={isEditUsernameModalOpen}
+                                onCancel={() => setEditUsernameModalOpen(false)}
+                                value={user.username}
+                                onChange={(newUsername) => {
+                                    console.log(
+                                        "New newUsername:",
+                                        newUsername
+                                    );
+                                    setEditUsernameModalOpen(false);
+                                }}
+                                onSave={handleEditUsernameClick}
+                            />
                         </Button>
                     </Box>
                     <Box sx={boxStyles}>

@@ -55,7 +55,7 @@ const EditUserameModal = ({ isOpen, onCancel, value, onChange, onSave }) => {
                     "usernameupdated successfully:",
                     response.data
                 );
-                onSave(newDisplayName);
+                onSave(newUsername);
 
                 onCancel();
             } else {
@@ -69,7 +69,7 @@ const EditUserameModal = ({ isOpen, onCancel, value, onChange, onSave }) => {
     const handleChange = (event) => {
         const { name, value } = event.target;
 
-        setUsername(value);
+        setNewUsername( value);
 
         const isValidLength = /^.{1,23}$/;
         const isValid = isValidLength.test(value);
