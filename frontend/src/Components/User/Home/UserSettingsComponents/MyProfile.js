@@ -6,6 +6,7 @@ import EditPhoneModal from "./Modals/EditPhoneModal";
 import EditAvatarModal from "./Modals/EditAvatarModal";
 import EditDpNameModal from "./Modals/EditDpNameModal";
 import EditUserameModal from "./Modals/EditUsernameModal";
+import EditEmailModal from "./Modals/EditEmailModal";
 
 const headingStyles = {
     fontSize: "10px",
@@ -46,6 +47,7 @@ const MyProfile = () => {
     const [isEditAvatarModalOpen, setEditAvatarModalOpen] = useState(false);
     const [isEditDpNameModalOpen, setEditDpNameModalOpen] = useState(false);
     const [isEditUsernameModalOpen, setEditUsernameModalOpen] = useState(false);
+    const [isEditEmailModalOpen, setEditEmailModalOpen] = useState(false);
 
     const handleEditPhoneClick = () => {
         setIsPhoneModalOpen(true);
@@ -54,9 +56,13 @@ const MyProfile = () => {
     const handleEditDpNameClick = () => {
         setEditDpNameModalOpen(true);
     };
-    
+
     const handleEditUsernameClick = () => {
         setEditUsernameModalOpen(true);
+    };
+
+    const handleEditEmailClick = () => {
+        setEditEmailModalOpen(true);
     };
 
     const handlePhoneChange = (newPhone) => {
@@ -73,6 +79,12 @@ const MyProfile = () => {
 
     const handleUsernameChange = (newUsername) => {
         const updatedUser = { ...user, username: newUsername };
+        setUser(updatedUser);
+        setEditUsernameModalOpen(false);
+    };
+
+    const handleEmailChange = (newEmail) => {
+        const updatedUser = { ...user, email: newEmail };
         setUser(updatedUser);
         setEditUsernameModalOpen(false);
     };
@@ -194,9 +206,9 @@ const MyProfile = () => {
                                 {user.username}
                             </Typography>
                         </Box>
-                        <Button 
-                        sx={editButtonStyle}
-                        onClick={handleEditUsernameClick}
+                        <Button
+                            sx={editButtonStyle}
+                            onClick={handleEditUsernameClick}
                         >
                             <Typography
                                 style={{
@@ -205,7 +217,7 @@ const MyProfile = () => {
                             >
                                 Edit
                             </Typography>
-                            <EditUserameModal 
+                            <EditUserameModal
                                 isOpen={isEditUsernameModalOpen}
                                 onCancel={() => setEditUsernameModalOpen(false)}
                                 value={user.username}
@@ -262,7 +274,10 @@ const MyProfile = () => {
                                 {user.email}
                             </Typography>
                         </Box>
-                        <Button sx={editButtonStyle}>
+                        <Button
+                            sx={editButtonStyle}
+                            onClick={handleEditEmailClick}
+                        >
                             <Typography
                                 style={{
                                     fontSize: "12px",
@@ -270,6 +285,19 @@ const MyProfile = () => {
                             >
                                 Edit
                             </Typography>
+                            <EditEmailModal
+                                isOpen={isEditEmailModalOpen}
+                                onCancel={() => setEditEmailModalOpen(false)}
+                                value={user.email}
+                                onChange={(newEmail) => {
+                                    console.log(
+                                        "New email:",
+                                        newEmail
+                                    );
+                                    setEditEmailModalOpen(false);
+                                }}
+                                onSave={handleEmailChange}
+                            />
                         </Button>
                     </Box>
                     <Box sx={boxStyles}>
