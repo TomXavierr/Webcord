@@ -228,7 +228,7 @@ const MyProfile = () => {
                                     );
                                     setEditUsernameModalOpen(false);
                                 }}
-                                onSave={handleEditUsernameClick}
+                                onSave={handleUsernameChange}
                             />
                         </Button>
                     </Box>

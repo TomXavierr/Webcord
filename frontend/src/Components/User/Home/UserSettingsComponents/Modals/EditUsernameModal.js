@@ -35,7 +35,7 @@ const EditUserameModal = ({ isOpen, onCancel, value, onChange, onSave }) => {
         event.preventDefault();
 
         try {
-            if (Object.keys(errors).length === 0) {
+           
                 const token = localStorage.getItem("access");
                 const config = {
                     headers: {
@@ -52,16 +52,15 @@ const EditUserameModal = ({ isOpen, onCancel, value, onChange, onSave }) => {
                 );
 
                 console.log(
-                    "usernameupdated successfully:",
+                    "username updated successfully:",
                     response.data
                 );
                 onSave(newUsername);
 
                 onCancel();
-            } else {
-                console.error("Cannot submit. Display name is invalid.");
+            
             }
-        } catch (error) {
+         catch (error) {
             console.error("Failed to update Display Name:", error);
         }
     };
