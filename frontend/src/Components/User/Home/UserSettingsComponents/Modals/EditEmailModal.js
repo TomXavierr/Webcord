@@ -54,9 +54,7 @@ const EditEmailModal = ({ isOpen, onCancel, value, onChange, onSave }) => {
             onSave(newEmail);
 
             onCancel();
-            {
-                console.error("Cannot submit. Display name is invalid.");
-            }
+            
         } catch (error) {
             console.error("Failed to update Display Name:", error);
         }
