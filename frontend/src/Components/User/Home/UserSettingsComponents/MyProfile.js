@@ -47,7 +47,6 @@ const MyProfile = () => {
     const [isEditAvatarModalOpen, setEditAvatarModalOpen] = useState(false);
     const [isEditDpNameModalOpen, setEditDpNameModalOpen] = useState(false);
     const [isEditUsernameModalOpen, setEditUsernameModalOpen] = useState(false);
-    const [isEditEmailModalOpen, setEditEmailModalOpen] = useState(false);
 
     const handleEditPhoneClick = () => {
         setIsPhoneModalOpen(true);
@@ -61,9 +60,6 @@ const MyProfile = () => {
         setEditUsernameModalOpen(true);
     };
 
-    const handleEditEmailClick = () => {
-        setEditEmailModalOpen(true);
-    };
 
     const handlePhoneChange = (newPhone) => {
         const updatedUser = { ...user, phone: newPhone };
@@ -83,11 +79,7 @@ const MyProfile = () => {
         setEditUsernameModalOpen(false);
     };
 
-    const handleEmailChange = (newEmail) => {
-        const updatedUser = { ...user, email: newEmail };
-        setUser(updatedUser);
-        setEditUsernameModalOpen(false);
-    };
+
 
     return (
         <Box
@@ -274,31 +266,7 @@ const MyProfile = () => {
                                 {user.email}
                             </Typography>
                         </Box>
-                        <Button
-                            sx={editButtonStyle}
-                            onClick={handleEditEmailClick}
-                        >
-                            <Typography
-                                style={{
-                                    fontSize: "12px",
-                                }}
-                            >
-                                Edit
-                            </Typography>
-                            <EditEmailModal
-                                isOpen={isEditEmailModalOpen}
-                                onCancel={() => setEditEmailModalOpen(false)}
-                                value={user.email}
-                                onChange={(newEmail) => {
-                                    console.log(
-                                        "New email:",
-                                        newEmail
-                                    );
-                                    setEditEmailModalOpen(false);
-                                }}
-                                onSave={handleEmailChange}
-                            />
-                        </Button>
+                   
                     </Box>
                     <Box sx={boxStyles}>
                         <Box>
