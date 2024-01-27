@@ -6,7 +6,6 @@ import EditPhoneModal from "./Modals/EditPhoneModal";
 import EditAvatarModal from "./Modals/EditAvatarModal";
 import EditDpNameModal from "./Modals/EditDpNameModal";
 import EditUserameModal from "./Modals/EditUsernameModal";
-import EditEmailModal from "./Modals/EditEmailModal";
 
 const headingStyles = {
     fontSize: "10px",
@@ -261,15 +260,6 @@ const MyProfile = () => {
                     </Box>
                     <Box sx={boxStyles}>
                         <Box>
-                            <Typography style={headingStyles}>EMAIL</Typography>
-                            <Typography style={textStyles}>
-                                {user.email}
-                            </Typography>
-                        </Box>
-                   
-                    </Box>
-                    <Box sx={boxStyles}>
-                        <Box>
                             <Typography style={headingStyles}>PHONE</Typography>
                             <Typography style={textStyles}>
                                 {user.phone}
@@ -297,6 +287,15 @@ const MyProfile = () => {
                                 onSave={handlePhoneChange}
                             />
                         </Button>
+                    </Box>
+                    <Box sx={boxStyles}>
+                        <Box>
+                            <Typography style={headingStyles}>EMAIL</Typography>
+                            <Typography style={textStyles}>
+                                {user.email}
+                            </Typography>
+                        </Box>
+                   
                     </Box>
                 </Box>
             </Box>
